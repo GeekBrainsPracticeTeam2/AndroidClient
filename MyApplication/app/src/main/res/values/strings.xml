@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Android Client</string>
+    <string name="general_stats">General stats</string>
+    <string name="daily_stats">Daily stats</string>
 </resources>

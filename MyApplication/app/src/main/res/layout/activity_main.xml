@@ -10,8 +10,21 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.alex.androidclient.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        <Button
+            android:id="@+id/general_stats"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/general_stats"
+            android:layout_alignParentLeft="true"
+            />
+
+        <Button
+            android:id="@+id/daily_stats"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/daily_stats"
+            android:layout_alignParentRight="true"
+
+            />
+
 </RelativeLayout>

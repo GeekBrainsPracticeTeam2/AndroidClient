@@ -10,21 +10,12 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.alex.androidclient.MainActivity">
 
-        <Button
-            android:id="@+id/general_stats"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/general_stats"
-            android:layout_alignParentLeft="true"
-            />
+        <fragment
+            android:id="@+id/tabs_fragment"
+            android:name="com.example.alex.androidclient.TabsFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <Button
-            android:id="@+id/daily_stats"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/daily_stats"
-            android:layout_alignParentRight="true"
-
-            />
+        </fragment>
 
 </RelativeLayout>

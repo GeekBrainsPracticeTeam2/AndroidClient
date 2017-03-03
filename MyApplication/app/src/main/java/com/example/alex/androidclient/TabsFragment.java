@@ -27,7 +27,7 @@ public class TabsFragment extends Fragment {
 
         setTabs();
 
-        return  view;
+        return view;
     }
 
     private void initViews(View view){

@@ -3,11 +3,11 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
+    <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/text"
-        android:text="Первый таб"
-        android:layout_centerInParent="true"/>
+        android:id="@+id/sites_spinner"
+        android:entries="@array/sites"
+        android:layout_gravity="center_horizontal"/>
 
 </LinearLayout>

@@ -2,4 +2,10 @@
     <string name="app_name">Android Client</string>
     <string name="general_stats">General stats</string>
     <string name="daily_stats">Daily stats</string>
+
+    <string-array name="sites">
+        <item>lenta.ru</item>
+        <item>rbc.ru</item>
+        <item>kommersant.ru</item>
+    </string-array>
 </resources>

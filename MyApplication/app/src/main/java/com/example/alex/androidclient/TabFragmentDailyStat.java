@@ -18,7 +18,7 @@ public class TabFragmentDailyStat extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.two_tab_fragment_layout, container, false);
+        View view = inflater.inflate(R.layout.daily_stat_tab_fragment_layout, container, false);
         initView(view);
         return view;
     }

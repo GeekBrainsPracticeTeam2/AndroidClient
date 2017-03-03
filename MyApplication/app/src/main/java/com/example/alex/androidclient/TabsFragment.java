@@ -39,8 +39,8 @@ public class TabsFragment extends Fragment {
         TabFragment secondFragment = new TabFragment();
 
         EasyTabsBuilder.with(easyTabs).addTabs(
-                new TabItem(firstFragment, "Первый таб"),
-                new TabItem(secondFragment, "Второй таб")
+                new TabItem(firstFragment, getResources().getString(R.string.general_stats)),
+                new TabItem(secondFragment, getResources().getString(R.string.daily_stats))
         ).Build();
     }
 }

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -17,8 +18,8 @@ import android.widget.TextView;
  */
 
 public class TabFragmentGeneralStat extends Fragment implements AdapterView.OnItemSelectedListener {
-    TextView textView;
-    Spinner sites;
+    Spinner spinnerSites;
+    Button buttonView;
 
     @Nullable
     @Override
@@ -26,21 +27,23 @@ public class TabFragmentGeneralStat extends Fragment implements AdapterView.OnIt
         View view = inflater.inflate(R.layout.general_stat_tab_fragment_layout, container, false);
         initView(view);
         setSpinner();
+        buttonBehavoir();
         return view;
     }
 
     private void initView(View view){
-        textView = (TextView)view.findViewById(R.id.text);
-        sites = (Spinner)view.findViewById(R.id.sites_spinner);
+        spinnerSites = (Spinner)view.findViewById(R.id.sites_spinner);
+        buttonView =(Button)view.findViewById(R.id.button_view);
     }
 
     private void setSpinner(){
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.sites,
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.sites,
                 android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
 
-        sites.setAdapter(adapter);
-        sites.setOnItemSelectedListener(this);
+        spinnerSites.setAdapter(adapter);
+        spinnerSites.setOnItemSelectedListener(this);
     }
 
     @Override
@@ -50,6 +53,10 @@ public class TabFragmentGeneralStat extends Fragment implements AdapterView.OnIt
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+    private void buttonBehavoir(){
 
     }
 }

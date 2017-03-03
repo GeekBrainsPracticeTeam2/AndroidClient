@@ -2,6 +2,8 @@
     <string name="app_name">Android Client</string>
     <string name="general_stats">General stats</string>
     <string name="daily_stats">Daily stats</string>
+    <string name="view">To see the statistics</string>
+    <string name="select">Please select the site you want</string>
 
     <string-array name="sites">
         <item>lenta.ru</item>

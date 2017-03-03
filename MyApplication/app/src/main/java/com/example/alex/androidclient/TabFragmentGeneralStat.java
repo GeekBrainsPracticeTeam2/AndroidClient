@@ -12,7 +12,7 @@ import android.widget.TextView;
  * Created by alex on 03.03.17.
  */
 
-public class TabFragment extends Fragment {
+public class TabFragmentGeneralStat extends Fragment {
     TextView textView;
 
     @Nullable

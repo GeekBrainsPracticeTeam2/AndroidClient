@@ -39,12 +39,12 @@ public class TabsFragment extends Fragment {
         String nameSecondTab = getString(R.string.daily_stats);
         //TODO перенести стринги вверх, после объявления класса. С контекстом и гетресурсом, валится.
 
-        TabFragmentGeneralStat firstFragment = new TabFragmentGeneralStat();
-        TabFragmentDailyStat secondFragment = new TabFragmentDailyStat();
+        TabFragmentGeneralStat generalStatFragment = new TabFragmentGeneralStat();
+        TabFragmentDailyStat dailyStatFragment = new TabFragmentDailyStat();
 
         EasyTabsBuilder.with(easyTabs).addTabs(
-                new TabItem(firstFragment, nameFirstTab),
-                new TabItem(secondFragment, nameSecondTab)
+                new TabItem(generalStatFragment, nameFirstTab),
+                new TabItem(dailyStatFragment, nameSecondTab)
         ).Build();
     }
 }

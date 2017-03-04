@@ -17,6 +17,28 @@
         android:entries="@array/sites"
         android:layout_gravity="center"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/linear_layout_date_selected"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/first_date_selected"
+            android:hint="@string/first_date"
+            android:layout_weight="0.5"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/last_date_selected"
+            android:hint="@string/last_date"
+            android:layout_weight="0.5"/>
+
+    </LinearLayout>
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

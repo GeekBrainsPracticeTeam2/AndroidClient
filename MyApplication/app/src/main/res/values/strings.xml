@@ -4,6 +4,8 @@
     <string name="daily_stats">Daily stats</string>
     <string name="view">To see the statistics</string>
     <string name="select">Please select the site you want</string>
+    <string name="first_date">Selected first Date</string>
+    <string name="last_date">Selected last Date</string>
 
     <string-array name="sites">
         <item>lenta.ru</item>

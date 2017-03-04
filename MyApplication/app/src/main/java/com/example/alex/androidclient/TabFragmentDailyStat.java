@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.Date;
+
 /**
  * Created by alex on 03.03.17.
  */
@@ -19,6 +21,9 @@ import android.widget.TextView;
 public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItemSelectedListener{
     Spinner spinnerSites;
     Button buttonView;
+
+    private Date firstDateSelected;
+    private Date lastDateSelected;
 
     @Nullable
     @Override

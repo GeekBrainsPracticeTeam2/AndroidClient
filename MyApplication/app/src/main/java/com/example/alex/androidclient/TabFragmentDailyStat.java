@@ -18,9 +18,10 @@ import java.util.Date;
  * Created by alex on 03.03.17.
  */
 
-public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItemSelectedListener{
-    Spinner spinnerSites;
-    Button buttonView;
+public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItemSelectedListener,
+        View.OnClickListener{
+    private Spinner spinnerSites;
+    private Button buttonView, buttonFirstDateSelected, buttonLastDateSelected;
 
     private Date firstDateSelected;
     private Date lastDateSelected;
@@ -38,6 +39,8 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     private void initView(View view){
         spinnerSites = (Spinner)view.findViewById(R.id.sites_spinner);
         buttonView =(Button)view.findViewById(R.id.button_view);
+        buttonFirstDateSelected = (Button)view.findViewById(R.id.first_date_selected);
+        buttonLastDateSelected = (Button)view.findViewById(R.id.last_date_selected);
     }
 
     private void setSpinner(){
@@ -61,6 +64,26 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     }
 
     private void buttonBehavoir(){
+        buttonView.setOnClickListener(this);
+        buttonFirstDateSelected.setOnClickListener(this);
+        buttonLastDateSelected.setOnClickListener(this);
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.first_date_selected:
+
+                break;
+            case R.id.last_date_selected:
+
+                break;
+            case R.id.button_view:
+
+                break;
+
+        }
 
     }
 }

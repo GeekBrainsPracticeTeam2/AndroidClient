@@ -1,5 +1,6 @@
 package com.example.alex.androidclient;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,9 +10,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -23,8 +26,9 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     private Spinner spinnerSites;
     private Button buttonView, buttonFirstDateSelected, buttonLastDateSelected;
 
-    private Date firstDateSelected;
-    private Date lastDateSelected;
+    private Calendar date = Calendar.getInstance();
+    private Calendar firstDateSelected = Calendar.getInstance();
+    private Calendar lastDateSelected;
 
     @Nullable
     @Override
@@ -74,10 +78,10 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.first_date_selected:
-
+                setDate(v);
                 break;
             case R.id.last_date_selected:
-
+                setDate(v);
                 break;
             case R.id.button_view:
 
@@ -86,4 +90,22 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
         }
 
     }
+
+    public void setDate(View v) {
+        //отображаем диалоговое окно для выбора даты
+        new DatePickerDialog(getActivity(), d,
+                date.get(Calendar.YEAR),
+                date.get(Calendar.MONTH),
+                date.get(Calendar.DAY_OF_MONTH))
+                .show();
+    }
+
+    DatePickerDialog.OnDateSetListener d = new DatePickerDialog.OnDateSetListener() {
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            date.set(Calendar.YEAR, year);
+            date.set(Calendar.MONTH, monthOfYear);
+            date.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            //Здесь должен быть метод, который сетит значения даты.
+                    }
+    };
 }

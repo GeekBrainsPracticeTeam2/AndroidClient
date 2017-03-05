@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     private Spinner spinnerSites;
     private Button buttonView, buttonFirstDateSelected, buttonLastDateSelected;
     private LinearLayout linearLayoutTextViewDateSelected;
+    private RecyclerView recyclerView;
 
     private Calendar dateToDay = Calendar.getInstance();
     private Calendar firstDateSelected;
@@ -49,6 +51,7 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
         buttonLastDateSelected = (Button)view.findViewById(R.id.last_date_selected);
         linearLayoutTextViewDateSelected = (LinearLayout)view.findViewById(R.id.
                 linear_layout_textview_date_selected);
+        recyclerView = (RecyclerView)view.findViewById(R.id.recycler_view);
     }
 
     private void setSpinner(){
@@ -90,6 +93,7 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
                 visibileLinearLayoutTextViewDateSelected();
                 break;
             case R.id.button_view:
+                //здесь метод отправки запроса к БД
 
                 break;
 

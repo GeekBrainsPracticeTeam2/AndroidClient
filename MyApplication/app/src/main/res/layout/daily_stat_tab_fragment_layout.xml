@@ -76,4 +76,12 @@
         android:hint="@string/view"
         android:layout_gravity="center"/>
 
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/recycler_view" />
+
+    <!--написать линер лайяут, горизонтальный, из 2 текст вью, в которых будет отражаться итоговый
+     результат. Жирный.-->
+
 </LinearLayout>

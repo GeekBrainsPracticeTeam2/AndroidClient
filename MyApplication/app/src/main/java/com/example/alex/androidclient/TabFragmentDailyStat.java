@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -25,9 +26,10 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
         View.OnClickListener{
     private Spinner spinnerSites;
     private Button buttonView, buttonFirstDateSelected, buttonLastDateSelected;
+    private LinearLayout linearLayoutTextViewDateSelected;
 
-    private Calendar date = Calendar.getInstance();
-    private Calendar firstDateSelected = Calendar.getInstance();
+    private Calendar dateToDay = Calendar.getInstance();
+    private Calendar firstDateSelected;
     private Calendar lastDateSelected;
 
     @Nullable
@@ -45,6 +47,8 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
         buttonView =(Button)view.findViewById(R.id.button_view);
         buttonFirstDateSelected = (Button)view.findViewById(R.id.first_date_selected);
         buttonLastDateSelected = (Button)view.findViewById(R.id.last_date_selected);
+        linearLayoutTextViewDateSelected = (LinearLayout)view.findViewById(R.id.
+                linear_layout_textview_date_selected);
     }
 
     private void setSpinner(){
@@ -78,10 +82,12 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.first_date_selected:
-                setDate(v);
+                setDate(v, firstDateSelected);
+                visibileLinearLayoutTextViewDateSelected();
                 break;
             case R.id.last_date_selected:
-                setDate(v);
+                setDate(v, lastDateSelected);
+                visibileLinearLayoutTextViewDateSelected();
                 break;
             case R.id.button_view:
 
@@ -91,21 +97,30 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
 
     }
 
-    public void setDate(View v) {
+    private void visibileLinearLayoutTextViewDateSelected(){
+        if (firstDateSelected != null && lastDateSelected != null){
+            linearLayoutTextViewDateSelected.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void setDate(View v, Calendar dateSelected) {
         //отображаем диалоговое окно для выбора даты
-        new DatePickerDialog(getActivity(), d,
-                date.get(Calendar.YEAR),
-                date.get(Calendar.MONTH),
-                date.get(Calendar.DAY_OF_MONTH))
+        new DatePickerDialog(getActivity(), datePickerDialogListener(dateSelected),
+                dateToDay.get(Calendar.YEAR),
+                dateToDay.get(Calendar.MONTH),
+                dateToDay.get(Calendar.DAY_OF_MONTH))
                 .show();
     }
 
-    DatePickerDialog.OnDateSetListener d = new DatePickerDialog.OnDateSetListener() {
-        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            date.set(Calendar.YEAR, year);
-            date.set(Calendar.MONTH, monthOfYear);
-            date.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            //Здесь должен быть метод, который сетит значения даты.
-                    }
-    };
+    private DatePickerDialog.OnDateSetListener datePickerDialogListener(final Calendar dateSelected) {
+        //TODO разобраться с объявлением final, т.к. не получается сетить.
+        DatePickerDialog.OnDateSetListener d = new DatePickerDialog.OnDateSetListener() {
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                dateSelected.set(Calendar.YEAR, year);
+                dateSelected.set(Calendar.MONTH, monthOfYear);
+                dateSelected.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            }
+        };
+        return d;
+    }
 }

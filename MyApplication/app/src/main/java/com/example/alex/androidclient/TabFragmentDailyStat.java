@@ -1,8 +1,11 @@
 package com.example.alex.androidclient;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,6 +22,8 @@ import android.widget.TextView;
 import java.util.Calendar;
 import java.util.Date;
 
+import static com.example.alex.androidclient.DatePickerFragment.DATE_SELECTED;
+
 /**
  * Created by alex on 03.03.17.
  */
@@ -30,9 +35,12 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     private LinearLayout linearLayoutTextViewDateSelected;
     private RecyclerView recyclerView;
 
-    private Calendar dateToDay = Calendar.getInstance();
     private Calendar firstDateSelected;
     private Calendar lastDateSelected;
+
+    private long date;
+
+    private static final int REQUEST_DATE = 1;
 
     @Nullable
     @Override
@@ -85,11 +93,11 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.first_date_selected:
-                setDate(v, firstDateSelected);
+                setDate(firstDateSelected);
                 visibileLinearLayoutTextViewDateSelected();
                 break;
             case R.id.last_date_selected:
-                setDate(v, lastDateSelected);
+                setDate(lastDateSelected);
                 visibileLinearLayoutTextViewDateSelected();
                 break;
             case R.id.button_view:
@@ -107,24 +115,24 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
         }
     }
 
-    public void setDate(View v, Calendar dateSelected) {
-        //отображаем диалоговое окно для выбора даты
-        new DatePickerDialog(getActivity(), datePickerDialogListener(dateSelected),
-                dateToDay.get(Calendar.YEAR),
-                dateToDay.get(Calendar.MONTH),
-                dateToDay.get(Calendar.DAY_OF_MONTH))
-                .show();
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_DATE){
+            date = data.getLongExtra(DATE_SELECTED, -1);
+        }
     }
 
-    private DatePickerDialog.OnDateSetListener datePickerDialogListener(final Calendar dateSelected) {
-        //TODO разобраться с объявлением final, т.к. не получается сетить.
-        DatePickerDialog.OnDateSetListener d = new DatePickerDialog.OnDateSetListener() {
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                dateSelected.set(Calendar.YEAR, year);
-                dateSelected.set(Calendar.MONTH, monthOfYear);
-                dateSelected.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            }
-        };
-        return d;
+    private void setDate(Calendar calendar){
+        DialogFragment newFragment = new DatePickerFragment();
+        newFragment.setTargetFragment(this, REQUEST_DATE);
+        newFragment.show(getFragmentManager(), "DatePicker");
+
+        if (date != 0){
+            calendar.setTimeInMillis(date);
+        }
+
+
     }
+
 }

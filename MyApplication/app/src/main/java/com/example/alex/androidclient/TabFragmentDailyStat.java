@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,7 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
         View.OnClickListener{
     private Spinner spinnerSites;
     private Button buttonView, buttonFirstDateSelected, buttonLastDateSelected;
+    private TextView textViewFirstDateSelected, textViewlastDateSelected;
     private LinearLayout linearLayoutTextViewDateSelected;
     private RecyclerView recyclerView;
 
@@ -39,8 +41,12 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     private Calendar lastDateSelected = Calendar.getInstance();
 
     private long date;
+    private boolean firstDateChosen = false;
+    private boolean lastDateChosen = false;
 
-    private static final int REQUEST_DATE = 1;
+    private static final int CHANGE_DATE = 2;
+
+    private static final String TAG = "MyApp";
 
     @Nullable
     @Override
@@ -57,9 +63,17 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
         buttonView =(Button)view.findViewById(R.id.button_view);
         buttonFirstDateSelected = (Button)view.findViewById(R.id.first_date_selected);
         buttonLastDateSelected = (Button)view.findViewById(R.id.last_date_selected);
+        textViewFirstDateSelected = (TextView)view.findViewById(R.id.textview_first_date_selected);
+        textViewlastDateSelected = (TextView)view.findViewById(R.id.textviews_last_date_selected);
+        setTextView();
         linearLayoutTextViewDateSelected = (LinearLayout)view.findViewById(R.id.
                 linear_layout_textview_date_selected);
         recyclerView = (RecyclerView)view.findViewById(R.id.recycler_view);
+    }
+
+    private void setTextView(){
+        textViewFirstDateSelected.setText(firstDateSelected.toString());
+        textViewlastDateSelected.setText(lastDateSelected.toString());
     }
 
     private void setSpinner(){
@@ -93,11 +107,11 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.first_date_selected:
-                setDate(firstDateSelected);
+                setDate(firstDateSelected, firstDateChosen);
                 visibileLinearLayoutTextViewDateSelected();
                 break;
             case R.id.last_date_selected:
-                setDate(lastDateSelected);
+                setDate(lastDateSelected, lastDateChosen);
                 visibileLinearLayoutTextViewDateSelected();
                 break;
             case R.id.button_view:
@@ -110,7 +124,9 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     }
 
     private void visibileLinearLayoutTextViewDateSelected(){
-        if (firstDateSelected != null && lastDateSelected != null){
+        Log.i(TAG, "firstDateChosen is " + firstDateChosen + ", lastDateSelected is " +
+                lastDateChosen);
+        if (firstDateChosen && lastDateChosen){
             linearLayoutTextViewDateSelected.setVisibility(View.VISIBLE);
         }
     }
@@ -118,20 +134,32 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_DATE){
-            date = data.getLongExtra(DATE_SELECTED, -1);
+
+        if (data == null || resultCode != Activity.RESULT_OK) return;
+
+        switch (requestCode) {
+            case CHANGE_DATE:
+                date = data.getLongExtra(DATE_SELECTED, 0);
+                break;
         }
+
     }
 
-    private void setDate(Calendar calendar){
-        DialogFragment newFragment = new DatePickerFragment();
-        newFragment.setTargetFragment(this, REQUEST_DATE);
-        newFragment.show(getFragmentManager(), "DatePicker");
+    private void setDate(Calendar dateSelected, boolean dateChosen){
+        Log.i(TAG, "Start setDate, dateChosen is " + dateChosen);
+        Log.i(TAG, "Start setDate, date = " + dateSelected);
+        Log.i(TAG, "date = " + date);
+        DialogFragment changeDate = new DatePickerFragment();
+        changeDate.setTargetFragment(TabFragmentDailyStat.this, CHANGE_DATE);
+        changeDate.show(getFragmentManager(), "DatePicker");
 
         if (date != 0){
-            calendar.setTimeInMillis(date);
+            dateSelected.setTimeInMillis(date);
+            dateChosen = true;
         }
 
+            Log.i(TAG, "End setDate, dateChosen is " + dateChosen);
+            Log.i(TAG, "End setDate, date = " + dateSelected);
 
     }
 

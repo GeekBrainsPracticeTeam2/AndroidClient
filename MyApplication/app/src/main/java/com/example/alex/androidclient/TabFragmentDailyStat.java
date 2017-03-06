@@ -27,6 +27,7 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
         View.OnClickListener{
     private Spinner spinnerSites;
     private Button buttonView, buttonFirstDateSelected, buttonLastDateSelected;
+    private TextView textViewFirstDateSelected, textViewlastDateSelected;
     private LinearLayout linearLayoutTextViewDateSelected;
     private RecyclerView recyclerView;
 
@@ -49,10 +50,15 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
         buttonView =(Button)view.findViewById(R.id.button_view);
         buttonFirstDateSelected = (Button)view.findViewById(R.id.first_date_selected);
         buttonLastDateSelected = (Button)view.findViewById(R.id.last_date_selected);
+        textViewFirstDateSelected = (TextView)view.findViewById(R.id.textview_first_date_selected);
+        textViewlastDateSelected = (TextView)view.findViewById(R.id.textviews_last_date_selected);
+        setTextView();
         linearLayoutTextViewDateSelected = (LinearLayout)view.findViewById(R.id.
                 linear_layout_textview_date_selected);
         recyclerView = (RecyclerView)view.findViewById(R.id.recycler_view);
     }
+
+    
 
     private void setSpinner(){
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),

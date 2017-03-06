@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,8 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
 
     private boolean firstDateChosen = false;
     private boolean lastDateChosen = false;
+
+    private static final String TAG = "MyApp";
 
     @Nullable
     @Override
@@ -137,7 +140,10 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
                 dateSelected.set(Calendar.DAY_OF_MONTH, dayOfMonth);
             }
         };
+        Log.i(TAG, "Start datePickerDialogListener dateChosen is " + dateChosen);
         dateChosen = true;
+        Log.i(TAG, "End datePickerDialogListener firstDateChosen is " + firstDateChosen);
+        Log.i(TAG, "End datePickerDialogListener lastDateChosen is " + lastDateChosen);
         return d;
     }
 }

@@ -31,8 +31,8 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     private RecyclerView recyclerView;
 
     private Calendar dateToDay = Calendar.getInstance();
-    private Calendar firstDateSelected;
-    private Calendar lastDateSelected;
+    private Calendar firstDateSelected = Calendar.getInstance();
+    private Calendar lastDateSelected = Calendar.getInstance();
 
     @Nullable
     @Override
@@ -117,7 +117,6 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     }
 
     private DatePickerDialog.OnDateSetListener datePickerDialogListener(final Calendar dateSelected) {
-        //TODO разобраться с объявлением final, т.к. не получается сетить.
         DatePickerDialog.OnDateSetListener d = new DatePickerDialog.OnDateSetListener() {
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 dateSelected.set(Calendar.YEAR, year);

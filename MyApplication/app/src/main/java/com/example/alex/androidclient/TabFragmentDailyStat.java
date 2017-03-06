@@ -35,6 +35,9 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     private Calendar firstDateSelected = Calendar.getInstance();
     private Calendar lastDateSelected = Calendar.getInstance();
 
+    private boolean firstDateChosen = false;
+    private boolean lastDateChosen = false;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -94,11 +97,11 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.first_date_selected:
-                setDate(v, firstDateSelected);
+                setDate(v, firstDateSelected, firstDateChosen);
                 visibileLinearLayoutTextViewDateSelected();
                 break;
             case R.id.last_date_selected:
-                setDate(v, lastDateSelected);
+                setDate(v, lastDateSelected, lastDateChosen);
                 visibileLinearLayoutTextViewDateSelected();
                 break;
             case R.id.button_view:
@@ -111,21 +114,22 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     }
 
     private void visibileLinearLayoutTextViewDateSelected(){
-        if (firstDateSelected != null && lastDateSelected != null){
+        if (firstDateChosen && lastDateChosen){
             linearLayoutTextViewDateSelected.setVisibility(View.VISIBLE);
         }
     }
 
-    public void setDate(View v, Calendar dateSelected) {
+    public void setDate(View v, Calendar dateSelected, boolean dateChosen) {
         //отображаем диалоговое окно для выбора даты
-        new DatePickerDialog(getActivity(), datePickerDialogListener(dateSelected),
+        new DatePickerDialog(getActivity(), datePickerDialogListener(dateSelected, dateChosen),
                 dateToDay.get(Calendar.YEAR),
                 dateToDay.get(Calendar.MONTH),
                 dateToDay.get(Calendar.DAY_OF_MONTH))
                 .show();
     }
 
-    private DatePickerDialog.OnDateSetListener datePickerDialogListener(final Calendar dateSelected) {
+    private DatePickerDialog.OnDateSetListener datePickerDialogListener(final Calendar dateSelected,
+                                                                        boolean dateChosen) {
         DatePickerDialog.OnDateSetListener d = new DatePickerDialog.OnDateSetListener() {
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 dateSelected.set(Calendar.YEAR, year);
@@ -133,6 +137,7 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
                 dateSelected.set(Calendar.DAY_OF_MONTH, dayOfMonth);
             }
         };
+        dateChosen = true;
         return d;
     }
 }

@@ -35,8 +35,8 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     private LinearLayout linearLayoutTextViewDateSelected;
     private RecyclerView recyclerView;
 
-    private Calendar firstDateSelected;
-    private Calendar lastDateSelected;
+    private Calendar firstDateSelected = Calendar.getInstance();
+    private Calendar lastDateSelected = Calendar.getInstance();
 
     private long date;
 

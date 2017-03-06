@@ -58,8 +58,11 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
         recyclerView = (RecyclerView)view.findViewById(R.id.recycler_view);
     }
 
+    private void setTextView(){
+        textViewFirstDateSelected.setText(firstDateSelected.toString());
+        textViewlastDateSelected.setText(lastDateSelected.toString());
+    }
     
-
     private void setSpinner(){
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.sites,

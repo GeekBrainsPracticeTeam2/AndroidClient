@@ -18,6 +18,7 @@ public class DatePickerFragment extends DialogFragment implements
         DatePickerDialog.OnDateSetListener{
     public static final String DATE_SELECTED = "date";
     public static final String BUTTON_SELECTED = "flag";
+    public static final String CHOSEN = "chosen";
     int flag;
 
     @Override
@@ -37,7 +38,8 @@ public class DatePickerFragment extends DialogFragment implements
         long date = view.getCalendarView().getDate();
         Intent i = new Intent();
         i.putExtra (DATE_SELECTED, date);
-        i.putExtra(BUTTON_SELECTED, flag);
+        i.putExtra (BUTTON_SELECTED, flag);
+        i.putExtra(CHOSEN, true);
         getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, i);
     }
 }

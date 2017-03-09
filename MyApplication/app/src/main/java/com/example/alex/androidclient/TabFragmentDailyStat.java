@@ -25,6 +25,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import static com.example.alex.androidclient.DatePickerFragment.BUTTON_SELECTED;
+import static com.example.alex.androidclient.DatePickerFragment.CHOSEN;
 import static com.example.alex.androidclient.DatePickerFragment.DATE_SELECTED;
 
 /**
@@ -79,7 +80,7 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
 
     private void setTextView(){
         if (firstDateSelected != null) {
-            textViewFirstDateSelected.setText(sdf.format(firstDateSelected));
+            textViewFirstDateSelected.setText("01");
         }
         if (lastDateSelected != null){
             textViewlastDateSelected.setText(sdf.format(lastDateSelected));
@@ -117,37 +118,32 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.first_date_selected:
-                Log.i(TAG, "onClick start startDatePickerDialog()");
                 startDatePickerDialog(flagFirstDateSelected);
-                firstDateChosen = true;
                 visibileLinearLayoutTextViewDateSelected();
                 break;
             case R.id.last_date_selected:
                 startDatePickerDialog(flagLastDateSelected);
-                lastDateChosen = true;
-                visibileLinearLayoutTextViewDateSelected();
                 break;
             case R.id.button_view:
                 //здесь метод отправки запроса к БД
 
                 break;
-
         }
-
     }
 
     private void visibileLinearLayoutTextViewDateSelected(){
-        Log.i(TAG, "firstDateChosen is " + firstDateChosen + ", lastDateSelected is " +
-                lastDateChosen);
+        Log.i(TAG, "On visibileLinearLayoutTextViewDateSelected firstDateChosen is " +
+                firstDateChosen + ", lastDateSelected is " + lastDateChosen);
         if (firstDateChosen && lastDateChosen){
             linearLayoutTextViewDateSelected.setVisibility(View.VISIBLE);
+            firstDateChosen = false;
+            lastDateChosen = false;
         }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.i(TAG, "Start onActivityResult data = " + data.getLongExtra(DATE_SELECTED, 0));
 
         if (data == null || resultCode != Activity.RESULT_OK) return;
 
@@ -155,16 +151,13 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
             case CHANGE_DATE:
                 date = data.getLongExtra(DATE_SELECTED, 0);
                 int flag = data.getIntExtra(BUTTON_SELECTED, 0);
-                setDate(flag);
+                boolean chosen = data.getBooleanExtra(CHOSEN, false);
+                setDate(flag, chosen);
                 break;
         }
-
-        Log.i(TAG, "End onActivityResult data = " + data.getLongExtra(DATE_SELECTED, 0));
-
     }
 
     private void startDatePickerDialog(int flag){
-        Log.i(TAG, "startDatePickerDialog() start");
         DialogFragment changeDate = new DatePickerFragment();
         Bundle args = new Bundle(1);
         args.putInt("flag", flag);
@@ -173,19 +166,26 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
         changeDate.show(getFragmentManager(), "DatePicker");
     }
 
-    private void setDate(int flagDateSelected){
+    private void setDate(int flag, boolean chosen){
         Log.i(TAG, "setDate() start");
 
-        if (flagFirstDateSelected == flagDateSelected){
+        if (flagFirstDateSelected == flag){
             firstDateSelected = Calendar.getInstance();
             firstDateSelected.setTimeInMillis(date);
+            firstDateChosen = chosen;
             } else {
             lastDateSelected = Calendar.getInstance();
             lastDateSelected.setTimeInMillis(date);
+            lastDateChosen = chosen;
         }
-
-            Log.i(TAG, "End setDate, firstDateSelected = " + firstDateSelected);
-            Log.i(TAG, "End setDate, lastDateSelected = " + lastDateSelected);
+        Log.i(TAG, "flagFirstDateSelected = " + flagFirstDateSelected);
+        Log.i(TAG, "flagLastDateSelected = " + flagLastDateSelected);
+        Log.i(TAG, "flag = " + flag);
+        Log.i(TAG, "End setDate:");
+        Log.i(TAG, "firstDateSelected = " + firstDateSelected);
+        Log.i(TAG, "firstDateChosen = " + firstDateChosen);
+        Log.i(TAG, "lastDateSelected = " + lastDateSelected);
+        Log.i(TAG, "lastDateChosen = " + lastDateChosen);
 
     }
 

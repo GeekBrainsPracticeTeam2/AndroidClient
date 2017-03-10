@@ -19,6 +19,7 @@ import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -40,28 +41,29 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     private LinearLayout linearLayoutTextViewDateSelected;
     private RecyclerView recyclerView;
 
-    private Calendar firstDateSelected;
-    private Calendar lastDateSelected;
+    private Calendar firstDateSelected, lastDateSelected;
 
     private long date;
+
     private boolean firstDateChosen = false;
     private boolean lastDateChosen = false;
-    public static final int flagFirstDateSelected = R.id.first_date_selected;
-    public static final int flagLastDateSelected = R.id.last_date_selected;
 
+    private static final int flagFirstDateSelected = R.id.first_date_selected;
+    private static final int flagLastDateSelected = R.id.last_date_selected;
     private static final int CHANGE_DATE = 2;
-
     private static final String TAG = "MyApp";
 
-    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.daily_stat_tab_fragment_layout, container, false);
         initView(view);
         setSpinner();
         buttonBehavoir();
+
         return view;
     }
 
@@ -80,6 +82,7 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     private void setTextView(){
         String firstDate = sdf.format(firstDateSelected.getTime());
         String lastDate = sdf.format(lastDateSelected.getTime());
+
         if (firstDateSelected != null) {
             textViewFirstDateSelected.setText(firstDate);
         }
@@ -133,8 +136,33 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
 
     private void visibileLinearLayoutTextViewDateSelected(){
         if (firstDateChosen && lastDateChosen){
+            checkSelectedDateIsGreaterToday();
+            checkFirstDateSelectedIsGreaterLastDateSelected();
             setTextView();
             linearLayoutTextViewDateSelected.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void checkFirstDateSelectedIsGreaterLastDateSelected() {
+        if (firstDateSelected.after(lastDateSelected)){
+            firstDateSelected.setTimeInMillis(lastDateSelected.getTimeInMillis());
+            Toast.makeText(getActivity(), R.string.alarm_first_date_is_greater_last_date,
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void checkSelectedDateIsGreaterToday() {
+        Calendar toDay = Calendar.getInstance();
+
+        if (firstDateSelected.after(toDay)){
+            firstDateSelected.setTimeInMillis(toDay.getTimeInMillis());
+            Toast.makeText(getActivity(), R.string.alarm_date_is_greater_today,
+                    Toast.LENGTH_SHORT).show();
+        }
+        if (lastDateSelected.after(toDay)){
+            lastDateSelected.setTimeInMillis(toDay.getTimeInMillis());
+            Toast.makeText(getActivity(), R.string.alarm_date_is_greater_today,
+                    Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -157,7 +185,7 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     private void startDatePickerDialog(int flag){
         DialogFragment changeDate = new DatePickerFragment();
         Bundle args = new Bundle(1);
-        args.putInt("flag", flag);
+        args.putInt(BUTTON_SELECTED, flag);
         changeDate.setArguments(args);
         changeDate.setTargetFragment(TabFragmentDailyStat.this, CHANGE_DATE);
         changeDate.show(getFragmentManager(), "DatePicker");

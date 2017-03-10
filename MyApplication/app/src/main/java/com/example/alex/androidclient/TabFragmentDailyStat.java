@@ -19,6 +19,7 @@ import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -135,8 +136,27 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
 
     private void visibileLinearLayoutTextViewDateSelected(){
         if (firstDateChosen && lastDateChosen){
+            checkSelectedDateIsGreaterToday();
             setTextView();
             linearLayoutTextViewDateSelected.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void checkSelectedDateIsGreaterToday() {
+        Calendar toDay = Calendar.getInstance();
+        long fDS = firstDateSelected.getTimeInMillis();
+        long lDS = lastDateSelected.getTimeInMillis();
+        long tD = toDay.getTimeInMillis();
+
+        if (fDS > tD){
+            firstDateSelected.setTimeInMillis(tD);
+            Toast.makeText(getActivity(), R.string.alarm_date_is_greater_today,
+                    Toast.LENGTH_SHORT).show();
+        }
+        if (lDS > tD){
+            lastDateSelected.setTimeInMillis(tD);
+            Toast.makeText(getActivity(), R.string.alarm_date_is_greater_today,
+                    Toast.LENGTH_SHORT).show();
         }
     }
 

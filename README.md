@@ -1,5 +1,5 @@
 # AndroidClient
-Android client app to showing statistics onmobile  devices.
+Android client app to showing statistics on mobile  devices.
 
 Add to bulid.gradle:
 

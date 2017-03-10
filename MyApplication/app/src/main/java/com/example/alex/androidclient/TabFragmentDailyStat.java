@@ -72,19 +72,19 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
         buttonLastDateSelected = (Button)view.findViewById(R.id.last_date_selected);
         textViewFirstDateSelected = (TextView)view.findViewById(R.id.textview_first_date_selected);
         textViewLastDateSelected = (TextView)view.findViewById(R.id.textviews_last_date_selected);
-        setTextView();
         linearLayoutTextViewDateSelected = (LinearLayout)view.findViewById(R.id.
                 linear_layout_textview_date_selected);
         recyclerView = (RecyclerView)view.findViewById(R.id.recycler_view);
     }
 
     private void setTextView(){
+        String firstDate = sdf.format(firstDateSelected.getTime());
+        String lastDate = sdf.format(lastDateSelected.getTime());
         if (firstDateSelected != null) {
-            textViewFirstDateSelected.setText("01");
+            textViewFirstDateSelected.setText(firstDate);
         }
         if (lastDateSelected != null){
-            textViewLastDateSelected.setText("02");
-//            sdf.format(lastDateSelected
+            textViewLastDateSelected.setText(lastDate);
         }
     }
 
@@ -132,9 +132,10 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     }
 
     private void visibileLinearLayoutTextViewDateSelected(){
-        Log.i(TAG, "On visibileLinearLayoutTextViewDateSelected firstDateChosen is " +
-                firstDateChosen + ", lastDateSelected is " + lastDateChosen);
+//        Log.i(TAG, "On visibileLinearLayoutTextViewDateSelected firstDateChosen is " +
+//                firstDateChosen + ", lastDateSelected is " + lastDateChosen);
         if (firstDateChosen && lastDateChosen){
+            setTextView();
             linearLayoutTextViewDateSelected.setVisibility(View.VISIBLE);
             firstDateChosen = false;
             lastDateChosen = false;

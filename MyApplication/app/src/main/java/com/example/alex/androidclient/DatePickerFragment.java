@@ -35,7 +35,9 @@ public class DatePickerFragment extends DialogFragment implements
     @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 
-        long date = view.getCalendarView().getDate();
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, monthOfYear, dayOfMonth);
+        long date = calendar.getTimeInMillis();
         Intent i = new Intent();
         i.putExtra (DATE_SELECTED, date);
         i.putExtra (BUTTON_SELECTED, flag);

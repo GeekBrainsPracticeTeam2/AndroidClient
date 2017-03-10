@@ -46,8 +46,8 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     private long date;
     private boolean firstDateChosen = false;
     private boolean lastDateChosen = false;
-    private int flagFirstDateSelected = R.id.first_date_selected;
-    private int flagLastDateSelected = R.id.last_date_selected;
+    public static final int flagFirstDateSelected = R.id.first_date_selected;
+    public static final int flagLastDateSelected = R.id.last_date_selected;
 
     private static final int CHANGE_DATE = 2;
 
@@ -118,10 +118,10 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.first_date_selected:
+            case flagFirstDateSelected:
                 startDatePickerDialog(flagFirstDateSelected);
                 break;
-            case R.id.last_date_selected:
+            case flagLastDateSelected:
                 startDatePickerDialog(flagLastDateSelected);
                 break;
             case R.id.button_view:
@@ -132,13 +132,9 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     }
 
     private void visibileLinearLayoutTextViewDateSelected(){
-//        Log.i(TAG, "On visibileLinearLayoutTextViewDateSelected firstDateChosen is " +
-//                firstDateChosen + ", lastDateSelected is " + lastDateChosen);
         if (firstDateChosen && lastDateChosen){
             setTextView();
             linearLayoutTextViewDateSelected.setVisibility(View.VISIBLE);
-            firstDateChosen = false;
-            lastDateChosen = false;
         }
     }
 
@@ -168,8 +164,6 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     }
 
     private void setDate(int flag, boolean chosen){
-        Log.i(TAG, "setDate() start");
-
         if (flagFirstDateSelected == flag){
             firstDateSelected = Calendar.getInstance();
             firstDateSelected.setTimeInMillis(date);
@@ -181,15 +175,5 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
             lastDateChosen = chosen;
             visibileLinearLayoutTextViewDateSelected();
         }
-//        Log.i(TAG, "flagFirstDateSelected = " + flagFirstDateSelected);
-//        Log.i(TAG, "flagLastDateSelected = " + flagLastDateSelected);
-//        Log.i(TAG, "flag = " + flag);
-//        Log.i(TAG, "End setDate:");
-//        Log.i(TAG, "firstDateSelected = " + firstDateSelected);
-//        Log.i(TAG, "firstDateChosen = " + firstDateChosen);
-//        Log.i(TAG, "lastDateSelected = " + lastDateSelected);
-//        Log.i(TAG, "lastDateChosen = " + lastDateChosen);
-
     }
-
 }

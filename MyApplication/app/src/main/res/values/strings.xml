@@ -9,6 +9,8 @@
     <string name="last_date">Selected last Date</string>
     <string name="alarm_date_is_greater_today">Your chosen date is greater than today\'s. Please
         select a valid date.</string>
+    <string name="alarm_first_date_is_greater_last_date">Your chosen start date greater than the
+        end. Please select a valid date.</string>
 
 
     <string-array name="sites">

@@ -137,24 +137,30 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     private void visibileLinearLayoutTextViewDateSelected(){
         if (firstDateChosen && lastDateChosen){
             checkSelectedDateIsGreaterToday();
+            checkFirstDateSelectedIsGreaterLastDateSelected();
             setTextView();
             linearLayoutTextViewDateSelected.setVisibility(View.VISIBLE);
         }
     }
 
+    private void checkFirstDateSelectedIsGreaterLastDateSelected() {
+        if (firstDateSelected.after(lastDateSelected)){
+            firstDateSelected.setTimeInMillis(lastDateSelected.getTimeInMillis());
+            Toast.makeText(getActivity(), R.string.alarm_first_date_is_greater_last_date,
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private void checkSelectedDateIsGreaterToday() {
         Calendar toDay = Calendar.getInstance();
-        long fDS = firstDateSelected.getTimeInMillis();
-        long lDS = lastDateSelected.getTimeInMillis();
-        long tD = toDay.getTimeInMillis();
 
-        if (fDS > tD){
-            firstDateSelected.setTimeInMillis(tD);
+        if (firstDateSelected.after(toDay)){
+            firstDateSelected.setTimeInMillis(toDay.getTimeInMillis());
             Toast.makeText(getActivity(), R.string.alarm_date_is_greater_today,
                     Toast.LENGTH_SHORT).show();
         }
-        if (lDS > tD){
-            lastDateSelected.setTimeInMillis(tD);
+        if (lastDateSelected.after(toDay)){
+            lastDateSelected.setTimeInMillis(toDay.getTimeInMillis());
             Toast.makeText(getActivity(), R.string.alarm_date_is_greater_today,
                     Toast.LENGTH_SHORT).show();
         }

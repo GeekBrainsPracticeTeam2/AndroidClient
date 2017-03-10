@@ -40,28 +40,29 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     private LinearLayout linearLayoutTextViewDateSelected;
     private RecyclerView recyclerView;
 
-    private Calendar firstDateSelected;
-    private Calendar lastDateSelected;
+    private Calendar firstDateSelected, lastDateSelected;
 
     private long date;
+
     private boolean firstDateChosen = false;
     private boolean lastDateChosen = false;
-    public static final int flagFirstDateSelected = R.id.first_date_selected;
-    public static final int flagLastDateSelected = R.id.last_date_selected;
 
+    private static final int flagFirstDateSelected = R.id.first_date_selected;
+    private static final int flagLastDateSelected = R.id.last_date_selected;
     private static final int CHANGE_DATE = 2;
-
     private static final String TAG = "MyApp";
 
-    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.daily_stat_tab_fragment_layout, container, false);
         initView(view);
         setSpinner();
         buttonBehavoir();
+
         return view;
     }
 
@@ -80,6 +81,7 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     private void setTextView(){
         String firstDate = sdf.format(firstDateSelected.getTime());
         String lastDate = sdf.format(lastDateSelected.getTime());
+
         if (firstDateSelected != null) {
             textViewFirstDateSelected.setText(firstDate);
         }
@@ -157,7 +159,7 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     private void startDatePickerDialog(int flag){
         DialogFragment changeDate = new DatePickerFragment();
         Bundle args = new Bundle(1);
-        args.putInt("flag", flag);
+        args.putInt(BUTTON_SELECTED, flag);
         changeDate.setArguments(args);
         changeDate.setTargetFragment(TabFragmentDailyStat.this, CHANGE_DATE);
         changeDate.show(getFragmentManager(), "DatePicker");

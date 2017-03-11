@@ -11,6 +11,7 @@
         select a valid date.</string>
     <string name="alarm_first_date_is_greater_last_date">Your chosen start date greater than the
         end. Please select a valid date.</string>
+    <string name="default_date">DD:MM:YYYY</string>
 
 
     <string-array name="sites">

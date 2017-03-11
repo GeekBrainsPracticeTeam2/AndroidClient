@@ -38,7 +38,6 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     private Spinner spinnerSites;
     private Button buttonView, buttonFirstDateSelected, buttonLastDateSelected;
     private TextView textViewFirstDateSelected, textViewLastDateSelected;
-    private LinearLayout linearLayoutTextViewDateSelected;
     private RecyclerView recyclerView;
 
     private Calendar firstDateSelected, lastDateSelected;
@@ -74,19 +73,22 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
         buttonLastDateSelected = (Button)view.findViewById(R.id.last_date_selected);
         textViewFirstDateSelected = (TextView)view.findViewById(R.id.textview_first_date_selected);
         textViewLastDateSelected = (TextView)view.findViewById(R.id.textviews_last_date_selected);
-        linearLayoutTextViewDateSelected = (LinearLayout)view.findViewById(R.id.
-                linear_layout_textview_date_selected);
+        setTextViewDefault();
         recyclerView = (RecyclerView)view.findViewById(R.id.recycler_view);
     }
 
-    private void setTextView(){
-        String firstDate = sdf.format(firstDateSelected.getTime());
-        String lastDate = sdf.format(lastDateSelected.getTime());
+    private void setTextViewDefault() {
+        textViewFirstDateSelected.setText(R.string.default_date);
+        textViewLastDateSelected.setText(R.string.default_date);
+    }
 
+    private void setTextViewSelected(){
         if (firstDateSelected != null) {
+            String firstDate = sdf.format(firstDateSelected.getTime());
             textViewFirstDateSelected.setText(firstDate);
         }
         if (lastDateSelected != null){
+            String lastDate = sdf.format(lastDateSelected.getTime());
             textViewLastDateSelected.setText(lastDate);
         }
     }
@@ -134,12 +136,11 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
         }
     }
 
-    private void visibileLinearLayoutTextViewDateSelected(){
+    private void checkTextViewDateSelected(){
         if (firstDateChosen && lastDateChosen){
             checkSelectedDateIsGreaterToday();
             checkFirstDateSelectedIsGreaterLastDateSelected();
-            setTextView();
-            linearLayoutTextViewDateSelected.setVisibility(View.VISIBLE);
+            setTextViewSelected();
         }
     }
 
@@ -196,12 +197,14 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
             firstDateSelected = Calendar.getInstance();
             firstDateSelected.setTimeInMillis(date);
             firstDateChosen = chosen;
-            visibileLinearLayoutTextViewDateSelected();
+            setTextViewSelected();
+            checkTextViewDateSelected();
             } else {
             lastDateSelected = Calendar.getInstance();
             lastDateSelected.setTimeInMillis(date);
             lastDateChosen = chosen;
-            visibileLinearLayoutTextViewDateSelected();
+            setTextViewSelected();
+            checkTextViewDateSelected();
         }
     }
 }

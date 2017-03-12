@@ -21,7 +21,10 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String TB_UPDATES_DATE = "date";
     public static final String TB_UPDATES_TBNAME = "table_name";
     public static final String TB_ID_COL_NAME = "_id";
-    final String DROP_TABLE = "DROP TABLE IF EXISTS " + TB_SITES_NAME + ", " + TB_PERSONS_NAMES + ", " + TB_UPDATES;
+    final String DROP_TABLE = "DROP TABLE IF EXISTS "
+                                + TB_SITES_NAME + ", "
+                                + TB_PERSONS_NAMES + ", "
+                                + TB_UPDATES;
 
 
     public DBHelper(Context context) {
@@ -30,12 +33,15 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         try {
-            sqLiteDatabase.execSQL("CREATE TABLE " + TB_SITES_NAME + " (" + TB_ID_COL_NAME
-                    + " INTEGER PRIMARY KEY AUTOINCREMENT, " + TB_URL + " STRING);");
-            sqLiteDatabase.execSQL("CREATE TABLE " + TB_PERSONS_NAMES +" (" + TB_ID_COL_NAME
-                    + " INTEGER PRIMARY KEY AUTOINCREMENT, " + TB_PERSON_NAME + " STRING);");
-            sqLiteDatabase.execSQL("CREATE TABLE " + TB_UPDATES +" (" + TB_ID_COL_NAME
-                    + " INTEGER PRIMARY KEY AUTOINCREMENT, " + TB_UPDATES_DATE + " INTEGER, "
+            sqLiteDatabase.execSQL("CREATE TABLE " + TB_SITES_NAME + " ("
+                    + TB_ID_COL_NAME + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    + TB_URL + " STRING);");
+            sqLiteDatabase.execSQL("CREATE TABLE " + TB_PERSONS_NAMES +" ("
+                    + TB_ID_COL_NAME + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    + TB_PERSON_NAME + " STRING);");
+            sqLiteDatabase.execSQL("CREATE TABLE " + TB_UPDATES +" ("
+                    + TB_ID_COL_NAME + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    + TB_UPDATES_DATE + " INTEGER, "
                     + TB_UPDATES_TBNAME + " STRING);");
         } catch (SQLException e) {
             e.printStackTrace();

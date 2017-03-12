@@ -33,12 +33,10 @@ proguard/
 captures/
 
 # Intellij
-*.iml
-.idea/workspace.xml
+# *.iml
+# .idea/workspace.xml
 
 # Keystore files
 *.jks
 
-# Android Client
-# AndroidClient/
 /.idea/

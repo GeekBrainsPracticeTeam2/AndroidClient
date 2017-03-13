@@ -25,6 +25,7 @@ public class CacheManager {
     }
 
     public boolean checkUpdates() {
+        // TODO: add functionality
         List<DictionaryUpdates> updates = jHelper.getDictionaryUpdatesList();
         
 

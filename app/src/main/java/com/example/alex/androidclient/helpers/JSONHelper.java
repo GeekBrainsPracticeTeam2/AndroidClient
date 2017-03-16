@@ -9,6 +9,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.example.alex.androidclient.models.DictionaryPersons;
+import com.example.alex.androidclient.models.DictionarySites;
 import com.example.alex.androidclient.models.DictionaryUpdates;
 import com.example.alex.androidclient.models.PersonStats;
 import com.example.alex.androidclient.models.TotalStatistics;
@@ -31,10 +33,13 @@ public class JSONHelper {
     public static final String NAMES_STATISTICS = "statistics";
     public static final String NAMES_SITE_ID = "siteID";
     public static final String TABLES_UPDATES = "tables";
+    public static final String DICTIONARY = "data";
     private RequestQueue requestQueue;
     private Ason ason;
     private TotalStatistics totalStats;
     private List<DictionaryUpdates> dictionaryUpdatesList = new ArrayList<>();
+    private List<DictionarySites> dictionarySitesList = new ArrayList<>();
+    private List<DictionaryPersons> dictionaryPersonsList = new ArrayList<>();
 
     private int mode = -1;
 
@@ -60,17 +65,7 @@ public class JSONHelper {
     private void fetchData() {
         switch (mode){
             case 0:
-                /*
-                AsonArray personsStatistics = ason.getJsonArray(NAMES_STATISTICS);
-                 */
                 AsonArray array = ason.getJsonArray(NAMES_STATISTICS);
-                /*
-                List<PersonStats> stats = new ArrayList<>();
-
-                for (int i = 0; i < personsStatistics; i++) {
-                    stats.add(new PersonStats(personsStatistics.get))
-                }
-                */
                 List<PersonStats> statsList = Ason.deserializeList(array, PersonStats.class);
                 totalStats = new TotalStatistics(ason.getInt(NAMES_SITE_ID),
                         statsList);
@@ -80,8 +75,12 @@ public class JSONHelper {
                 dictionaryUpdatesList = Ason.deserializeList(dictionaryUpdates, DictionaryUpdates.class);
                 break;
             case 2:
+                AsonArray dictionarySites = ason.getJsonArray(DICTIONARY);
+                dictionarySitesList = Ason.deserializeList(dictionarySites, DictionarySites.class);
                 break;
             case 3:
+                AsonArray dictionaryPersons = ason.getJsonArray(DICTIONARY);
+                dictionaryPersonsList = Ason.deserializeList(dictionaryPersons, DictionaryPersons.class);
                 break;
         }
     }
@@ -100,6 +99,10 @@ public class JSONHelper {
         }
     };
 
+    public TotalStatistics getTotalStats() {
+        return totalStats;
+    }
+
     private final Response.ErrorListener onPostsError = new Response.ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError error) {
@@ -109,5 +112,13 @@ public class JSONHelper {
 
     public List<DictionaryUpdates> getDictionaryUpdatesList() {
         return dictionaryUpdatesList;
+    }
+
+    public List<DictionarySites> getDictionarySitesList() {
+        return dictionarySitesList;
+    }
+
+    public List<DictionaryPersons> getDictionaryPersonsList() {
+        return dictionaryPersonsList;
     }
 }

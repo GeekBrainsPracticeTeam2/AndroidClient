@@ -6,15 +6,15 @@ package com.example.alex.androidclient.models;
 
 public class DictionaryUpdates {
 
-    private int dictionaryID;
+    private String dictionaryName;
     private int last_update_date;
 
-    public int getDictionaryID() {
-        return dictionaryID;
+    public String getDictionaryName() {
+        return dictionaryName;
     }
 
-    public void setDictionaryID(int dictionaryID) {
-        this.dictionaryID = dictionaryID;
+    public void setDictionaryName(String dictionaryName) {
+        this.dictionaryName = dictionaryName;
     }
 
     public int getLast_update_date() {

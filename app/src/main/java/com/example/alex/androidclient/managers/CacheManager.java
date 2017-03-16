@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.example.alex.androidclient.helpers.DBHelper;
 import com.example.alex.androidclient.helpers.JSONHelper;
 import com.example.alex.androidclient.models.DictionaryUpdates;
+import com.example.alex.androidclient.models.TotalStatistics;
 
 import java.util.List;
 
@@ -76,5 +77,10 @@ public class CacheManager {
             default:
                 break;
         }
+    }
+
+    public TotalStatistics getTotalStatistics() {
+        JSONHelper jHelperTotalStats = new JSONHelper(0);
+        return jHelperTotalStats.getTotalStats();
     }
 }

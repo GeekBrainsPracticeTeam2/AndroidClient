@@ -14,7 +14,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DBHelper extends SQLiteOpenHelper {
     public static final String DB_NAME = "humaninweb.db";
     public static final String TB_SITES_NAME = "sites";
-    public static final String TB_URL = "url";
+    public static final String TB_SITES_URL = "url";
     public static final String TB_PERSONS_NAMES = "persons";
     public static final String TB_PERSON_NAME = "name";
     public static final String TB_UPDATES = "last_update";
@@ -35,7 +35,7 @@ public class DBHelper extends SQLiteOpenHelper {
         try {
             sqLiteDatabase.execSQL("CREATE TABLE " + TB_SITES_NAME + " ("
                     + TB_ID_COL_NAME + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                    + TB_URL + " STRING);");
+                    + TB_SITES_URL + " STRING);");
             sqLiteDatabase.execSQL("CREATE TABLE " + TB_PERSONS_NAMES +" ("
                     + TB_ID_COL_NAME + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                     + TB_PERSON_NAME + " STRING);");

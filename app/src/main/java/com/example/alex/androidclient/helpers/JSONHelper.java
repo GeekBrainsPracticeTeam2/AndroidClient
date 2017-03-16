@@ -25,10 +25,15 @@ import java.util.List;
 public class JSONHelper {
 
     public static final String LOG_TAG = "JSONHelper";
-    private static final String SAMPLE_JSON_TOTAL_STATISTICS = "{\"siteID\":0,\"statistics\":[{\"person\":0,\"count\":5},{\"person\":1,\"count\":7},{\"person\":2,\"count\":14},{\"person\":3,\"count\":8},{\"person\":4,\"count\":27}]}";
-    private static final String SAMPLE_JSON_UPDATE_STATUS = "{\"tables\":[{\"ID\":0,\"lu_date\":\"2017-03-13 15:56:26\"},{\"ID\":1,\"lu_date\":\"2017-03-13 15:56:26\"}]}";
-    private static final String SAMPLE_JSON_SITES_DIR_UPDATE = "{\"data\":[{\"ID\":0,\"url\":\"lenta.ru\"},{\"ID\":1,\"url\":\"vesti.ru\"},{\"ID\":2,\"url\":\"kp.ru\"}]}";
-    private static final String SAMPLE_JSON_NAMES_DIR_UPDATE = "{\"data\":[{\"ID\":0,\"name\":\"Путин В.В.\"},{\"ID\":1,\"name\":\"Медведев Д.А.\"},{\"ID\":2,\"name\":\"Навальный ?.?.\"}]}";
+    private static final String SAMPLE_JSON_TOTAL_STATISTICS = "{\"siteID\":0,\"statistics\":" +
+            "[{\"person\":0,\"count\":5},{\"person\":1,\"count\":7},{\"person\":2,\"count\":14}," +
+            "{\"person\":3,\"count\":8},{\"person\":4,\"count\":27}]}";
+    private static final String SAMPLE_JSON_UPDATE_STATUS = "{\"tables\":[{\"ID\":0,\"lu_date\":" +
+            "\"2017-03-13 15:56:26\"},{\"ID\":1,\"lu_date\":\"2017-03-13 15:56:26\"}]}";
+    private static final String SAMPLE_JSON_SITES_DIR_UPDATE = "{\"data\":[{\"ID\":0,\"url\":" +
+            "\"lenta.ru\"},{\"ID\":1,\"url\":\"vesti.ru\"},{\"ID\":2,\"url\":\"kp.ru\"}]}";
+    private static final String SAMPLE_JSON_NAMES_DIR_UPDATE = "{\"data\":[{\"ID\":0,\"name\":" +
+            "\"Путин В.В.\"},{\"ID\":1,\"name\":\"Медведев Д.А.\"},{\"ID\":2,\"name\":\"Навальный ?.?.\"}]}";
 
     public static final String NAMES_STATISTICS = "statistics";
     public static final String NAMES_SITE_ID = "siteID";

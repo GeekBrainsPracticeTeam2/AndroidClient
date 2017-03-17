@@ -8,6 +8,9 @@ public class DictionaryPersons {
     private int personId;
     private String personName;
 
+//    public DictionaryPersons() {
+//    }
+
     public DictionaryPersons(int personId, String personName) {
         this.personId = personId;
         this.personName = personName;

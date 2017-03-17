@@ -89,7 +89,7 @@ public class CacheManager {
         }
     }
 
-    public TotalStatistics getTotalStatistics() {
+    public List<TotalStatistics> getTotalStatistics() {
         JSONHelper jHelperTotalStats = new JSONHelper(0);
         return jHelperTotalStats.getTotalStats();
     }

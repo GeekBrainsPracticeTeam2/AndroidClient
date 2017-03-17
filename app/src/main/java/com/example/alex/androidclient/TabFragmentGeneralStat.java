@@ -13,6 +13,9 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.alex.androidclient.managers.CacheManager;
+import com.example.alex.androidclient.models.TotalStatistics;
+
 /**
  * Created by alex on 03.03.17.
  */
@@ -20,6 +23,8 @@ import android.widget.TextView;
 public class TabFragmentGeneralStat extends Fragment implements AdapterView.OnItemSelectedListener {
     Spinner spinnerSites;
     Button buttonView;
+    final Context context = getContext();
+    CacheManager cacheManager;
 
     @Nullable
     @Override
@@ -57,6 +62,15 @@ public class TabFragmentGeneralStat extends Fragment implements AdapterView.OnIt
     }
 
     private void buttonBehavoir(){
+        if(cacheManager == null){
+            cacheManager = new CacheManager(context);
+        }
+
+        MyApp app = ((MyApp)getActivity().getApplicationContext());
+        cacheManager = app.getCacheManager();
+
+        TotalStatistics totalStatistics = cacheManager.getTotalStatistics();
+
 
     }
 }

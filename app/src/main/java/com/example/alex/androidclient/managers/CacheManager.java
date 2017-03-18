@@ -13,6 +13,8 @@ import com.example.alex.androidclient.models.DictionarySites;
 import com.example.alex.androidclient.models.DictionaryUpdates;
 import com.example.alex.androidclient.models.TotalStatistics;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +28,7 @@ public class CacheManager {
     DBHelper dbHelper;
     SQLiteDatabase database;
 
-    public CacheManager(Context context) {
+    public CacheManager(Context context) throws JSONException {
         jHelper = new JSONHelper(1);
         dbHelper = new DBHelper(context);
     }
@@ -46,7 +48,7 @@ public class CacheManager {
                     if((updates.get(i).getDictionaryName().equalsIgnoreCase(table)) &&
                             updates.get(i).getDictionaryName().equalsIgnoreCase(cursor
                                     .getString(tableNameIndex))) {
-                        if(updates.get(i).getLast_update_date() == cursor.getInt(dateIndex))
+                        if(updates.get(i).getLastUpdateDate() == cursor.getInt(dateIndex))
                             return true;
                     }
                 }
@@ -58,7 +60,7 @@ public class CacheManager {
         return false;
     }
 
-    public void updateDictionary(String table) {
+    public void updateDictionary(String table) throws JSONException {
         switch (table) {
             case DBHelper.TB_SITES_NAME:
                 JSONHelper siteJsonHelper = new JSONHelper(2);
@@ -89,12 +91,12 @@ public class CacheManager {
         }
     }
 
-    public List<TotalStatistics> getTotalStatistics() {
+    public List<TotalStatistics> getTotalStatistics() throws JSONException {
         JSONHelper jHelperTotalStats = new JSONHelper(0);
         return jHelperTotalStats.getTotalStats();
     }
 
-    public TotalStatistics getTotalStatisticsBySite(int siteId) {
+    public TotalStatistics getTotalStatisticsBySite(int siteId) throws JSONException {
         JSONHelper jHelperTotalStats = new JSONHelper(0);
         List<TotalStatistics> totalStats = jHelperTotalStats.getTotalStats();
         for (TotalStatistics stats: totalStats) {
@@ -106,7 +108,7 @@ public class CacheManager {
         return null;
     }
 
-    public List<DictionarySites> getSitesDictionary() {
+    public List<DictionarySites> getSitesDictionary() throws JSONException {
         List<DictionarySites> dictionarySites = new ArrayList<>();
         if(checkUpdates(DBHelper.TB_SITES_NAME)) {
             updateDictionary(DBHelper.TB_SITES_NAME);
@@ -134,7 +136,7 @@ public class CacheManager {
         return dictionarySites;
     }
 
-    public List<DictionaryPersons> getPersonsDictionary() {
+    public List<DictionaryPersons> getPersonsDictionary() throws JSONException {
         List<DictionaryPersons> dictionaryPersons = new ArrayList<>();
         if(checkUpdates(DBHelper.TB_PERSONS_NAMES)) {
             updateDictionary(DBHelper.TB_PERSONS_NAMES);

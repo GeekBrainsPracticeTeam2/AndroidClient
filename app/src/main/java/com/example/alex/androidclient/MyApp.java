@@ -9,6 +9,8 @@ import com.example.alex.androidclient.models.DictionarySites;
 import com.example.alex.androidclient.models.PersonStats;
 import com.example.alex.androidclient.models.TotalStatistics;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,25 +44,41 @@ public class MyApp extends Application {
     public void onCreate() {
         super.onCreate();
 
-        initCacheManager();
+        try {
+            initCacheManager();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-        initDictionarySites();
+        try {
+            initDictionarySites();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-        initDictionaryPersons();
+        try {
+            initDictionaryPersons();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
-    private void initCacheManager(){
+    private void initCacheManager() throws JSONException {
         if (cacheManager == null){
             cacheManager = new CacheManager(this);
         }
     }
 
-    private void initDictionarySites(){
+    private void initDictionarySites() throws JSONException {
         Log.d(LOG_TAG, "initDictionarySites");
         if (dictionarySites == null && siteUrl == null){
-            dictionarySites = new ArrayList<>();
-            dictionarySites = cacheManager.getSitesDictionary();
-            siteUrl = new String[dictionarySites.size()];
+            try {
+                dictionarySites = new ArrayList<>();
+                dictionarySites = cacheManager.getSitesDictionary();
+                siteUrl = new String[dictionarySites.size()];
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         for (int i = 0; i < dictionarySites.size(); i++) {
             String url = dictionarySites.get(i).getSiteUrl();
@@ -69,11 +87,15 @@ public class MyApp extends Application {
         }
     }
 
-    private void initDictionaryPersons(){
+    private void initDictionaryPersons() throws JSONException {
         if (dictionaryPersons == null && namePerson == null){
-            dictionaryPersons = new ArrayList<>();
-            dictionaryPersons = cacheManager.getPersonsDictionary();
-            namePerson = new String[dictionaryPersons.size()];
+            try {
+                dictionaryPersons = new ArrayList<>();
+                dictionaryPersons = cacheManager.getPersonsDictionary();
+                namePerson = new String[dictionaryPersons.size()];
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         for (int i = 0; i < dictionaryPersons.size(); i++) {
             String person = dictionaryPersons.get(i).getPersonName();

@@ -94,6 +94,18 @@ public class CacheManager {
         return jHelperTotalStats.getTotalStats();
     }
 
+    public TotalStatistics getTotalStatisticsBySite(int siteId) {
+        JSONHelper jHelperTotalStats = new JSONHelper(0);
+        List<TotalStatistics> totalStats = jHelperTotalStats.getTotalStats();
+        for (TotalStatistics stats: totalStats) {
+            if(stats.getSiteID() == siteId)
+                return stats;
+
+        }
+
+        return null;
+    }
+
     public List<DictionarySites> getSitesDictionary() {
         List<DictionarySites> dictionarySites = new ArrayList<>();
         if(checkUpdates(DBHelper.TB_SITES_NAME)) {

@@ -17,11 +17,16 @@ import java.util.List;
 
 public class MyApp extends Application {
     private CacheManager cacheManager;
-    private ArrayList<DictionarySites> dictionarySites;
+    private List<DictionarySites> dictionarySites;
+    private String[] siteUrl;
     private List<DictionaryPersons> dictionaryPersons;
     private String[] namePerson;
     private int[] likeCount;
     private List<PersonStats> statsList;
+
+    public String[] getSiteUrl() {
+        return siteUrl;
+    }
 
     public String[] getNamePerson() {
         return namePerson;
@@ -51,8 +56,14 @@ public class MyApp extends Application {
     }
 
     private void initDictionarySites(){
-        if (dictionarySites == null){
+        if (dictionarySites == null && siteUrl == null){
             dictionarySites = new ArrayList<>();
+            dictionarySites = cacheManager.getSitesDictionary();
+            siteUrl = new String[dictionarySites.size()];
+        }
+        for (int i = 0; i < dictionarySites.size(); i++) {
+            String url = dictionarySites.get(i).getSiteUrl();
+            siteUrl[i] = url;
         }
     }
 

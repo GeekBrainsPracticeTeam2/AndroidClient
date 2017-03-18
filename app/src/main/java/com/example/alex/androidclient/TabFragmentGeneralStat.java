@@ -50,15 +50,18 @@ public class TabFragmentGeneralStat extends Fragment implements AdapterView.OnIt
         recyclerView = (RecyclerView)view.findViewById(R.id.recycler_view_general_stat);
     }
 
-    private void setSpinner(){
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
-                R.array.sites,
-                android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-
-        spinnerSites.setAdapter(adapter);
-        spinnerSites.setOnItemSelectedListener(this);
-    }
+//    private void setSpinner(){
+//        MyApp app = ((MyApp)getActivity().getApplicationContext());
+//
+//        String[] siteUrl = app.getSiteUrl();
+//
+//        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+//                siteUrl, android.R.layout.simple_spinner_item);
+//        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+//
+//        spinnerSites.setAdapter(adapter);
+//        spinnerSites.setOnItemSelectedListener(this);
+//    }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

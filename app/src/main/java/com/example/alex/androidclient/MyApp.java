@@ -81,7 +81,7 @@ public class MyApp extends Application {
 
     private void initDateForGeneralStat(){
         if (statsList == null && likeCount == null){
-            TotalStatistics totalStatistics = cacheManager.getTotalStatistics();
+            List<TotalStatistics> totalStatistics = cacheManager.getTotalStatistics();
             statsList = totalStatistics.getStatsList();
             likeCount = new int[statsList.size()];
         }

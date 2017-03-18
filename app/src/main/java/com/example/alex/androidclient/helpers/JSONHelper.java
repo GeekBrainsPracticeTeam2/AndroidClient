@@ -41,7 +41,7 @@ public class JSONHelper {
     public static final String DICTIONARY = "data";
     private RequestQueue requestQueue;
     private Ason ason;
-    private TotalStatistics totalStats;
+    private List<TotalStatistics> totalStats;
     private List<DictionaryUpdates> dictionaryUpdatesList = new ArrayList<>();
     private List<DictionarySites> dictionarySitesList = new ArrayList<>();
     private List<DictionaryPersons> dictionaryPersonsList = new ArrayList<>();
@@ -72,8 +72,8 @@ public class JSONHelper {
             case 0:
                 AsonArray array = ason.getJsonArray(NAMES_STATISTICS);
                 List<PersonStats> statsList = Ason.deserializeList(array, PersonStats.class);
-                totalStats = new TotalStatistics(ason.getInt(NAMES_SITE_ID),
-                        statsList);
+                totalStats.add(new TotalStatistics(ason.getInt(NAMES_SITE_ID),
+                        statsList));
                 break;
             case 1:
                 AsonArray dictionaryUpdates = ason.getJsonArray(TABLES_UPDATES);
@@ -104,7 +104,7 @@ public class JSONHelper {
         }
     };
 
-    public TotalStatistics getTotalStats() {
+    public List<TotalStatistics> getTotalStats() {
         return totalStats;
     }
 

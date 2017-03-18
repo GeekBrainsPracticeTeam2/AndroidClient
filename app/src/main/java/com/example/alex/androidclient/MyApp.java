@@ -5,8 +5,11 @@ import android.app.Application;
 import com.example.alex.androidclient.managers.CacheManager;
 import com.example.alex.androidclient.models.DictionaryPersons;
 import com.example.alex.androidclient.models.DictionarySites;
+import com.example.alex.androidclient.models.PersonStats;
+import com.example.alex.androidclient.models.TotalStatistics;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by alex on 17.03.17.
@@ -15,22 +18,30 @@ import java.util.ArrayList;
 public class MyApp extends Application {
     private CacheManager cacheManager;
     private ArrayList<DictionarySites> dictionarySites;
-    private ArrayList<DictionaryPersons> dictionaryPersons;
+    private List<DictionaryPersons> dictionaryPersons;
+    private String[] namePerson;
+    private int[] likeCount;
+    private List<PersonStats> statsList;
 
+    public String[] getNamePerson() {
+        return namePerson;
+    }
 
-    public CacheManager getCacheManager() {
-        return cacheManager;
+    public int[] getLikeCount() {
+        return likeCount;
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
 
+        initCacheManager();
+
         initDictionarySites();
 
         initDictionaryPersons();
 
-        initCacheManager();
+        initDateForGeneralStat();
     }
 
     private void initCacheManager(){
@@ -46,8 +57,28 @@ public class MyApp extends Application {
     }
 
     private void initDictionaryPersons(){
-        if (dictionaryPersons == null){
+        if (dictionaryPersons == null && namePerson == null){
             dictionaryPersons = new ArrayList<>();
+            dictionaryPersons = cacheManager.getPersonsDictionary();
+            namePerson = new String[dictionaryPersons.size()];
         }
+        for (int i = 0; i < dictionaryPersons.size(); i++) {
+            String person = dictionaryPersons.get(i).getPersonName();
+            namePerson[i] = person;
+        }
+    }
+
+    private void initDateForGeneralStat(){
+        if (statsList == null && likeCount == null){
+            TotalStatistics totalStatistics = cacheManager.getTotalStatistics();
+            statsList = totalStatistics.getStatsList();
+            likeCount = new int[statsList.size()];
+        }
+
+        for (int i = 0; i < statsList.size(); i++) {
+            int like = statsList.get(i).getLikesCount();
+            likeCount[i] = like;
+        }
+
     }
 }

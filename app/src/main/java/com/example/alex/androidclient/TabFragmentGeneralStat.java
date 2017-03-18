@@ -4,6 +4,8 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,18 +15,24 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.alex.androidclient.adapter.RecyclerViewAdapterGeneralStat;
 import com.example.alex.androidclient.managers.CacheManager;
+import com.example.alex.androidclient.models.PersonStats;
 import com.example.alex.androidclient.models.TotalStatistics;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by alex on 03.03.17.
  */
 
 public class TabFragmentGeneralStat extends Fragment implements AdapterView.OnItemSelectedListener {
-    Spinner spinnerSites;
-    Button buttonView;
+    private Spinner spinnerSites;
+    private Button buttonView;
+    private RecyclerView recyclerView;
     final Context context = getContext();
-    CacheManager cacheManager;
+    private CacheManager cacheManager;
 
     @Nullable
     @Override
@@ -39,6 +47,7 @@ public class TabFragmentGeneralStat extends Fragment implements AdapterView.OnIt
     private void initView(View view){
         spinnerSites = (Spinner)view.findViewById(R.id.sites_spinner);
         buttonView =(Button)view.findViewById(R.id.button_view);
+        recyclerView = (RecyclerView)view.findViewById(R.id.recycler_view_general_stat);
     }
 
     private void setSpinner(){
@@ -62,15 +71,21 @@ public class TabFragmentGeneralStat extends Fragment implements AdapterView.OnIt
     }
 
     private void buttonBehavoir(){
-        if(cacheManager == null){
-            cacheManager = new CacheManager(context);
-        }
-
         MyApp app = ((MyApp)getActivity().getApplicationContext());
-        cacheManager = app.getCacheManager();
 
-        TotalStatistics totalStatistics = cacheManager.getTotalStatistics();
+        int[] likeCount = app.getLikeCount();
+        String[] namePerson = app.getNamePerson();
+
+        setRecyclerView(namePerson, likeCount);
 
 
+    }
+
+    private void setRecyclerView(String[] namePerson, int[] likeCount){
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(new RecyclerViewAdapterGeneralStat(namePerson, likeCount, context));
     }
 }

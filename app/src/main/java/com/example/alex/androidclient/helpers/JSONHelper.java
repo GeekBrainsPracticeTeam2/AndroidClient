@@ -29,9 +29,11 @@ import java.util.List;
 public class JSONHelper {
 
     public static final String LOG_TAG = "JSONHelper";
-    private static final String SAMPLE_JSON_TOTAL_STATISTICS = "{\"siteID\":0,\"statistics\":" +
-            "[{\"person\":0,\"count\":5},{\"person\":1,\"count\":7},{\"person\":2,\"count\":14}," +
-            "{\"person\":3,\"count\":8},{\"person\":4,\"count\":27}]}";
+    private static final String SAMPLE_JSON_TOTAL_STATISTICS = "{\"data\":[{\"siteID\":0,\"statistics\"" +
+            ":[{\"person\":0,\"count\":5},{\"person\":1,\"count\":7},{\"person\":2,\"count\":14}," +
+            "{\"person\":3,\"count\":8},{\"person\":4,\"count\":27}]},{\"siteID\":1,\"statistics\":" +
+            "[{\"person\":0,\"count\":3},{\"person\":1,\"count\":10},{\"person\":2,\"count\":7}," +
+            "{\"person\":3,\"count\":10},{\"person\":4,\"count\":21}]}]}";
     private static final String SAMPLE_JSON_UPDATE_STATUS = "{\"tables\":[{\"ID\":0,\"lu_date\":" +
             "\"2017-03-13 15:56:26\"},{\"ID\":1,\"lu_date\":\"2017-03-13 15:56:26\"}]}";
     private static final String SAMPLE_JSON_SITES_DIR_UPDATE = "{\"data\":[{\"ID\":0,\"url\":" +

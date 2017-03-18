@@ -45,8 +45,6 @@ public class MyApp extends Application {
         initDictionarySites();
 
         initDictionaryPersons();
-
-        initDateForGeneralStat();
     }
 
     private void initCacheManager(){
@@ -79,9 +77,8 @@ public class MyApp extends Application {
         }
     }
 
-    private void initDateForGeneralStat(){
+    private int[] initDateForGeneralStat(TotalStatistics totalStatistics){
         if (statsList == null && likeCount == null){
-            List<TotalStatistics> totalStatistics = cacheManager.getTotalStatistics();
             statsList = totalStatistics.getStatsList();
             likeCount = new int[statsList.size()];
         }
@@ -90,6 +87,6 @@ public class MyApp extends Application {
             int like = statsList.get(i).getLikesCount();
             likeCount[i] = like;
         }
-
+        return likeCount;
     }
 }

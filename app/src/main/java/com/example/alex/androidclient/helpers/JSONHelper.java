@@ -15,6 +15,10 @@ import com.example.alex.androidclient.models.DictionaryUpdates;
 import com.example.alex.androidclient.models.PersonStats;
 import com.example.alex.androidclient.models.TotalStatistics;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +52,7 @@ public class JSONHelper {
 
     private int mode = -1;
 
-    public JSONHelper(int mode) {
+    public JSONHelper(int mode) throws JSONException {
         this.mode = mode;
         switch (mode){
             case 0:
@@ -67,22 +71,29 @@ public class JSONHelper {
         fetchData();
     }
 
-    private void fetchData() {
+    private void fetchData() throws JSONException {
+        JSONObject dataJsonObj;
         switch (mode){
+            // get total statistics
             case 0:
-                AsonArray array = ason.getJsonArray(NAMES_STATISTICS);
+                dataJsonObj = new JSONObject(SAMPLE_JSON_TOTAL_STATISTICS);
+                JSONArray array = dataJsonObj.getJSONArray(NAMES_STATISTICS);
                 List<PersonStats> statsList = Ason.deserializeList(array, PersonStats.class);
                 totalStats.add(new TotalStatistics(ason.getInt(NAMES_SITE_ID),
                         statsList));
                 break;
+            // get updates for dictionaries
             case 1:
                 AsonArray dictionaryUpdates = ason.getJsonArray(TABLES_UPDATES);
                 dictionaryUpdatesList = Ason.deserializeList(dictionaryUpdates, DictionaryUpdates.class);
                 break;
+            // get update for sites dictionary
             case 2:
                 AsonArray dictionarySites = ason.getJsonArray(DICTIONARY);
+                Log.d(LOG_TAG, "Size of dictionary array " + dictionarySites.size());
                 dictionarySitesList = Ason.deserializeList(dictionarySites, DictionarySites.class);
                 break;
+            // get update for persons dictionary
             case 3:
                 AsonArray dictionaryPersons = ason.getJsonArray(DICTIONARY);
                 dictionaryPersonsList = Ason.deserializeList(dictionaryPersons, DictionaryPersons.class);

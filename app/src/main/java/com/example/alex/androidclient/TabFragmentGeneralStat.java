@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.example.alex.androidclient.adapter.RecyclerViewAdapterGeneralStat;
 import com.example.alex.androidclient.managers.CacheManager;
+import com.example.alex.androidclient.models.DictionarySites;
 import com.example.alex.androidclient.models.PersonStats;
 import com.example.alex.androidclient.models.TotalStatistics;
 
@@ -55,8 +56,10 @@ public class TabFragmentGeneralStat extends Fragment implements AdapterView.OnIt
 
         String[] siteUrl = app.getSiteUrl();
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
-                R.array.sites, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter(getActivity(),
+                android.R.layout.simple_spinner_item, siteUrl);
+        /*ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.sites, android.R.layout.simple_spinner_item);*/
         adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
 
         spinnerSites.setAdapter(adapter);

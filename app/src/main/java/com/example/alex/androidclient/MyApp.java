@@ -1,6 +1,7 @@
 package com.example.alex.androidclient;
 
 import android.app.Application;
+import android.util.Log;
 
 import com.example.alex.androidclient.managers.CacheManager;
 import com.example.alex.androidclient.models.DictionaryPersons;
@@ -16,6 +17,7 @@ import java.util.List;
  */
 
 public class MyApp extends Application {
+    public static final String LOG_TAG = "MyApp";
     private CacheManager cacheManager;
     private List<DictionarySites> dictionarySites;
     private String[] siteUrl;
@@ -54,6 +56,7 @@ public class MyApp extends Application {
     }
 
     private void initDictionarySites(){
+        Log.d(LOG_TAG, "initDictionarySites");
         if (dictionarySites == null && siteUrl == null){
             dictionarySites = new ArrayList<>();
             dictionarySites = cacheManager.getSitesDictionary();
@@ -62,6 +65,7 @@ public class MyApp extends Application {
         for (int i = 0; i < dictionarySites.size(); i++) {
             String url = dictionarySites.get(i).getSiteUrl();
             siteUrl[i] = url;
+            Log.d(LOG_TAG, url);
         }
     }
 

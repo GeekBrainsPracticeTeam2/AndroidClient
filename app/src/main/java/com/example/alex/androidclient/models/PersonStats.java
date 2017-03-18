@@ -15,6 +15,10 @@ public class PersonStats {
         this.likesCount = likesCount;
     }
 
+    public PersonStats() {
+
+    }
+
     public int getPersonID() {
         return personID;
     }

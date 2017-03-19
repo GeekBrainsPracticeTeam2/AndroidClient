@@ -26,7 +26,8 @@ import java.util.List;
 
 public class JSONHelper {
 
-    public static final String LOG_TAG = "JSONHelper";
+    private final String LOG_TAG = this.getClass().getSimpleName();
+
     private static final String SAMPLE_JSON_TOTAL_STATISTICS = "{\"data\":[{\"siteId\":0,\"statistics\"" +
             ":[{\"person\":0,\"count\":5},{\"person\":1,\"count\":7},{\"person\":2,\"count\":14}," +
             "{\"person\":3,\"count\":8},{\"person\":4,\"count\":27}]},{\"siteId\":1,\"statistics\":" +

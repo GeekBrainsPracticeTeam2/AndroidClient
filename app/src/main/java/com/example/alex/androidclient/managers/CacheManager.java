@@ -23,7 +23,7 @@ import java.util.List;
  */
 
 public class CacheManager {
-    public static final String LOG_TAG = "CacheManager";
+    private final String LOG_TAG = this.getClass().getSimpleName();
     JSONHelper jHelper;
     DBHelper dbHelper;
     SQLiteDatabase database;
@@ -97,7 +97,10 @@ public class CacheManager {
     }
 
     public List<TotalStatistics> getTotalStatistics() throws JSONException {
+        Log.d(LOG_TAG, "Start getTotalStatistics");
         JSONHelper jHelperTotalStats = new JSONHelper(0);
+        Log.d(LOG_TAG, "Size totalStatisticsList = " + jHelperTotalStats.getTotalStats().size());
+        Log.d(LOG_TAG, "End getTotalStatistics");
         return jHelperTotalStats.getTotalStats();
     }
 

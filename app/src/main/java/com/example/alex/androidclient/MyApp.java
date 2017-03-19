@@ -44,6 +44,7 @@ public class MyApp extends Application {
     }
 
     public int[] getLikeCount() {
+        initLikeCount();
         return likeCount;
     }
 
@@ -68,9 +69,6 @@ public class MyApp extends Application {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-        initLikePerson();
-
     }
 
     private void initCacheManager() throws JSONException {
@@ -80,7 +78,7 @@ public class MyApp extends Application {
     }
 
     private void initDictionarySites() throws JSONException {
-        Log.d(LOG_TAG, "initDictionarySites");
+        Log.d(LOG_TAG, "Start initDictionarySites");
         if (dictionarySites == null && siteUrl == null){
             try {
                 dictionarySites = new ArrayList<>();
@@ -93,8 +91,9 @@ public class MyApp extends Application {
         for (int i = 0; i < dictionarySites.size(); i++) {
             String url = dictionarySites.get(i).getSiteUrl();
             siteUrl[i] = url;
-            Log.d(LOG_TAG, url);
+            Log.d(LOG_TAG, "siteUrl(" + i + ") = " + url);
         }
+        Log.d(LOG_TAG, "End initDictionarySites");
     }
 
     private void initDictionaryPersons() throws JSONException {
@@ -113,8 +112,8 @@ public class MyApp extends Application {
         }
     }
 
-    private void initLikePerson(){
-        Log.d(LOG_TAG, "Start initDictionarySites");
+    private void initLikeCount(){
+        Log.d(LOG_TAG, "Start initLikeCount");
 
         if (siteID > -1) {
 
@@ -122,9 +121,12 @@ public class MyApp extends Application {
                 try {
                     totalStatisticsList = new ArrayList<>();
                     totalStatisticsList = cacheManager.getTotalStatistics();
+                    Log.d(LOG_TAG, "Size totalStatisticsList = " + totalStatisticsList.size());
                     statsList = new ArrayList<>();
                     statsList = totalStatisticsList.get(siteID).getStatsList();
+                    Log.d(LOG_TAG, "Size statsList = " + statsList.size());
                     likeCount = new int[statsList.size()];
+                    Log.d(LOG_TAG, "Length likeCount = " + likeCount.length);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -133,8 +135,9 @@ public class MyApp extends Application {
             for (int i = 0; i < statsList.size(); i++) {
                 int like = statsList.get(i).getLikesCount();
                 likeCount[i] = like;
+                Log.d(LOG_TAG, "likeCount(" + i + ") = " + likeCount[i]);
             }
         }
-        Log.d(LOG_TAG, "End initDictionarySites");
+        Log.d(LOG_TAG, "End initLikeCount");
     }
 }

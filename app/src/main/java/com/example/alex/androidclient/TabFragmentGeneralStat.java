@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,12 +31,15 @@ import java.util.List;
 
 public class TabFragmentGeneralStat extends Fragment implements AdapterView.OnItemSelectedListener,
         View.OnClickListener{
+    private final String LOG_TAG = this.getClass().getSimpleName();
+
     private Spinner spinnerSites;
     private Button buttonView;
     private RecyclerView recyclerView;
     final Context context = getContext();
 
     private int spinnerItemPosition;
+
 
     @Nullable
     @Override
@@ -54,9 +58,11 @@ public class TabFragmentGeneralStat extends Fragment implements AdapterView.OnIt
     }
 
     private void setSpinner(){
-        MyApp app = ((MyApp)getActivity().getApplicationContext());
+        Log.d(LOG_TAG, "Start setSpinner");
 
+        MyApp app = ((MyApp)getActivity().getApplicationContext());
         String[] siteUrl = app.getSiteUrl();
+        Log.d(LOG_TAG, "Length String[] siteUrl = " + siteUrl.length);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_spinner_item, siteUrl);
@@ -64,16 +70,24 @@ public class TabFragmentGeneralStat extends Fragment implements AdapterView.OnIt
 
         spinnerSites.setAdapter(adapter);
         spinnerSites.setOnItemSelectedListener(this);
+        Log.d(LOG_TAG, "End setSpinner");
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        Log.d(LOG_TAG, "Start onItemSelected");
         spinnerItemPosition = position;
+        Log.d(LOG_TAG, "spinnerItemPosition = " + spinnerItemPosition);
+        Log.d(LOG_TAG, "End onItemSelected");
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
+        Log.d(LOG_TAG, "Start onNothingSelected");
         spinnerItemPosition = -1;
+
+        Log.d(LOG_TAG, "spinnerItemPosition = " + spinnerItemPosition);
+        Log.d(LOG_TAG, "End onNothingSelected");
     }
 
     private void buttonBehavoir(){
@@ -84,20 +98,27 @@ public class TabFragmentGeneralStat extends Fragment implements AdapterView.OnIt
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_view:
+                Log.d(LOG_TAG, "Start onClick case R.id.button_view");
                 MyApp app = ((MyApp)getActivity().getApplicationContext());
                 app.setSiteID(spinnerItemPosition);
                 int[] likeCount = app.getLikeCount();
+                Log.d(LOG_TAG, "Length int[] likeCount = " + likeCount.length);
                 String[] namePerson = app.getNamePerson();
+                Log.d(LOG_TAG, "Length String[] namePerson = " + namePerson.length);
                 setRecyclerView(namePerson, likeCount);
+                Log.d(LOG_TAG, "End onClick case R.id.button_view");
         break;
     }
 }
 
     private void setRecyclerView(String[] namePerson, int[] likeCount){
-
+        Log.d(LOG_TAG, "Start setRecyclerView");
+        Log.d(LOG_TAG, "Length int[] likeCount = " + likeCount.length);
+        Log.d(LOG_TAG, "Length String[] namePerson = " + namePerson.length);
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(new RecyclerViewAdapterGeneralStat(namePerson, likeCount, context));
+        Log.d(LOG_TAG, "End setRecyclerView");
     }
 }

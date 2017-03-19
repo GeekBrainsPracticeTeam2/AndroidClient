@@ -3,13 +3,6 @@ Android client app to showing statistics on mobile  devices.
 
 Add to bulid.gradle:
 
-// ASON     
-compile('com.afollestad:ason:1.4.6') {
-     
-     exclude group: 'org.json', module: 'json'
- 
- }
- 
- // Volley
+// Volley
  
  compile 'com.android.volley:volley:1.+'

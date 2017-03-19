@@ -59,6 +59,7 @@ public class CacheManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        database.close();
 
         return false;
     }
@@ -77,6 +78,7 @@ public class CacheManager {
                             .getSiteUrl());
                     database.insert(table, null, cv);
                 }
+                database.close();
                 break;
             case DBHelper.TB_PERSONS_NAMES:
                 JSONHelper personsJsoHelper = new JSONHelper(3);
@@ -90,6 +92,7 @@ public class CacheManager {
                             .get(i).getPersonName());
                     database.insert(table, null, cv);
                 }
+                database.close();
                 break;
             default:
                 break;
@@ -141,6 +144,7 @@ public class CacheManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        database.close();
 
         return dictionarySites;
     }
@@ -169,6 +173,7 @@ public class CacheManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        database.close();
 
         return dictionaryPersons;
     }

@@ -128,9 +128,9 @@ public class JSONHelper {
                 dictionaryPersonsList.clear();
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject persons = array.getJSONObject(i);
-                    dictionarySitesList.add(new DictionarySites(persons.getInt("id"), persons.getString("name")));
+                    dictionaryPersonsList.add(new DictionaryPersons(persons.getInt("id"), persons.getString("name")));
                 }
-                Log.d(LOG_TAG, "dictionarySitesList size is " + dictionarySitesList.size());
+                Log.d(LOG_TAG, "dictionaryPersonsList size is " + dictionaryPersonsList.size());
                 break;
         }
     }

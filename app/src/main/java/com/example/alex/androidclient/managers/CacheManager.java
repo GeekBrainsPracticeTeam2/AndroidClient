@@ -37,21 +37,24 @@ public class CacheManager {
         List<DictionaryUpdates> updates = jHelper.getDictionaryUpdatesList();
         database = dbHelper.getWritableDatabase();
         try {
-            Cursor cursor = database.query(table, null, null, null, null, null, null);
+            Cursor cursor = database.query(DBHelper.TB_UPDATES, null, null, null, null, null, null);
 
             if (cursor.moveToFirst()) {
                 int idIndex = cursor.getColumnIndex(DBHelper.TB_ID_COL_NAME);
                 int dateIndex = cursor.getColumnIndex(DBHelper.TB_UPDATES_DATE);
                 int tableNameIndex = cursor.getColumnIndex(DBHelper.TB_UPDATES_TBNAME);
+                Log.d(LOG_TAG, "tableNameIndex is " + tableNameIndex);
 
                 for (int i = 0; i < updates.size(); i++) {
                     if((updates.get(i).getDictionaryName().equalsIgnoreCase(table)) &&
                             updates.get(i).getDictionaryName().equalsIgnoreCase(cursor
                                     .getString(tableNameIndex))) {
-                        if(updates.get(i).getLastUpdateDate() == cursor.getInt(dateIndex))
+                        if(updates.get(i).getLastUpdateDate() != cursor.getString(dateIndex))
                             return true;
                     }
                 }
+            } else {
+                return true;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -64,6 +67,7 @@ public class CacheManager {
         switch (table) {
             case DBHelper.TB_SITES_NAME:
                 JSONHelper siteJsonHelper = new JSONHelper(2);
+                database = dbHelper.getWritableDatabase();
                 Cursor c = database.query(DBHelper.TB_SITES_NAME, null, null, null, null, null, null);
                 ContentValues cv = new ContentValues();
                 for (int i = 0; i < siteJsonHelper.getDictionarySitesList().size(); i++) {
@@ -76,6 +80,7 @@ public class CacheManager {
                 break;
             case DBHelper.TB_PERSONS_NAMES:
                 JSONHelper personsJsoHelper = new JSONHelper(3);
+                database = dbHelper.getWritableDatabase();
                 c = database.query(DBHelper.TB_PERSONS_NAMES, null, null, null, null, null, null);
                 cv = new ContentValues();
                 for (int i = 0; i < personsJsoHelper.getDictionaryPersonsList().size(); i++) {
@@ -110,6 +115,7 @@ public class CacheManager {
 
     public List<DictionarySites> getSitesDictionary() throws JSONException {
         List<DictionarySites> dictionarySites = new ArrayList<>();
+        Log.d(LOG_TAG, "" + checkUpdates(DBHelper.TB_SITES_NAME));
         if(checkUpdates(DBHelper.TB_SITES_NAME)) {
             updateDictionary(DBHelper.TB_SITES_NAME);
         }

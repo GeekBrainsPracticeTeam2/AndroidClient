@@ -7,7 +7,7 @@ package com.example.alex.androidclient.models;
 public class DictionaryUpdates {
 
     private String dictionaryName;
-    private long lastUpdateDate;
+    private String lastUpdateDate;
 
     public String getDictionaryName() {
         return dictionaryName;
@@ -17,11 +17,11 @@ public class DictionaryUpdates {
         this.dictionaryName = dictionaryName;
     }
 
-    public long getLastUpdateDate() {
+    public String getLastUpdateDate() {
         return lastUpdateDate;
     }
 
-    public void setLastUpdateDate(long lastUpdateDate) {
+    public void setLastUpdateDate(String lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
     }
 }

@@ -150,6 +150,9 @@ public class JSONHelper {
     };
 
     public List<TotalStatistics> getTotalStats() {
+        Log.d(LOG_TAG, "Start getTotalStats");
+        Log.d(LOG_TAG, "Size totalStatisticsList = " + totalStats.size());
+        Log.d(LOG_TAG, "End getTotalStats");
         return totalStats;
     }
 

@@ -28,12 +28,14 @@ import java.util.List;
  * Created by alex on 03.03.17.
  */
 
-public class TabFragmentGeneralStat extends Fragment implements AdapterView.OnItemSelectedListener {
+public class TabFragmentGeneralStat extends Fragment implements AdapterView.OnItemSelectedListener,
+        View.OnClickListener{
     private Spinner spinnerSites;
     private Button buttonView;
     private RecyclerView recyclerView;
     final Context context = getContext();
-    private CacheManager cacheManager;
+
+    private int spinnerItemPosition;
 
     @Nullable
     @Override
@@ -56,10 +58,8 @@ public class TabFragmentGeneralStat extends Fragment implements AdapterView.OnIt
 
         String[] siteUrl = app.getSiteUrl();
 
-        ArrayAdapter<CharSequence> adapter = new ArrayAdapter(getActivity(),
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_spinner_item, siteUrl);
-        /*ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
-                R.array.sites, android.R.layout.simple_spinner_item);*/
         adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
 
         spinnerSites.setAdapter(adapter);
@@ -68,24 +68,30 @@ public class TabFragmentGeneralStat extends Fragment implements AdapterView.OnIt
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+        spinnerItemPosition = position;
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-
+        spinnerItemPosition = -1;
     }
 
     private void buttonBehavoir(){
-        MyApp app = ((MyApp)getActivity().getApplicationContext());
-
-        int[] likeCount = app.getLikeCount();
-        String[] namePerson = app.getNamePerson();
-
-        setRecyclerView(namePerson, likeCount);
-
-
+        buttonView.setOnClickListener(this);
     }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.button_view:
+                MyApp app = ((MyApp)getActivity().getApplicationContext());
+                app.setSiteID(spinnerItemPosition);
+                int[] likeCount = app.getLikeCount();
+                String[] namePerson = app.getNamePerson();
+                setRecyclerView(namePerson, likeCount);
+        break;
+    }
+}
 
     private void setRecyclerView(String[] namePerson, int[] likeCount){
 

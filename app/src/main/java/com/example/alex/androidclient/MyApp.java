@@ -19,14 +19,21 @@ import java.util.List;
  */
 
 public class MyApp extends Application {
-    public static final String LOG_TAG = "MyApp";
+    private final String LOG_TAG = this.getClass().getSimpleName();
     private CacheManager cacheManager;
     private List<DictionarySites> dictionarySites;
     private String[] siteUrl;
     private List<DictionaryPersons> dictionaryPersons;
     private String[] namePerson;
+
     private int[] likeCount;
     private List<PersonStats> statsList;
+    private List<TotalStatistics> totalStatisticsList;
+    private int siteID = -1;
+
+    public void setSiteID(int siteID) {
+        this.siteID = siteID;
+    }
 
     public String[] getSiteUrl() {
         return siteUrl;
@@ -61,6 +68,9 @@ public class MyApp extends Application {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        initLikePerson();
+
     }
 
     private void initCacheManager() throws JSONException {
@@ -103,16 +113,28 @@ public class MyApp extends Application {
         }
     }
 
-    private int[] initDateForGeneralStat(TotalStatistics totalStatistics){
-        if (statsList == null && likeCount == null){
-            statsList = totalStatistics.getStatsList();
-            likeCount = new int[statsList.size()];
-        }
+    private void initLikePerson(){
+        Log.d(LOG_TAG, "Start initDictionarySites");
 
-        for (int i = 0; i < statsList.size(); i++) {
-            int like = statsList.get(i).getLikesCount();
-            likeCount[i] = like;
+        if (siteID > -1) {
+
+            if (totalStatisticsList == null && likeCount == null) {
+                try {
+                    totalStatisticsList = new ArrayList<>();
+                    totalStatisticsList = cacheManager.getTotalStatistics();
+                    statsList = new ArrayList<>();
+                    statsList = totalStatisticsList.get(siteID).getStatsList();
+                    likeCount = new int[statsList.size()];
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            for (int i = 0; i < statsList.size(); i++) {
+                int like = statsList.get(i).getLikesCount();
+                likeCount[i] = like;
+            }
         }
-        return likeCount;
+        Log.d(LOG_TAG, "End initDictionarySites");
     }
 }

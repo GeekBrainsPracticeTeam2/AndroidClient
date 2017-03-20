@@ -12,6 +12,9 @@ public class TotalStatistics {
     private int siteID;
     private List<PersonStats> statsList;
 
+    public TotalStatistics() {
+    }
+
     public TotalStatistics(int siteID, List<PersonStats> statsList) {
         this.siteID = siteID;
         this.statsList = statsList;

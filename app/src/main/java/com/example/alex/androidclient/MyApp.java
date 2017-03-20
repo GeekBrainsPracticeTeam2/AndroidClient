@@ -28,7 +28,7 @@ public class MyApp extends Application {
 
     private int[] likeCount;
     private List<PersonStats> statsList;
-    private List<TotalStatistics> totalStatisticsList;
+    private TotalStatistics totalStatisticsBySite;
     private int siteID = -1;
 
     public void setSiteID(int siteID) {
@@ -117,13 +117,13 @@ public class MyApp extends Application {
 
         if (siteID > -1) {
 
-            if (totalStatisticsList == null && likeCount == null) {
+            if (totalStatisticsBySite == null && likeCount == null) {
                 try {
-                    totalStatisticsList = new ArrayList<>();
-                    totalStatisticsList = cacheManager.getTotalStatistics();
-                    Log.d(LOG_TAG, "Size totalStatisticsList = " + totalStatisticsList.size());
+                    totalStatisticsBySite = new TotalStatistics();
+                    totalStatisticsBySite = cacheManager.getTotalStatisticsBySite(siteID);
+                    Log.d(LOG_TAG, "totalStatisticsList = " + totalStatisticsBySite);
                     statsList = new ArrayList<>();
-                    statsList = totalStatisticsList.get(siteID).getStatsList();
+                    statsList = totalStatisticsBySite.getStatsList();
                     Log.d(LOG_TAG, "Size statsList = " + statsList.size());
                     likeCount = new int[statsList.size()];
                     Log.d(LOG_TAG, "Length likeCount = " + likeCount.length);

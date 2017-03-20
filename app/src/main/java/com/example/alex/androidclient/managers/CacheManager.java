@@ -108,14 +108,16 @@ public class CacheManager {
     }
 
     public TotalStatistics getTotalStatisticsBySite(int siteId) throws JSONException {
+        Log.d(LOG_TAG, "Start getTotalStatisticsBySite");
+        Log.d(LOG_TAG, "siteId = " + siteId);
         JSONHelper jHelperTotalStats = new JSONHelper(0);
         List<TotalStatistics> totalStats = jHelperTotalStats.getTotalStats();
+        Log.d(LOG_TAG, "Size totalStatis = " + jHelperTotalStats.getTotalStats().size());
         for (TotalStatistics stats: totalStats) {
             if(stats.getSiteID() == siteId)
+                Log.d(LOG_TAG, "Size stats = " + stats.getStatsList().size());
                 return stats;
-
         }
-
         return null;
     }
 

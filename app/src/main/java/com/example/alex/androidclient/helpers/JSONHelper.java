@@ -25,7 +25,6 @@ import java.util.List;
  */
 
 public class JSONHelper {
-
     private final String LOG_TAG = this.getClass().getSimpleName();
 
     private static final String SAMPLE_JSON_TOTAL_STATISTICS = "{\"data\":[{\"siteId\":0,\"statistics\"" +
@@ -74,10 +73,13 @@ public class JSONHelper {
     }
 
     private void fetchData() throws JSONException {
+        Log.d(LOG_TAG, "Start fetchData");
         JSONArray array;
         switch (mode){
             // get total statistics
             case 0:
+                Log.d(LOG_TAG, "Start fetchData. case = 0");
+                Log.d(LOG_TAG, "jsonDataObject = " + jsonDataObject);
                 array = jsonDataObject.getJSONArray(NAMES_STATISTICS);
                 Log.d(LOG_TAG, "PersonsStats size is " + array.length());
                 totalStats.clear();
@@ -87,6 +89,8 @@ public class JSONHelper {
                     List<PersonStats> personStts = new ArrayList<>();
                     for (int j = 0; j < personStats.length(); j++) {
                         personStts.add(new PersonStats(personStats.getInt(0), personStats.getInt(1)));
+                        Log.d(LOG_TAG, "PersonId = " + personStats.getInt(0));
+                        Log.d(LOG_TAG, "likesCount = " + personStats.getInt(1));
                     }
                     totalStats.add(new TotalStatistics(stats.getInt("siteId"), personStts));
                 }

@@ -46,7 +46,7 @@ public class JSONHelper {
     public static final String DICTIONARY_UPDATES_LAST_UPDATE_DATE = "lastUpdateDate";
     private RequestQueue requestQueue;
     private JSONObject jsonDataObject;
-    private List<TotalStatistics> totalStats;
+    private List<TotalStatistics> totalStats = new ArrayList<>();
     private List<DictionaryUpdates> dictionaryUpdatesList = new ArrayList<>();
     private List<DictionarySites> dictionarySitesList = new ArrayList<>();
     private List<DictionaryPersons> dictionaryPersonsList = new ArrayList<>();
@@ -80,17 +80,18 @@ public class JSONHelper {
             case 0:
                 Log.d(LOG_TAG, "Start fetchData. case = 0");
                 Log.d(LOG_TAG, "jsonDataObject = " + jsonDataObject);
-                array = jsonDataObject.getJSONArray(NAMES_STATISTICS);
+                array = jsonDataObject.getJSONArray(DICTIONARY);
                 Log.d(LOG_TAG, "PersonsStats size is " + array.length());
                 totalStats.clear();
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject stats = array.getJSONObject(i);
-                    JSONArray personStats = stats.getJSONArray("statistics");
+                    JSONArray personStats = stats.getJSONArray(NAMES_STATISTICS);
                     List<PersonStats> personStts = new ArrayList<>();
                     for (int j = 0; j < personStats.length(); j++) {
-                        personStts.add(new PersonStats(personStats.getInt(0), personStats.getInt(1)));
-                        Log.d(LOG_TAG, "PersonId = " + personStats.getInt(0));
-                        Log.d(LOG_TAG, "likesCount = " + personStats.getInt(1));
+                        JSONObject stat = personStats.getJSONObject(i);
+                        personStts.add(new PersonStats(stat.getInt("person"), stat.getInt("count")));
+                        Log.d(LOG_TAG, "PersonId = " + stat.getInt("person"));
+                        Log.d(LOG_TAG, "likesCount = " + stat.getInt("count"));
                     }
                     totalStats.add(new TotalStatistics(stats.getInt("siteId"), personStts));
                 }

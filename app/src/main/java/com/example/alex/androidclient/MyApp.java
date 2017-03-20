@@ -97,6 +97,7 @@ public class MyApp extends Application {
     }
 
     private void initDictionaryPersons() throws JSONException {
+        Log.d(LOG_TAG, "Start initDictionaryPersons");
         if (dictionaryPersons == null && namePerson == null){
             try {
                 dictionaryPersons = new ArrayList<>();
@@ -109,7 +110,9 @@ public class MyApp extends Application {
         for (int i = 0; i < dictionaryPersons.size(); i++) {
             String person = dictionaryPersons.get(i).getPersonName();
             namePerson[i] = person;
+            Log.d(LOG_TAG, "namePerson(" + i + ") = " + namePerson[i]);
         }
+        Log.d(LOG_TAG, "End initDictionaryPersons");
     }
 
     private void initLikeCount(){

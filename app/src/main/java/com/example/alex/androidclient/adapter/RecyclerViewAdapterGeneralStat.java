@@ -47,9 +47,14 @@ public class RecyclerViewAdapterGeneralStat extends
 
     @Override
     public void onBindViewHolder(RecyclerViewAdapterGeneralStat.ViewHolder holder, int position) {
+        Log.d(LOG_TAG, "Start onBindViewHolder");
+        Log.d(LOG_TAG, "namePerson[" + position +"] = " + namePerson[position]);
+        Log.d(LOG_TAG, "likesCount[" + position +"] = " + likesCount[position]);
+
         holder.textViewNamePerson.setText(namePerson[position]);
         holder.textViewlikesCount.setText(likesCount[position]);
 
+        Log.d(LOG_TAG, "End onBindViewHolder");
     }
 
     @Override

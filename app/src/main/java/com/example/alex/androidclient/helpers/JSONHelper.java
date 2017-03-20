@@ -37,7 +37,8 @@ public class JSONHelper {
     private static final String SAMPLE_JSON_SITES_DIR_UPDATE = "{\"data\":[{\"id\":0,\"url\":" +
             "\"lenta.ru\"},{\"id\":1,\"url\":\"vesti.ru\"},{\"id\":2,\"url\":\"kp.ru\"}]}";
     private static final String SAMPLE_JSON_NAMES_DIR_UPDATE = "{\"data\":[{\"id\":0,\"name\":" +
-            "\"Путин В.В.\"},{\"id\":1,\"name\":\"Медведев Д.А.\"},{\"id\":2,\"name\":\"Навальный ?.?.\"}]}";
+            "\"Путин В.В.\"},{\"id\":1,\"name\":\"Медведев Д.А.\"},{\"id\":2,\"name\":" +
+            "\"Навальный ?.?.\"},{\"id\":3,\"name\":\"Дуров П.?\"},{\"id\":4,\"name\":\"Сталин И.В.\"}]}";
 
     public static final String NAMES_STATISTICS = "statistics";
     public static final String NAMES_SITE_ID = "siteID";

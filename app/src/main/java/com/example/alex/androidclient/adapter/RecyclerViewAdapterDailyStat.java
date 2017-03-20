@@ -1,25 +1,26 @@
-package com.example.alex.androidclient;
+package com.example.alex.androidclient.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.alex.androidclient.R;
 
 /**
  * Created by alex on 05.03.17.
  */
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
+public class RecyclerViewAdapterDailyStat extends RecyclerView.Adapter<RecyclerViewAdapterDailyStat.ViewHolder> {
     private String[] namePerson;
-    private int[] indexOccurrence;
+    private int[] likesCount;
     private Context context;
 
-    public RecyclerViewAdapter(String[] namePerson, int[] indexOccurrence, Context context) {
+    public RecyclerViewAdapterDailyStat(String[] namePerson, int[] likesCount, Context context) {
         this.namePerson = namePerson;
-        this.indexOccurrence = indexOccurrence;
+        this.likesCount = likesCount;
         this.context = context;
     }
 
@@ -42,7 +43,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     class ViewHolder extends RecyclerView.ViewHolder {
         TextView textViewNamePerson;
-        TextView textViewIndexOccurrence;
+        TextView textViewLikesCount;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -51,8 +52,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         private void initViews (View itemView){
             textViewNamePerson = (TextView) itemView.findViewById(R.id.text_view_name_person);
-            textViewIndexOccurrence = (TextView)itemView.findViewById(R.id.
-                    text_view_index_occurrence);
+            textViewLikesCount = (TextView)itemView.findViewById(R.id.text_view_likes_count);
         }
     }
 }

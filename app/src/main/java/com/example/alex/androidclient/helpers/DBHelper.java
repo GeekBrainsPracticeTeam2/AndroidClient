@@ -41,7 +41,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     + TB_PERSON_NAME + " STRING);");
             sqLiteDatabase.execSQL("CREATE TABLE " + TB_UPDATES +" ("
                     + TB_ID_COL_NAME + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                    + TB_UPDATES_DATE + " INTEGER, "
+                    + TB_UPDATES_DATE + " STRING, "
                     + TB_UPDATES_TBNAME + " STRING);");
         } catch (SQLException e) {
             e.printStackTrace();

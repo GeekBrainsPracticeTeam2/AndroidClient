@@ -8,10 +8,7 @@ public class DictionarySites {
     private int siteID;
     private String siteUrl;
 
-//    public DictionarySites() {
-//    }
-
-        public DictionarySites(int siteID, String siteUrl) {
+    public DictionarySites(int siteID, String siteUrl) {
         this.siteID = siteID;
         this.siteUrl = siteUrl;
     }

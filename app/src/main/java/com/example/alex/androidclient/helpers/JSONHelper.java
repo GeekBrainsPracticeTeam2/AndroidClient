@@ -81,15 +81,17 @@ public class JSONHelper {
                 Log.d(LOG_TAG, "Start fetchData. case = 0");
                 Log.d(LOG_TAG, "jsonDataObject = " + jsonDataObject);
                 array = jsonDataObject.getJSONArray(DICTIONARY);
-                Log.d(LOG_TAG, "PersonsStats size is " + array.length());
+                Log.d(LOG_TAG, "TotalStatistics size is " + array.length());
                 totalStats.clear();
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject stats = array.getJSONObject(i);
                     JSONArray personStats = stats.getJSONArray(NAMES_STATISTICS);
+                    Log.d(LOG_TAG, "PersonsStats size is " + personStats.length());
                     List<PersonStats> personStts = new ArrayList<>();
                     for (int j = 0; j < personStats.length(); j++) {
-                        JSONObject stat = personStats.getJSONObject(i);
+                        JSONObject stat = personStats.getJSONObject(j);
                         personStts.add(new PersonStats(stat.getInt("person"), stat.getInt("count")));
+                        Log.d(LOG_TAG, stat.toString());
                         Log.d(LOG_TAG, "PersonId = " + stat.getInt("person"));
                         Log.d(LOG_TAG, "likesCount = " + stat.getInt("count"));
                     }

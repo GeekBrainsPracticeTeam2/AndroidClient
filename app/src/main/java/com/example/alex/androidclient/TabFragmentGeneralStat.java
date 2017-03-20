@@ -36,7 +36,7 @@ public class TabFragmentGeneralStat extends Fragment implements AdapterView.OnIt
     private Spinner spinnerSites;
     private Button buttonView;
     private RecyclerView recyclerView;
-    final Context context = getContext();
+    private Context context;
 
     private int spinnerItemPosition;
 
@@ -112,9 +112,11 @@ public class TabFragmentGeneralStat extends Fragment implements AdapterView.OnIt
 }
 
     private void setRecyclerView(String[] namePerson, int[] likeCount){
+        context = getActivity();
         Log.d(LOG_TAG, "Start setRecyclerView");
         Log.d(LOG_TAG, "Length int[] likeCount = " + likeCount.length);
         Log.d(LOG_TAG, "Length String[] namePerson = " + namePerson.length);
+        Log.d(LOG_TAG, "context = " + context);
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);

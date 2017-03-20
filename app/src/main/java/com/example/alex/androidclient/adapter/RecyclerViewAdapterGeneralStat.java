@@ -2,6 +2,7 @@ package com.example.alex.androidclient.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,14 +19,22 @@ import java.util.ArrayList;
 
 public class RecyclerViewAdapterGeneralStat extends
         RecyclerView.Adapter<RecyclerViewAdapterGeneralStat.ViewHolder> {
+    private final String LOG_TAG = this.getClass().getSimpleName();
     private String[] namePerson;
     private int[] likesCount;
     private Context context;
 
     public RecyclerViewAdapterGeneralStat(String[] namePerson, int[] likesCount, Context context) {
+        Log.d(LOG_TAG, "Start contstructor");
+
         this.namePerson = namePerson;
         this.likesCount = likesCount;
         this.context = context;
+
+        Log.d(LOG_TAG, "Length namePerson = " + namePerson.length);
+        Log.d(LOG_TAG, "Length likesCount = " + likesCount.length);
+        Log.d(LOG_TAG, "context = " + context);
+        Log.d(LOG_TAG, "End contstructor");
     }
 
     @Override
@@ -38,6 +47,8 @@ public class RecyclerViewAdapterGeneralStat extends
 
     @Override
     public void onBindViewHolder(RecyclerViewAdapterGeneralStat.ViewHolder holder, int position) {
+        holder.textViewNamePerson.setText(namePerson[position]);
+        holder.textViewlikesCount.setText(likesCount[position]);
 
     }
 

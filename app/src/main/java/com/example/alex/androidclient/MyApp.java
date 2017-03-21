@@ -36,10 +36,20 @@ public class MyApp extends Application {
     }
 
     public String[] getSiteUrl() {
+        try {
+            initDictionarySites();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         return siteUrl;
     }
 
     public String[] getNamePerson() {
+        try {
+            initDictionaryPersons();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         return namePerson;
     }
 

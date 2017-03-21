@@ -94,9 +94,6 @@ public class JSONHelper {
                     }
                     totalStats.add(new TotalStatistics(stats.getInt("siteId"), personStts));
                 }
-                /*List<PersonStats> statsList = Ason.deserializeList(array, PersonStats.class);
-                totalStats.add(new TotalStatistics(jsonDataObject.getInt(NAMES_SITE_ID),
-                        statsList));*/
                 break;
             // get updates for dictionaries
             case 1:

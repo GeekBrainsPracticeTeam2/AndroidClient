@@ -36,6 +36,15 @@ public class TabFragmentGeneralStat extends Fragment implements AdapterView.OnIt
     private RecyclerView recyclerView;
     private RecyclerViewAdapterGeneralStat adapter;
 
+    private MyApp app;
+    private String[] siteUrl;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        app = ((MyApp)getActivity().getApplicationContext());
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -54,8 +63,8 @@ public class TabFragmentGeneralStat extends Fragment implements AdapterView.OnIt
     private void setSpinner(){
         Log.d(LOG_TAG, "Start setSpinner");
 
-        MyApp app = ((MyApp)getActivity().getApplicationContext());
-        String[] siteUrl = app.getSiteUrl();
+
+        siteUrl = app.getSiteUrl();
         Log.d(LOG_TAG, "Length String[] siteUrl = " + siteUrl.length);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
@@ -72,7 +81,7 @@ public class TabFragmentGeneralStat extends Fragment implements AdapterView.OnIt
         Log.d(LOG_TAG, "Start onItemSelected");
         Log.d(LOG_TAG, "position = " + position);
 
-        MyApp app = ((MyApp)getActivity().getApplicationContext());
+        siteUrl = app.getSiteUrl();
         app.setSiteID(position);
         app.getLikeCount();
         adapter.notifyDataSetChanged();
@@ -89,7 +98,6 @@ public class TabFragmentGeneralStat extends Fragment implements AdapterView.OnIt
     private void initRecyclerView(){
         Log.d(LOG_TAG, "Start onClick case R.id.button_view");
 
-        MyApp app = ((MyApp)getActivity().getApplicationContext());
         int[] likeCount = app.getLikeCount();
         String[] namePerson = app.getNamePerson();
 

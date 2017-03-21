@@ -114,9 +114,10 @@ public class CacheManager {
         List<TotalStatistics> totalStats = jHelperTotalStats.getTotalStats();
         Log.d(LOG_TAG, "Size totalStatis = " + jHelperTotalStats.getTotalStats().size());
         for (TotalStatistics stats: totalStats) {
-            if(stats.getSiteID() == siteId)
+            if(stats.getSiteID() == siteId){
                 Log.d(LOG_TAG, "Size stats = " + stats.getStatsList().size());
                 return stats;
+            }
         }
         return null;
     }

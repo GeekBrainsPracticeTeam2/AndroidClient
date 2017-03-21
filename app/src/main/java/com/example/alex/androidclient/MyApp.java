@@ -29,7 +29,7 @@ public class MyApp extends Application {
     private int[] likeCount;
     private List<PersonStats> statsList;
     private TotalStatistics totalStatisticsBySite;
-    private int siteID = -1;
+    private int siteID = 0;
 
     public void setSiteID(int siteID) {
         this.siteID = siteID;
@@ -117,22 +117,32 @@ public class MyApp extends Application {
 
     private void initLikeCount(){
         Log.d(LOG_TAG, "Start initLikeCount");
-
-        if (siteID > -1) {
-
             if (totalStatisticsBySite == null && likeCount == null) {
                 try {
                     totalStatisticsBySite = new TotalStatistics();
                     totalStatisticsBySite = cacheManager.getTotalStatisticsBySite(siteID);
                     Log.d(LOG_TAG, "totalStatisticsList = " + totalStatisticsBySite);
+
                     statsList = new ArrayList<>();
                     statsList = totalStatisticsBySite.getStatsList();
                     Log.d(LOG_TAG, "Size statsList = " + statsList.size());
+
                     likeCount = new int[statsList.size()];
                     Log.d(LOG_TAG, "Length likeCount = " + likeCount.length);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            } else {
+                try {
+                    totalStatisticsBySite = cacheManager.getTotalStatisticsBySite(siteID);
+                    statsList = totalStatisticsBySite.getStatsList();
+                    Log.d(LOG_TAG, "siteID = " + siteID);
+                    Log.d(LOG_TAG, "totalStatisticsBySite = " + totalStatisticsBySite);
+                    Log.d(LOG_TAG, "statsList = " + statsList);
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+
             }
 
             for (int i = 0; i < statsList.size(); i++) {
@@ -140,7 +150,7 @@ public class MyApp extends Application {
                 likeCount[i] = like;
                 Log.d(LOG_TAG, "likeCount(" + i + ") = " + likeCount[i]);
             }
-        }
+
         Log.d(LOG_TAG, "End initLikeCount");
     }
 }

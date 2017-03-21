@@ -37,6 +37,7 @@ public class TabFragmentGeneralStat extends Fragment implements AdapterView.OnIt
     private Button buttonView;
     private RecyclerView recyclerView;
     private Context context;
+    private RecyclerViewAdapterGeneralStat adapter;
 
     private int spinnerItemPosition;
 
@@ -47,6 +48,7 @@ public class TabFragmentGeneralStat extends Fragment implements AdapterView.OnIt
         View view = inflater.inflate(R.layout.general_stat_tab_fragment_layout, container, false);
         initView(view);
         setSpinner();
+        initRecyclerView();
         buttonBehavoir();
         return view;
     }
@@ -76,17 +78,25 @@ public class TabFragmentGeneralStat extends Fragment implements AdapterView.OnIt
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         Log.d(LOG_TAG, "Start onItemSelected");
-        spinnerItemPosition = position;
-        Log.d(LOG_TAG, "spinnerItemPosition = " + spinnerItemPosition);
+//        Log.d(LOG_TAG, "spinnerItemPosition = " + spinnerItemPosition);
+        Log.d(LOG_TAG, "position = " + position);
+//        if (spinnerItemPosition >= 0){
+//            spinnerItemPosition = position;
+        MyApp app = ((MyApp)getActivity().getApplicationContext());
+            app.setSiteID(position);
+        app.getLikeCount();
+            adapter.notifyDataSetChanged();
+//        }
+
         Log.d(LOG_TAG, "End onItemSelected");
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
         Log.d(LOG_TAG, "Start onNothingSelected");
-        spinnerItemPosition = -1;
-
-        Log.d(LOG_TAG, "spinnerItemPosition = " + spinnerItemPosition);
+//        spinnerItemPosition = -1;
+//
+//        Log.d(LOG_TAG, "spinnerItemPosition = " + spinnerItemPosition);
         Log.d(LOG_TAG, "End onNothingSelected");
     }
 
@@ -98,20 +108,24 @@ public class TabFragmentGeneralStat extends Fragment implements AdapterView.OnIt
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_view:
-                Log.d(LOG_TAG, "Start onClick case R.id.button_view");
-                MyApp app = ((MyApp)getActivity().getApplicationContext());
-                app.setSiteID(spinnerItemPosition);
-                int[] likeCount = app.getLikeCount();
-                Log.d(LOG_TAG, "Length int[] likeCount = " + likeCount.length);
-                String[] namePerson = app.getNamePerson();
-                Log.d(LOG_TAG, "Length String[] namePerson = " + namePerson.length);
-                setRecyclerView(namePerson, likeCount);
+
                 Log.d(LOG_TAG, "End onClick case R.id.button_view");
         break;
     }
 }
 
-    private void setRecyclerView(String[] namePerson, int[] likeCount){
+        private void initRecyclerView(){
+            Log.d(LOG_TAG, "Start onClick case R.id.button_view");
+            MyApp app = ((MyApp)getActivity().getApplicationContext());
+            app.setSiteID(spinnerItemPosition);
+            int[] likeCount = app.getLikeCount();
+            Log.d(LOG_TAG, "Length int[] likeCount = " + likeCount.length);
+            String[] namePerson = app.getNamePerson();
+            Log.d(LOG_TAG, "Length String[] namePerson = " + namePerson.length);
+            setRecyclerView(namePerson, likeCount);
+        }
+
+        private void setRecyclerView(String[] namePerson, int[] likeCount){
         context = getActivity();
         Log.d(LOG_TAG, "Start setRecyclerView");
         Log.d(LOG_TAG, "Length int[] likeCount = " + likeCount.length);
@@ -119,8 +133,11 @@ public class TabFragmentGeneralStat extends Fragment implements AdapterView.OnIt
         Log.d(LOG_TAG, "context = " + context);
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        adapter = new  RecyclerViewAdapterGeneralStat(namePerson, likeCount, context);
+        recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(new RecyclerViewAdapterGeneralStat(namePerson, likeCount, context));
+// recyclerView.setLayoutManager(layoutManager);
+//        recyclerView.setAdapter(new RecyclerViewAdapterGeneralStat(namePerson, likeCount, context));
         Log.d(LOG_TAG, "End setRecyclerView");
     }
 }

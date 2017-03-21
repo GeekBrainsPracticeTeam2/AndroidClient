@@ -27,11 +27,7 @@ import java.util.List;
 public class JSONHelper {
     private final String LOG_TAG = this.getClass().getSimpleName();
 
-    private static final String SAMPLE_JSON_TOTAL_STATISTICS = "{\"data\":[{\"siteId\":0,\"statistics\"" +
-            ":[{\"person\":0,\"count\":5},{\"person\":1,\"count\":7},{\"person\":2,\"count\":14}," +
-            "{\"person\":3,\"count\":8},{\"person\":4,\"count\":27}]},{\"siteId\":1,\"statistics\":" +
-            "[{\"person\":0,\"count\":3},{\"person\":1,\"count\":10},{\"person\":2,\"count\":7}," +
-            "{\"person\":3,\"count\":10},{\"person\":4,\"count\":21}]}]}";
+    private static final String SAMPLE_JSON_TOTAL_STATISTICS = "{\"data\":[{\"siteId\":0,\"statistics\":[{\"person\":0,\"count\":5},{\"person\":1,\"count\":7},{\"person\":2,\"count\":14},{\"person\":3,\"count\":8},{\"person\":4,\"count\":27}]},{\"siteId\":1,\"statistics\":[{\"person\":0,\"count\":3},{\"person\":1,\"count\":10},{\"person\":2,\"count\":7},{\"person\":3,\"count\":10},{\"person\":4,\"count\":21}]},{\"siteId\":2,\"statistics\":[{\"person\":0,\"count\":0},{\"person\":1,\"count\":1},{\"person\":2,\"count\":2},{\"person\":3,\"count\":3},{\"person\":4,\"count\":4}]}]}";
     private static final String SAMPLE_JSON_UPDATE_STATUS = "{\"tables\":[{\"dictionaryName\":\"sites\",\"lastUpdateDate\":" +
             "\"2017-03-13 15:56:26\"},{\"dictionaryName\":\"persons\",\"lastUpdateDate\":\"2017-03-13 15:56:26\"}]}";
     private static final String SAMPLE_JSON_SITES_DIR_UPDATE = "{\"data\":[{\"id\":0,\"url\":" +

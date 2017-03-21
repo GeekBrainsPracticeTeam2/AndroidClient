@@ -29,18 +29,12 @@ import java.util.List;
  * Created by alex on 03.03.17.
  */
 
-public class TabFragmentGeneralStat extends Fragment implements AdapterView.OnItemSelectedListener,
-        View.OnClickListener{
+public class TabFragmentGeneralStat extends Fragment implements AdapterView.OnItemSelectedListener{
     private final String LOG_TAG = this.getClass().getSimpleName();
 
     private Spinner spinnerSites;
-    private Button buttonView;
     private RecyclerView recyclerView;
-    private Context context;
     private RecyclerViewAdapterGeneralStat adapter;
-
-    private int spinnerItemPosition;
-
 
     @Nullable
     @Override
@@ -49,13 +43,11 @@ public class TabFragmentGeneralStat extends Fragment implements AdapterView.OnIt
         initView(view);
         setSpinner();
         initRecyclerView();
-        buttonBehavoir();
         return view;
     }
 
     private void initView(View view){
         spinnerSites = (Spinner)view.findViewById(R.id.sites_spinner);
-        buttonView =(Button)view.findViewById(R.id.button_view);
         recyclerView = (RecyclerView)view.findViewById(R.id.recycler_view_general_stat);
     }
 
@@ -78,15 +70,12 @@ public class TabFragmentGeneralStat extends Fragment implements AdapterView.OnIt
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         Log.d(LOG_TAG, "Start onItemSelected");
-//        Log.d(LOG_TAG, "spinnerItemPosition = " + spinnerItemPosition);
         Log.d(LOG_TAG, "position = " + position);
-//        if (spinnerItemPosition >= 0){
-//            spinnerItemPosition = position;
+
         MyApp app = ((MyApp)getActivity().getApplicationContext());
-            app.setSiteID(position);
+        app.setSiteID(position);
         app.getLikeCount();
-            adapter.notifyDataSetChanged();
-//        }
+        adapter.notifyDataSetChanged();
 
         Log.d(LOG_TAG, "End onItemSelected");
     }
@@ -94,50 +83,36 @@ public class TabFragmentGeneralStat extends Fragment implements AdapterView.OnIt
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
         Log.d(LOG_TAG, "Start onNothingSelected");
-//        spinnerItemPosition = -1;
-//
-//        Log.d(LOG_TAG, "spinnerItemPosition = " + spinnerItemPosition);
         Log.d(LOG_TAG, "End onNothingSelected");
     }
 
-    private void buttonBehavoir(){
-        buttonView.setOnClickListener(this);
+    private void initRecyclerView(){
+        Log.d(LOG_TAG, "Start onClick case R.id.button_view");
+
+        MyApp app = ((MyApp)getActivity().getApplicationContext());
+        int[] likeCount = app.getLikeCount();
+        String[] namePerson = app.getNamePerson();
+
+        Log.d(LOG_TAG, "Length int[] likeCount = " + likeCount.length);
+        Log.d(LOG_TAG, "Length String[] namePerson = " + namePerson.length);
+
+        setRecyclerView(namePerson, likeCount);
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.button_view:
+    private void setRecyclerView(String[] namePerson, int[] likeCount){
+        Context context = getActivity();
 
-                Log.d(LOG_TAG, "End onClick case R.id.button_view");
-        break;
-    }
-}
-
-        private void initRecyclerView(){
-            Log.d(LOG_TAG, "Start onClick case R.id.button_view");
-            MyApp app = ((MyApp)getActivity().getApplicationContext());
-            app.setSiteID(spinnerItemPosition);
-            int[] likeCount = app.getLikeCount();
-            Log.d(LOG_TAG, "Length int[] likeCount = " + likeCount.length);
-            String[] namePerson = app.getNamePerson();
-            Log.d(LOG_TAG, "Length String[] namePerson = " + namePerson.length);
-            setRecyclerView(namePerson, likeCount);
-        }
-
-        private void setRecyclerView(String[] namePerson, int[] likeCount){
-        context = getActivity();
         Log.d(LOG_TAG, "Start setRecyclerView");
         Log.d(LOG_TAG, "Length int[] likeCount = " + likeCount.length);
         Log.d(LOG_TAG, "Length String[] namePerson = " + namePerson.length);
         Log.d(LOG_TAG, "context = " + context);
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         adapter = new  RecyclerViewAdapterGeneralStat(namePerson, likeCount, context);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(layoutManager);
-// recyclerView.setLayoutManager(layoutManager);
-//        recyclerView.setAdapter(new RecyclerViewAdapterGeneralStat(namePerson, likeCount, context));
+
         Log.d(LOG_TAG, "End setRecyclerView");
     }
 }

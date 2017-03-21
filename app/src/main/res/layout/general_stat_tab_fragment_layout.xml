@@ -17,13 +17,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"/>
 
-    <Button
-        android:id="@+id/button_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:hint="@string/view"/>
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view_general_stat"
         android:layout_width="match_parent"

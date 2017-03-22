@@ -2,6 +2,7 @@ package com.example.alex.androidclient;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -35,9 +36,11 @@ import static com.example.alex.androidclient.DatePickerFragment.DATE_SELECTED;
 
 public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItemSelectedListener,
         View.OnClickListener{
+    private final String LOG_TAG = this.getClass().getSimpleName();
+
     private Spinner spinnerSites;
-    private Button buttonView, buttonFirstDateSelected, buttonLastDateSelected;
-    private TextView textViewFirstDateSelected, textViewLastDateSelected;
+    private Button bView, bFirstDateSelected, bLastDateSelected;
+    private TextView tvFirstDateSelected, tvLastDateSelected;
     private RecyclerView recyclerView;
 
     private Calendar firstDateSelected, lastDateSelected;
@@ -50,9 +53,17 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     private static final int flagFirstDateSelected = R.id.first_date_selected;
     private static final int flagLastDateSelected = R.id.last_date_selected;
     private static final int CHANGE_DATE = 2;
-    private static final String TAG = "MyApp";
+
 
     private SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+
+    private MyApp app;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        app = ((MyApp)getActivity().getApplicationContext());
+    }
 
     @Nullable
     @Override
@@ -60,7 +71,7 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.daily_stat_tab_fragment_layout, container, false);
         initView(view);
-//        setSpinner();
+        setSpinner();
         buttonBehavoir();
 
         return view;
@@ -68,40 +79,44 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
 
     private void initView(View view){
         spinnerSites = (Spinner)view.findViewById(R.id.sites_spinner);
-        buttonView =(Button)view.findViewById(R.id.button_view);
-        buttonFirstDateSelected = (Button)view.findViewById(R.id.first_date_selected);
-        buttonLastDateSelected = (Button)view.findViewById(R.id.last_date_selected);
-        textViewFirstDateSelected = (TextView)view.findViewById(R.id.textview_first_date_selected);
-        textViewLastDateSelected = (TextView)view.findViewById(R.id.textviews_last_date_selected);
+
+        bView =(Button)view.findViewById(R.id.button_view);
+        bFirstDateSelected = (Button)view.findViewById(R.id.first_date_selected);
+        bLastDateSelected = (Button)view.findViewById(R.id.last_date_selected);
+
+        tvFirstDateSelected = (TextView)view.findViewById(R.id.textview_first_date_selected);
+        tvLastDateSelected = (TextView)view.findViewById(R.id.textviews_last_date_selected);
         setTextViewDefault();
+
         recyclerView = (RecyclerView)view.findViewById(R.id.recycler_view);
     }
 
     private void setTextViewDefault() {
-        textViewFirstDateSelected.setText(R.string.default_date);
-        textViewLastDateSelected.setText(R.string.default_date);
+        tvFirstDateSelected.setText(R.string.default_date);
+        tvLastDateSelected.setText(R.string.default_date);
     }
 
     private void setTextViewSelected(){
         if (firstDateSelected != null) {
             String firstDate = sdf.format(firstDateSelected.getTime());
-            textViewFirstDateSelected.setText(firstDate);
+            tvFirstDateSelected.setText(firstDate);
         }
         if (lastDateSelected != null){
             String lastDate = sdf.format(lastDateSelected.getTime());
-            textViewLastDateSelected.setText(lastDate);
+            tvLastDateSelected.setText(lastDate);
         }
     }
 
-//    private void setSpinner(){
-//        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
-//                R.array.sites,
-//                android.R.layout.simple_spinner_item);
-//        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-//
-//        spinnerSites.setAdapter(adapter);
-//        spinnerSites.setOnItemSelectedListener(this);
-//    }
+    private void setSpinner(){
+        String[] siteUrl = app.getSiteUrl();
+
+        ArrayAdapter<String> adapter = new  ArrayAdapter<>(getActivity(),
+                android.R.layout.simple_spinner_item, siteUrl);
+        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+
+        spinnerSites.setAdapter(adapter);
+        spinnerSites.setOnItemSelectedListener(this);
+    }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -114,9 +129,9 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     }
 
     private void buttonBehavoir(){
-        buttonView.setOnClickListener(this);
-        buttonFirstDateSelected.setOnClickListener(this);
-        buttonLastDateSelected.setOnClickListener(this);
+        bView.setOnClickListener(this);
+        bFirstDateSelected.setOnClickListener(this);
+        bLastDateSelected.setOnClickListener(this);
 
     }
 

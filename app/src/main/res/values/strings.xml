@@ -1,17 +1,27 @@
 <resources>
     <string name="app_name">Android Client</string>
+
+    <!-- Start TabsFragment -->
     <string name="general_stats">General stats</string>
     <string name="daily_stats">Daily stats</string>
+    <!-- Start TabsFragment -->
+
     <string name="view">To see the statistics</string>
     <string name="select">Please select the site you want</string>
+
+    <!-- Start daily_stat_tab_fragment_layout -->
     <string name="date_selected">Please select the dates of your period</string>
     <string name="first_date">Selected first Date</string>
     <string name="last_date">Selected last Date</string>
+    <!-- End daily_stat_tab_fragment_layout -->
+
+    <!-- Start TabFragmentDailyStat -->
     <string name="alarm_date_is_greater_today">Your chosen date is greater than today\'s. Please
         select a valid date.</string>
     <string name="alarm_first_date_is_greater_last_date">Your chosen start date greater than the
         end. Please select a valid date.</string>
     <string name="default_date">DD:MM:YYYY</string>
+    <!--End TabFragmentDailyStat -->
 
     <!-- Start DatePickerFragment
     <string name="DATE_SELECTED">date</string>

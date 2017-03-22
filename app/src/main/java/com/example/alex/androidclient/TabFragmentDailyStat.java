@@ -51,18 +51,14 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     private static final int flagLastDateSelected = R.id.last_date_selected;
     private static final int CHANGE_DATE = 2;
 
-
     private SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 
     private MyApp app;
-
-    private PresenterDailyStat presenter;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         app = ((MyApp)getActivity().getApplicationContext());
-        presenter = new PresenterDailyStat();
     }
 
     @Nullable
@@ -162,7 +158,7 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
         }
     }
 
-    private void checkTextViewDateSelected(){
+    private void checkTVDateSelected(){
         if (firstDateChosen && lastDateChosen){
             checkSelectedDateIsGreaterToday();
             checkFirstDateSelectedIsGreaterLastDateSelected();
@@ -173,6 +169,7 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     private void checkFirstDateSelectedIsGreaterLastDateSelected() {
         if (firstDateSelected.after(lastDateSelected)){
             firstDateSelected.setTimeInMillis(lastDateSelected.getTimeInMillis());
+            setTVChosen(flagFirstDateSelected);
             Toast.makeText(getActivity(), R.string.alarm_first_date_is_greater_last_date,
                     Toast.LENGTH_SHORT).show();
         }
@@ -183,11 +180,13 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
 
         if (firstDateSelected.after(toDay)){
             firstDateSelected.setTimeInMillis(toDay.getTimeInMillis());
+            setTVChosen(flagFirstDateSelected);
             Toast.makeText(getActivity(), R.string.alarm_date_is_greater_today,
                     Toast.LENGTH_SHORT).show();
         }
         if (lastDateSelected.after(toDay)){
             lastDateSelected.setTimeInMillis(toDay.getTimeInMillis());
+            setTVChosen(flagLastDateSelected);
             Toast.makeText(getActivity(), R.string.alarm_date_is_greater_today,
                     Toast.LENGTH_SHORT).show();
         }
@@ -221,18 +220,39 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     private void setDate(int flag, boolean chosen){
         switch (flag) {
             case flagFirstDateSelected:
+//                handleDate(firstDateSelected, flag, firstDateChosen, chosen);
                 firstDateSelected = Calendar.getInstance();
                 firstDateSelected.setTimeInMillis(date);
                 firstDateChosen = chosen;
                 setTVChosen(flag);
-                checkTextViewDateSelected();
+                checkTVDateSelected();
                 break;
             case flagLastDateSelected:
+//                handleDate(lastDateSelected, flag, lastDateChosen, chosen);
                 lastDateSelected = Calendar.getInstance();
                 lastDateSelected.setTimeInMillis(date);
                 lastDateChosen = chosen;
                 setTVChosen(flag);
-                checkTextViewDateSelected();
+                checkTVDateSelected();
         }
+    }
+
+    private void handleDate(Calendar dateSelected, int flag, boolean dateChosen, boolean chosen){
+        Log.d(LOG_TAG, "Start handleDate");
+
+        dateSelected = Calendar.getInstance();
+        dateSelected.setTimeInMillis(date);
+        dateChosen = chosen;
+        setTVChosen(flag);
+        checkTVDateSelected();
+
+        Log.d(LOG_TAG, "dateSelected = " + dateSelected);
+        Log.d(LOG_TAG, "firstDateSelected = " + firstDateSelected);
+        Log.d(LOG_TAG, "lastDateSelected = " + lastDateSelected);
+        Log.d(LOG_TAG, "dateChosen = " + dateChosen);
+        Log.d(LOG_TAG, "firstDateChosen = " + firstDateChosen);
+        Log.d(LOG_TAG, "lastDateChosen = " + lastDateChosen);
+        Log.d(LOG_TAG, "End handleDate");
+
     }
 }

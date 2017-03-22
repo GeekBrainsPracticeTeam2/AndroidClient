@@ -1,7 +1,6 @@
 package com.example.alex.androidclient;
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,15 +15,14 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.alex.androidclient.presenters.PresenterDailyStat;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 import static com.example.alex.androidclient.DatePickerFragment.BUTTON_SELECTED;
 import static com.example.alex.androidclient.DatePickerFragment.CHOSEN;
@@ -59,10 +57,13 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
 
     private MyApp app;
 
+    private PresenterDailyStat presenter;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         app = ((MyApp)getActivity().getApplicationContext());
+        presenter = new PresenterDailyStat();
     }
 
     @Nullable
@@ -86,24 +87,35 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
 
         tvFirstDateSelected = (TextView)view.findViewById(R.id.textview_first_date_selected);
         tvLastDateSelected = (TextView)view.findViewById(R.id.textviews_last_date_selected);
-        setTextViewDefault();
+
+        setTVDefault(tvFirstDateSelected);
+        setTVDefault(tvLastDateSelected);
 
         recyclerView = (RecyclerView)view.findViewById(R.id.recycler_view);
     }
 
-    private void setTextViewDefault() {
-        tvFirstDateSelected.setText(R.string.default_date);
-        tvLastDateSelected.setText(R.string.default_date);
+    private void setTVDefault(TextView tv) {
+        tv.setText(R.string.default_date);
     }
 
-    private void setTextViewSelected(){
-        if (firstDateSelected != null) {
-            String firstDate = sdf.format(firstDateSelected.getTime());
-            tvFirstDateSelected.setText(firstDate);
-        }
-        if (lastDateSelected != null){
-            String lastDate = sdf.format(lastDateSelected.getTime());
-            tvLastDateSelected.setText(lastDate);
+    private void setTVChosen(int flag){
+        switch (flag) {
+            case flagFirstDateSelected:
+                try {
+                    String firstDate = sdf.format(firstDateSelected.getTime());
+                    tvFirstDateSelected.setText(firstDate);
+                } catch (NullPointerException e){
+                    e.printStackTrace();
+                }
+                break;
+            case flagLastDateSelected:
+                try {
+                    String lastDate = sdf.format(lastDateSelected.getTime());
+                    tvLastDateSelected.setText(lastDate);
+                } catch (NullPointerException e){
+                    e.printStackTrace();
+                }
+                break;
         }
     }
 
@@ -155,7 +167,7 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
         if (firstDateChosen && lastDateChosen){
             checkSelectedDateIsGreaterToday();
             checkFirstDateSelectedIsGreaterLastDateSelected();
-            setTextViewSelected();
+            setTVChosen(0);
         }
     }
 
@@ -193,7 +205,7 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
                 date = data.getLongExtra(DATE_SELECTED, 0);
                 int flag = data.getIntExtra(BUTTON_SELECTED, 0);
                 boolean chosen = data.getBooleanExtra(CHOSEN, false);
-                setDate(flag, chosen);
+                presenter.setDate(date, flag, chosen);
                 break;
         }
     }
@@ -207,19 +219,5 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
         changeDate.show(getFragmentManager(), "DatePicker");
     }
 
-    private void setDate(int flag, boolean chosen){
-        if (flagFirstDateSelected == flag){
-            firstDateSelected = Calendar.getInstance();
-            firstDateSelected.setTimeInMillis(date);
-            firstDateChosen = chosen;
-            setTextViewSelected();
-            checkTextViewDateSelected();
-            } else {
-            lastDateSelected = Calendar.getInstance();
-            lastDateSelected.setTimeInMillis(date);
-            lastDateChosen = chosen;
-            setTextViewSelected();
-            checkTextViewDateSelected();
-        }
-    }
+
 }

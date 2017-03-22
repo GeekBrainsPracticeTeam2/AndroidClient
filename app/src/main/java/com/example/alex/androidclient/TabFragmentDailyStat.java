@@ -36,7 +36,7 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
         View.OnClickListener{
     private final String LOG_TAG = this.getClass().getSimpleName();
 
-    private Spinner spinnerSites;
+    private Spinner spinnerSites, spinnerPersons;
     private Button bView, bFirstDateSelected, bLastDateSelected;
     private TextView tvFirstDateSelected, tvLastDateSelected;
     private RecyclerView recyclerView;
@@ -67,14 +67,16 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.daily_stat_tab_fragment_layout, container, false);
         initView(view);
-        setSpinner();
+        setSpinnerSites();
+        setSpinnerPersons();
         buttonBehavoir();
 
         return view;
     }
 
     private void initView(View view){
-        spinnerSites = (Spinner)view.findViewById(R.id.sites_spinner);
+        spinnerSites = (Spinner)view.findViewById(R.id.spinner_sites);
+        spinnerPersons = (Spinner)view.findViewById(R.id.spinner_person);
 
         bView =(Button)view.findViewById(R.id.button_view);
         bFirstDateSelected = (Button)view.findViewById(R.id.first_date_selected);
@@ -114,7 +116,7 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
         }
     }
 
-    private void setSpinner(){
+    private void setSpinnerSites(){
         String[] siteUrl = app.getSiteUrl();
 
         ArrayAdapter<String> adapter = new  ArrayAdapter<>(getActivity(),
@@ -125,9 +127,34 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
         spinnerSites.setOnItemSelectedListener(this);
     }
 
+    private void setSpinnerPersons(){
+        String[] namePerson= app.getNamePerson();
+
+        ArrayAdapter<String> adapter = new  ArrayAdapter<>(getActivity(),
+                android.R.layout.simple_spinner_item, namePerson);
+        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+
+        spinnerPersons.setAdapter(adapter);
+        spinnerPersons.setOnItemSelectedListener(this);
+    }
+
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        Log.d(LOG_TAG, "Start onItemSelected");
 
+        Spinner spinner = (Spinner)parent;
+        switch (spinner.getId()){
+            case R.id.spinner_sites:
+                Log.d(LOG_TAG, "Start onItemSelected case " + R.id.spinner_sites);
+                Log.d(LOG_TAG, "item selected = " + position);
+                Log.d(LOG_TAG, "item selected = " + spinnerSites.getItemAtPosition(position));
+                break;
+            case R.id.spinner_person:
+                Log.d(LOG_TAG, "Start onItemSelected case " + R.id.spinner_person);
+                Log.d(LOG_TAG, "item selected = " + position);
+                Log.d(LOG_TAG, "item selected = " + spinnerPersons.getItemAtPosition(position));
+                break;
+        }
     }
 
     @Override

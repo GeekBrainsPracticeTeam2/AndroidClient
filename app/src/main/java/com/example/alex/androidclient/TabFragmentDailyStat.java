@@ -45,8 +45,7 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
 
     private long date;
 
-    private boolean firstDateChosen = false;
-    private boolean lastDateChosen = false;
+    private boolean firstDateChosen, lastDateChosen = false;
 
     private static final int flagFirstDateSelected = R.id.first_date_selected;
     private static final int flagLastDateSelected = R.id.last_date_selected;
@@ -117,7 +116,6 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
                 }
                 break;
         }
-    }
     }
 
     private void setSpinner(){
@@ -206,7 +204,7 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
                 date = data.getLongExtra(DATE_SELECTED, 0);
                 int flag = data.getIntExtra(BUTTON_SELECTED, 0);
                 boolean chosen = data.getBooleanExtra(CHOSEN, false);
-                presenter.setDate(date, flag, chosen);
+                setDate(flag, chosen);
                 break;
         }
     }
@@ -220,5 +218,21 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
         changeDate.show(getFragmentManager(), "DatePicker");
     }
 
-
+    private void setDate(int flag, boolean chosen){
+        switch (flag) {
+            case flagFirstDateSelected:
+                firstDateSelected = Calendar.getInstance();
+                firstDateSelected.setTimeInMillis(date);
+                firstDateChosen = chosen;
+                setTVChosen(flag);
+                checkTextViewDateSelected();
+                break;
+            case flagLastDateSelected:
+                lastDateSelected = Calendar.getInstance();
+                lastDateSelected.setTimeInMillis(date);
+                lastDateChosen = chosen;
+                setTVChosen(flag);
+                checkTextViewDateSelected();
+        }
+    }
 }

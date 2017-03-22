@@ -1,7 +1,7 @@
 package com.example.alex.androidclient;
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,15 +15,14 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.alex.androidclient.presenters.PresenterDailyStat;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 import static com.example.alex.androidclient.DatePickerFragment.BUTTON_SELECTED;
 import static com.example.alex.androidclient.DatePickerFragment.CHOSEN;
@@ -35,24 +34,32 @@ import static com.example.alex.androidclient.DatePickerFragment.DATE_SELECTED;
 
 public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItemSelectedListener,
         View.OnClickListener{
+    private final String LOG_TAG = this.getClass().getSimpleName();
+
     private Spinner spinnerSites;
-    private Button buttonView, buttonFirstDateSelected, buttonLastDateSelected;
-    private TextView textViewFirstDateSelected, textViewLastDateSelected;
+    private Button bView, bFirstDateSelected, bLastDateSelected;
+    private TextView tvFirstDateSelected, tvLastDateSelected;
     private RecyclerView recyclerView;
 
     private Calendar firstDateSelected, lastDateSelected;
 
     private long date;
 
-    private boolean firstDateChosen = false;
-    private boolean lastDateChosen = false;
+    private boolean firstDateChosen, lastDateChosen = false;
 
     private static final int flagFirstDateSelected = R.id.first_date_selected;
     private static final int flagLastDateSelected = R.id.last_date_selected;
     private static final int CHANGE_DATE = 2;
-    private static final String TAG = "MyApp";
 
     private SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+
+    private MyApp app;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        app = ((MyApp)getActivity().getApplicationContext());
+    }
 
     @Nullable
     @Override
@@ -60,7 +67,7 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.daily_stat_tab_fragment_layout, container, false);
         initView(view);
-//        setSpinner();
+        setSpinner();
         buttonBehavoir();
 
         return view;
@@ -68,40 +75,55 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
 
     private void initView(View view){
         spinnerSites = (Spinner)view.findViewById(R.id.sites_spinner);
-        buttonView =(Button)view.findViewById(R.id.button_view);
-        buttonFirstDateSelected = (Button)view.findViewById(R.id.first_date_selected);
-        buttonLastDateSelected = (Button)view.findViewById(R.id.last_date_selected);
-        textViewFirstDateSelected = (TextView)view.findViewById(R.id.textview_first_date_selected);
-        textViewLastDateSelected = (TextView)view.findViewById(R.id.textviews_last_date_selected);
-        setTextViewDefault();
+
+        bView =(Button)view.findViewById(R.id.button_view);
+        bFirstDateSelected = (Button)view.findViewById(R.id.first_date_selected);
+        bLastDateSelected = (Button)view.findViewById(R.id.last_date_selected);
+
+        tvFirstDateSelected = (TextView)view.findViewById(R.id.textview_first_date_selected);
+        tvLastDateSelected = (TextView)view.findViewById(R.id.textviews_last_date_selected);
+
+        setTVDefault(tvFirstDateSelected);
+        setTVDefault(tvLastDateSelected);
+
         recyclerView = (RecyclerView)view.findViewById(R.id.recycler_view);
     }
 
-    private void setTextViewDefault() {
-        textViewFirstDateSelected.setText(R.string.default_date);
-        textViewLastDateSelected.setText(R.string.default_date);
+    private void setTVDefault(TextView tv) {
+        tv.setText(R.string.default_date);
     }
 
-    private void setTextViewSelected(){
-        if (firstDateSelected != null) {
-            String firstDate = sdf.format(firstDateSelected.getTime());
-            textViewFirstDateSelected.setText(firstDate);
-        }
-        if (lastDateSelected != null){
-            String lastDate = sdf.format(lastDateSelected.getTime());
-            textViewLastDateSelected.setText(lastDate);
+    private void setTVChosen(int flag){
+        switch (flag) {
+            case flagFirstDateSelected:
+                try {
+                    String firstDate = sdf.format(firstDateSelected.getTime());
+                    tvFirstDateSelected.setText(firstDate);
+                } catch (NullPointerException e){
+                    e.printStackTrace();
+                }
+                break;
+            case flagLastDateSelected:
+                try {
+                    String lastDate = sdf.format(lastDateSelected.getTime());
+                    tvLastDateSelected.setText(lastDate);
+                } catch (NullPointerException e){
+                    e.printStackTrace();
+                }
+                break;
         }
     }
 
-//    private void setSpinner(){
-//        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
-//                R.array.sites,
-//                android.R.layout.simple_spinner_item);
-//        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-//
-//        spinnerSites.setAdapter(adapter);
-//        spinnerSites.setOnItemSelectedListener(this);
-//    }
+    private void setSpinner(){
+        String[] siteUrl = app.getSiteUrl();
+
+        ArrayAdapter<String> adapter = new  ArrayAdapter<>(getActivity(),
+                android.R.layout.simple_spinner_item, siteUrl);
+        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+
+        spinnerSites.setAdapter(adapter);
+        spinnerSites.setOnItemSelectedListener(this);
+    }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -114,9 +136,9 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     }
 
     private void buttonBehavoir(){
-        buttonView.setOnClickListener(this);
-        buttonFirstDateSelected.setOnClickListener(this);
-        buttonLastDateSelected.setOnClickListener(this);
+        bView.setOnClickListener(this);
+        bFirstDateSelected.setOnClickListener(this);
+        bLastDateSelected.setOnClickListener(this);
 
     }
 
@@ -136,17 +158,18 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
         }
     }
 
-    private void checkTextViewDateSelected(){
+    private void checkTVDateSelected(){
         if (firstDateChosen && lastDateChosen){
             checkSelectedDateIsGreaterToday();
             checkFirstDateSelectedIsGreaterLastDateSelected();
-            setTextViewSelected();
+            setTVChosen(0);
         }
     }
 
     private void checkFirstDateSelectedIsGreaterLastDateSelected() {
         if (firstDateSelected.after(lastDateSelected)){
             firstDateSelected.setTimeInMillis(lastDateSelected.getTimeInMillis());
+            setTVChosen(flagFirstDateSelected);
             Toast.makeText(getActivity(), R.string.alarm_first_date_is_greater_last_date,
                     Toast.LENGTH_SHORT).show();
         }
@@ -157,11 +180,13 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
 
         if (firstDateSelected.after(toDay)){
             firstDateSelected.setTimeInMillis(toDay.getTimeInMillis());
+            setTVChosen(flagFirstDateSelected);
             Toast.makeText(getActivity(), R.string.alarm_date_is_greater_today,
                     Toast.LENGTH_SHORT).show();
         }
         if (lastDateSelected.after(toDay)){
             lastDateSelected.setTimeInMillis(toDay.getTimeInMillis());
+            setTVChosen(flagLastDateSelected);
             Toast.makeText(getActivity(), R.string.alarm_date_is_greater_today,
                     Toast.LENGTH_SHORT).show();
         }
@@ -193,18 +218,41 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     }
 
     private void setDate(int flag, boolean chosen){
-        if (flagFirstDateSelected == flag){
-            firstDateSelected = Calendar.getInstance();
-            firstDateSelected.setTimeInMillis(date);
-            firstDateChosen = chosen;
-            setTextViewSelected();
-            checkTextViewDateSelected();
-            } else {
-            lastDateSelected = Calendar.getInstance();
-            lastDateSelected.setTimeInMillis(date);
-            lastDateChosen = chosen;
-            setTextViewSelected();
-            checkTextViewDateSelected();
+        switch (flag) {
+            case flagFirstDateSelected:
+//                handleDate(firstDateSelected, flag, firstDateChosen, chosen);
+                firstDateSelected = Calendar.getInstance();
+                firstDateSelected.setTimeInMillis(date);
+                firstDateChosen = chosen;
+                setTVChosen(flag);
+                checkTVDateSelected();
+                break;
+            case flagLastDateSelected:
+//                handleDate(lastDateSelected, flag, lastDateChosen, chosen);
+                lastDateSelected = Calendar.getInstance();
+                lastDateSelected.setTimeInMillis(date);
+                lastDateChosen = chosen;
+                setTVChosen(flag);
+                checkTVDateSelected();
         }
+    }
+
+    private void handleDate(Calendar dateSelected, int flag, boolean dateChosen, boolean chosen){
+        Log.d(LOG_TAG, "Start handleDate");
+
+        dateSelected = Calendar.getInstance();
+        dateSelected.setTimeInMillis(date);
+        dateChosen = chosen;
+        setTVChosen(flag);
+        checkTVDateSelected();
+
+        Log.d(LOG_TAG, "dateSelected = " + dateSelected);
+        Log.d(LOG_TAG, "firstDateSelected = " + firstDateSelected);
+        Log.d(LOG_TAG, "lastDateSelected = " + lastDateSelected);
+        Log.d(LOG_TAG, "dateChosen = " + dateChosen);
+        Log.d(LOG_TAG, "firstDateChosen = " + firstDateChosen);
+        Log.d(LOG_TAG, "lastDateChosen = " + lastDateChosen);
+        Log.d(LOG_TAG, "End handleDate");
+
     }
 }

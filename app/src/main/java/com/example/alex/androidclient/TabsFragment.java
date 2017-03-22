@@ -37,7 +37,6 @@ public class TabsFragment extends Fragment {
     private void setTabs(){
         String nameFirstTab = getString(R.string.general_stats);
         String nameSecondTab = getString(R.string.daily_stats);
-        //TODO перенести стринги вверх, после объявления класса. С контекстом и гетресурсом, валится.
 
         TabFragmentGeneralStat generalStatFragment = new TabFragmentGeneralStat();
         TabFragmentDailyStat dailyStatFragment = new TabFragmentDailyStat();

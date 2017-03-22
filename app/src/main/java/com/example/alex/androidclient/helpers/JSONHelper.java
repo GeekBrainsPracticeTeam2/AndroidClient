@@ -7,6 +7,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.example.alex.androidclient.models.DailyStatistics;
 import com.example.alex.androidclient.models.DictionaryPersons;
 import com.example.alex.androidclient.models.DictionarySites;
 import com.example.alex.androidclient.models.DictionaryUpdates;
@@ -18,6 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -174,5 +176,8 @@ public class JSONHelper {
 
     public List<DictionaryPersons> getDictionaryPersonsList() {
         return dictionaryPersonsList;
+    }
+
+    public List<DailyStatistics> getDailyStats(Date startDate, Date finishDate) {
     }
 }

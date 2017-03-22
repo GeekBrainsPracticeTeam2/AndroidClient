@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.example.alex.androidclient.helpers.DBHelper;
 import com.example.alex.androidclient.helpers.JSONHelper;
+import com.example.alex.androidclient.models.DailyStatistics;
 import com.example.alex.androidclient.models.DictionaryPersons;
 import com.example.alex.androidclient.models.DictionarySites;
 import com.example.alex.androidclient.models.DictionaryUpdates;
@@ -16,6 +17,7 @@ import com.example.alex.androidclient.models.TotalStatistics;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -164,6 +166,12 @@ public class CacheManager {
             }
         }
         return null;
+    }
+
+    public List<DailyStatistics> getDailyStatistics(Date startDate, Date finishDate) {
+        JSONHelper jHelperDailyStats = new JSONHelper(4);
+        List<DailyStatistics> dailyStats = jHelperDailyStats.getDailyStats(startDate, finishDate);
+
     }
 
     public List<DictionarySites> getSitesDictionary() throws JSONException {

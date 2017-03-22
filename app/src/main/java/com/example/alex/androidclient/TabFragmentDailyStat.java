@@ -118,6 +118,7 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
                 break;
         }
     }
+    }
 
     private void setSpinner(){
         String[] siteUrl = app.getSiteUrl();

@@ -116,101 +116,120 @@ public class JSONHelper {
 
     private void fetchData() throws JSONException {
         Log.d(LOG_TAG, "Start fetchData");
-        JSONArray array;
         switch (mode){
             // get total statistics
             case 0:
-                Log.d(LOG_TAG, "Start fetchData. case = 0");
-                Log.d(LOG_TAG, "jsonDataObject = " + jsonDataObject);
-                array = jsonDataObject.getJSONArray(DICTIONARY);
-                Log.d(LOG_TAG, "TotalStatistics size is " + array.length());
-                totalStats.clear();
-                for (int i = 0; i < array.length(); i++) {
-                    JSONObject stats = array.getJSONObject(i);
-                    JSONArray personStats = stats.getJSONArray(JSON_STATISTICS);
-                    Log.d(LOG_TAG, "PersonsStats size is " + personStats.length());
-                    List<PersonStats> personStts = new ArrayList<>();
-                    for (int j = 0; j < personStats.length(); j++) {
-                        JSONObject stat = personStats.getJSONObject(j);
-                        personStts.add(new PersonStats(stat.getInt(JSON_PERSON), stat.getInt(JSON_COUNT)));
-                        /*Log.d(LOG_TAG, stat.toString());
-                        Log.d(LOG_TAG, "PersonId = " + stat.getInt(JSON_PERSON));
-                        Log.d(LOG_TAG, "likesCount = " + stat.getInt(JSON_COUNT));*/
-                    }
-                    totalStats.add(new TotalStatistics(stats.getInt(JSON_SITE_ID), personStts));
-                }
+                fetchTotalStatistics();
                 break;
             // get updates for dictionaries
             case 1:
-                array = jsonDataObject.getJSONArray(TABLES_UPDATES);
-                Log.d(LOG_TAG, "Updates size is " + array.length());
-                dictionaryUpdatesList.clear();
-                for (int i = 0; i < array.length(); i++) {
-                    JSONObject updates = array.getJSONObject(i);
-                    DictionaryUpdates dicUpdates = new DictionaryUpdates();
-                    dicUpdates.setDictionaryName(updates.getString(UPDATES_DICTIONARY_NAME));
-                    dicUpdates.setLastUpdateDate(updates.getString(UPDATES_LAST_UPDATE_DATE));
-                    Log.d(LOG_TAG, "" + dicUpdates.getDictionaryName());
-                    Log.d(LOG_TAG, "" + dicUpdates.getLastUpdateDate());
-                    dictionaryUpdatesList.add(dicUpdates);
-                }
-                Log.d(LOG_TAG, "dictionaryUpdatesList size is " + dictionaryUpdatesList.size());
+                fetchUpdatesForDictionaries();
                 break;
             // get update for sites dictionary
             case 2:
-                array = jsonDataObject.getJSONArray(DICTIONARY);
-                Log.d(LOG_TAG, "Sites dictionary size is " + array.length());
-                dictionarySitesList.clear();
-                for (int i = 0; i < array.length(); i++) {
-                    JSONObject sites = array.getJSONObject(i);
-                    dictionarySitesList.add(new DictionarySites(sites.getInt(DICTIONARY_ID),
-                            sites.getString(DICTIONARY_URL)));
-                }
-                Log.d(LOG_TAG, "dictionarySitesList size is " + dictionarySitesList.size());
+                fetchSitesDictionaryUpdate();
                 break;
             // get update for persons dictionary
             case 3:
-                array = jsonDataObject.getJSONArray(DICTIONARY);
-                Log.d(LOG_TAG, "Persons dictionary size is " + array.length());
-                dictionaryPersonsList.clear();
-                for (int i = 0; i < array.length(); i++) {
-                    JSONObject persons = array.getJSONObject(i);
-                    dictionaryPersonsList.add(new DictionaryPersons(persons.getInt(DICTIONARY_ID),
-                            persons.getString(DICTIONARY_NAME)));
-                }
-                Log.d(LOG_TAG, "dictionaryPersonsList size is " + dictionaryPersonsList.size());
+                fetchPersonsDictionaryUpdate();
                 break;
             case 4:
-                array = jsonDataObject.getJSONArray(DICTIONARY);
-                dailyStats.clear();
-                for (int i = 0; i < array.length(); i++) {
-                    JSONObject stats = array.getJSONObject(i);
-                    JSONArray statsByDates = stats.getJSONArray(JSON_STATISTICS);
-                    Log.d(LOG_TAG, "Count of date is " + statsByDates.length());
-                    for (int j = 0; j < statsByDates.length(); j++) {
-                        JSONObject datesObject = statsByDates.getJSONObject(i);
-                        JSONArray personStats = datesObject.getJSONArray(JSON_PERSONS_STATS);
-                        Log.d(LOG_TAG, "PersonsStats size is " + personStats.length());
-                        List<PersonStats> personStts = new ArrayList<>();
-                        for (int k = 0; k < personStats.length(); k++) {
-                            JSONObject stat = personStats.getJSONObject(k);
-                            personStts.add(new PersonStats(stat.getInt(JSON_PERSON), stat.getInt(JSON_COUNT)));
-                            Log.d(LOG_TAG, stat.toString());
-                            Log.d(LOG_TAG, "PersonId = " + stat.getInt("person"));
-                            Log.d(LOG_TAG, "likesCount = " + stat.getInt("count"));
-                        }
-                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                        Date parsedDate = null;
-                        try {
-                            parsedDate = format.parse(datesObject.getString(JSON_DATE));
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-                        dailyStats.add(new DailyStatistics(stats.getInt(JSON_SITE_ID),
-                                parsedDate, personStts));
-                    }
-                }
+                fetchDailyStatistics();
                 break;
+        }
+    }
+
+    private void fetchDailyStatistics() throws JSONException {
+        JSONArray array = jsonDataObject.getJSONArray(DICTIONARY);
+        dailyStats.clear();
+        for (int i = 0; i < array.length(); i++) {
+            JSONObject stats = array.getJSONObject(i);
+            JSONArray statsByDates = stats.getJSONArray(JSON_STATISTICS);
+            Log.d(LOG_TAG, "Count of date is " + statsByDates.length());
+            for (int j = 0; j < statsByDates.length(); j++) {
+                JSONObject datesObject = statsByDates.getJSONObject(i);
+                JSONArray personStats = datesObject.getJSONArray(JSON_PERSONS_STATS);
+                Log.d(LOG_TAG, "PersonsStats size is " + personStats.length());
+                List<PersonStats> personStts = new ArrayList<>();
+                for (int k = 0; k < personStats.length(); k++) {
+                    JSONObject stat = personStats.getJSONObject(k);
+                    personStts.add(new PersonStats(stat.getInt(JSON_PERSON), stat.getInt(JSON_COUNT)));
+                    Log.d(LOG_TAG, stat.toString());
+                    Log.d(LOG_TAG, "PersonId = " + stat.getInt("person"));
+                    Log.d(LOG_TAG, "likesCount = " + stat.getInt("count"));
+                }
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                Date parsedDate = null;
+                try {
+                    parsedDate = format.parse(datesObject.getString(JSON_DATE));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                dailyStats.add(new DailyStatistics(stats.getInt(JSON_SITE_ID),
+                        parsedDate, personStts));
+            }
+        }
+    }
+
+    private void fetchPersonsDictionaryUpdate() throws JSONException {
+        JSONArray array = jsonDataObject.getJSONArray(DICTIONARY);
+        Log.d(LOG_TAG, "Persons dictionary size is " + array.length());
+        dictionaryPersonsList.clear();
+        for (int i = 0; i < array.length(); i++) {
+            JSONObject persons = array.getJSONObject(i);
+            dictionaryPersonsList.add(new DictionaryPersons(persons.getInt(DICTIONARY_ID),
+                    persons.getString(DICTIONARY_NAME)));
+        }
+        Log.d(LOG_TAG, "dictionaryPersonsList size is " + dictionaryPersonsList.size());
+    }
+
+    private void fetchSitesDictionaryUpdate() throws JSONException {
+        JSONArray array = jsonDataObject.getJSONArray(DICTIONARY);
+        Log.d(LOG_TAG, "Sites dictionary size is " + array.length());
+        dictionarySitesList.clear();
+        for (int i = 0; i < array.length(); i++) {
+            JSONObject sites = array.getJSONObject(i);
+            dictionarySitesList.add(new DictionarySites(sites.getInt(DICTIONARY_ID),
+                    sites.getString(DICTIONARY_URL)));
+        }
+        Log.d(LOG_TAG, "dictionarySitesList size is " + dictionarySitesList.size());
+    }
+
+    private void fetchUpdatesForDictionaries() throws JSONException {
+        JSONArray array = jsonDataObject.getJSONArray(TABLES_UPDATES);
+        Log.d(LOG_TAG, "Updates size is " + array.length());
+        dictionaryUpdatesList.clear();
+        for (int i = 0; i < array.length(); i++) {
+            JSONObject updates = array.getJSONObject(i);
+            DictionaryUpdates dicUpdates = new DictionaryUpdates();
+            dicUpdates.setDictionaryName(updates.getString(UPDATES_DICTIONARY_NAME));
+            dicUpdates.setLastUpdateDate(updates.getString(UPDATES_LAST_UPDATE_DATE));
+            Log.d(LOG_TAG, "" + dicUpdates.getDictionaryName());
+            Log.d(LOG_TAG, "" + dicUpdates.getLastUpdateDate());
+            dictionaryUpdatesList.add(dicUpdates);
+        }
+        Log.d(LOG_TAG, "dictionaryUpdatesList size is " + dictionaryUpdatesList.size());
+    }
+
+    private void fetchTotalStatistics() throws JSONException {
+        Log.d(LOG_TAG, "Start fetchData. case = 0");
+        Log.d(LOG_TAG, "jsonDataObject = " + jsonDataObject);
+        JSONArray array = jsonDataObject.getJSONArray(DICTIONARY);
+        Log.d(LOG_TAG, "TotalStatistics size is " + array.length());
+        totalStats.clear();
+        for (int i = 0; i < array.length(); i++) {
+            JSONObject stats = array.getJSONObject(i);
+            JSONArray personStats = stats.getJSONArray(JSON_STATISTICS);
+            Log.d(LOG_TAG, "PersonsStats size is " + personStats.length());
+            List<PersonStats> personStts = new ArrayList<>();
+            for (int j = 0; j < personStats.length(); j++) {
+                JSONObject stat = personStats.getJSONObject(j);
+                personStts.add(new PersonStats(stat.getInt(JSON_PERSON), stat.getInt(JSON_COUNT)));
+                        /*Log.d(LOG_TAG, stat.toString());
+                        Log.d(LOG_TAG, "PersonId = " + stat.getInt(JSON_PERSON));
+                        Log.d(LOG_TAG, "likesCount = " + stat.getInt(JSON_COUNT));*/
+            }
+            totalStats.add(new TotalStatistics(stats.getInt(JSON_SITE_ID), personStts));
         }
     }
 

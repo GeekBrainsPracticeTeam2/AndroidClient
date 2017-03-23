@@ -212,7 +212,7 @@ public class JSONHelper {
     }
 
     private void fetchTotalStatistics() throws JSONException {
-        Log.d(LOG_TAG, "fetchTotalStatistics");
+        Log.d(LOG_TAG, "Start fetchData. case = 0");
         Log.d(LOG_TAG, "jsonDataObject = " + jsonDataObject);
         JSONArray array = jsonDataObject.getJSONArray(DICTIONARY);
         Log.d(LOG_TAG, "TotalStatistics size is " + array.length());
@@ -225,9 +225,9 @@ public class JSONHelper {
             for (int j = 0; j < personStats.length(); j++) {
                 JSONObject stat = personStats.getJSONObject(j);
                 personStts.add(new PersonStats(stat.getInt(JSON_PERSON), stat.getInt(JSON_COUNT)));
-//                        Log.d(LOG_TAG, stat.toString());
+                        /*Log.d(LOG_TAG, stat.toString());
                         Log.d(LOG_TAG, "PersonId = " + stat.getInt(JSON_PERSON));
-                        Log.d(LOG_TAG, "likesCount = " + stat.getInt(JSON_COUNT));
+                        Log.d(LOG_TAG, "likesCount = " + stat.getInt(JSON_COUNT));*/
             }
             totalStats.add(new TotalStatistics(stats.getInt(JSON_SITE_ID), personStts));
         }

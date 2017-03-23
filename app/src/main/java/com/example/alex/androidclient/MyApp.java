@@ -188,13 +188,16 @@ public class MyApp extends Application {
         if (dailyStatisticses == null && date == null) {
             try {
                 dailyStatisticses = new ArrayList<>();
-                dailyStatisticses = cacheManager.getDailyStatisticsForSite(siteID, startDate,
+                /*
+                DailyStatistics dailyStatisticses;
+                 */
+                dailyStatisticses = cacheManager.getDailyStatistics(startDate,
                         finishDate);
                 Log.d(LOG_TAG, "dailyStatisticses = " + dailyStatisticses);
 
                 statsList = new ArrayList<>();
-                statsList =;
-                        dailyStatisticses.get(siteID);
+
+                statsList = dailyStatisticses.get(siteID).getStatsList();
                 Log.d(LOG_TAG, "Size statsList = " + statsList.size());
 
                 likeCount = new int[statsList.size()];

@@ -136,6 +136,8 @@ public class JSONHelper {
             case 4:
                 fetchDailyStatistics();
                 break;
+            default:
+                break;
         }
     }
 
@@ -147,7 +149,8 @@ public class JSONHelper {
             JSONArray statsByDates = stats.getJSONArray(JSON_STATISTICS);
             Log.d(LOG_TAG, "Count of date is " + statsByDates.length());
             for (int j = 0; j < statsByDates.length(); j++) {
-                JSONObject datesObject = statsByDates.getJSONObject(i);
+                JSONObject datesObject = statsByDates.getJSONObject(j);
+                Log.d(LOG_TAG, "" + datesObject.toString());
                 JSONArray personStats = datesObject.getJSONArray(JSON_PERSONS_STATS);
                 Log.d(LOG_TAG, "PersonsStats size is " + personStats.length());
                 List<PersonStats> personStts = new ArrayList<>();
@@ -167,6 +170,8 @@ public class JSONHelper {
                 }
                 dailyStats.add(new DailyStatistics(stats.getInt(JSON_SITE_ID),
                         parsedDate, personStts));
+                Log.d(LOG_TAG, "Adding DailyStatistic with " + stats.getInt(JSON_SITE_ID) + " " +
+                        parsedDate.toString() + " " + personStts.toString());
             }
         }
     }

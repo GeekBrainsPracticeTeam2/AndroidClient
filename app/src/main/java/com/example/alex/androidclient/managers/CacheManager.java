@@ -174,10 +174,10 @@ public class CacheManager {
         return dailyStats;
     }
 
-    public List<DailyStatistics> getDailyStatisticsForSite(int siteId, Date startDate, Date finishDate)
+    public DailyStatistics getDailyStatisticsForSite(int siteId, Date startDate, Date finishDate)
             throws JSONException {
-        List<DailyStatistics> dailyStatsForSite = new ArrayList<>();
         List<DailyStatistics> dailyStats = new ArrayList<>();
+        DailyStatistics dailyStatsForSite = null;
         if(jHelper.getDailyStats().isEmpty()) {
             JSONHelper jHelperDailyStats = new JSONHelper(startDate, finishDate);
             dailyStats = jHelperDailyStats.getDailyStats(startDate, finishDate);

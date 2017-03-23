@@ -39,7 +39,7 @@ public class JSONHelper {
     public static final String DICTIONARY_NAME = "name";
     public static final String JSON_PERSONS_STATS = "personsStats";
     public static final String JSON_STATISTICS = "statistics";
-    public static final String JSON_SITE_ID = "siteID";
+    public static final String JSON_SITE_ID = "siteId";
     public static final String TABLES_UPDATES = "tables";
     public static final String DICTIONARY = "data";
     public static final String DICTIONARY_UPDATES_LAST_UPDATE_DATE = "lastUpdateDate";
@@ -231,6 +231,10 @@ public class JSONHelper {
             }
             totalStats.add(new TotalStatistics(stats.getInt(JSON_SITE_ID), personStts));
         }
+    }
+
+    public List<DailyStatistics> getDailyStats() {
+        return dailyStats;
     }
 
     public void fetchData(String url) {

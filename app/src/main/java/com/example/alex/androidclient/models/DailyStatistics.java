@@ -9,7 +9,6 @@ import java.util.List;
 
 public class DailyStatistics {
     private int siteID;
-
     private Date date;
     private List<PersonStats> statsList;
 

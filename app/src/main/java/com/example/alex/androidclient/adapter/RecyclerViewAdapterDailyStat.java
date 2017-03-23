@@ -8,9 +8,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.alex.androidclient.R;
+import com.example.alex.androidclient.models.DailyStatForRecycler;
+import com.example.alex.androidclient.models.DailyStatistics;
+import com.example.alex.androidclient.models.PersonStats;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by alex on 05.03.17.
@@ -19,13 +26,16 @@ import java.util.Calendar;
 public class RecyclerViewAdapterDailyStat extends
         RecyclerView.Adapter<RecyclerViewAdapterDailyStat.ViewHolder> {
     private final String LOG_TAG = this.getClass().getSimpleName();
-    private long[] date;
-    private int[] likesCount;
+    private List<DailyStatForRecycler> dailyStatForRecyclerList;
+    private DailyStatForRecycler dailyStatForRecycler;
+    private List<DailyStatistics> dailyStatisticsList;
+    private DailyStatistics dailyStatistics;
+    private List<PersonStats> personStatsList;
+    private PersonStats personStats;
     private Context context;
 
-    public RecyclerViewAdapterDailyStat(long[] date, int[] likesCount, Context context) {
-        this.date = date;
-        this.likesCount = likesCount;
+    public RecyclerViewAdapterDailyStat(List<DailyStatistics> dailyStats, Context context) {
+        this.dailyStats = dailyStats;
         this.context = context;
     }
 
@@ -38,14 +48,34 @@ public class RecyclerViewAdapterDailyStat extends
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Calendar calendar = Calendar.getInstance();
+        dailyStatistics = dailyStatisticsList.get(position);
+        int siteID = dailyStatistics.getSiteID();
+        Date date = dailyStatistics.getDate();
+        personStatsList = dailyStatistics.getStatsList();
+
+        for (int i = 0; i < personStatsList.size(); i++){
+        personStats = personStatsList.get(i);
+            int personId = personStats.getPersonID();
+            int likeCount = personStats.getLikesCount();
+            dailyStatForRecyclerList.add(new DailyStatForRecycler(siteID, date, personId,
+                    likeCount));
+        }
+
+        Map<Date, Integer> dateIntegerMap
+
+
+
+        {   Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(date[position]);
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
         String tvDate = sdf.format(calendar);
+        }
 
         holder.tvDate.setText(sdf.format(tvDate));
         holder.tvLikesCount.setText("" + likesCount[position]);
     }
+
+    private
 
     @Override
     public int getItemCount() {

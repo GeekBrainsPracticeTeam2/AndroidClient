@@ -183,14 +183,12 @@ public class MyApp extends Application {
     }
 
     private void initDate(){
-        Log.d(LOG_TAG, "Start initLikeCount");
+        Log.d(LOG_TAG, "Start initDate");
 
         if (dailyStatisticses == null && date == null) {
             try {
                 dailyStatisticses = new ArrayList<>();
-                /*
-                DailyStatistics dailyStatisticses;
-                 */
+
                 dailyStatisticses = cacheManager.getDailyStatistics(startDate,
                         finishDate);
                 Log.d(LOG_TAG, "dailyStatisticses = " + dailyStatisticses);

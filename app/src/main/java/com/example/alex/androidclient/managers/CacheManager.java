@@ -174,6 +174,17 @@ public class CacheManager {
         return dailyStats;
     }
 
+    public List<DailyStatistics> getDailyStatisticsForSite(int siteId, Date startDate, Date finishDate)
+            throws JSONException {
+        List<DailyStatistics> dailyStatsForSite = new ArrayList<>();
+        List<DailyStatistics> dailyStats = new ArrayList<>();
+        if(jHelper.getDailyStats().isEmpty()) {
+            JSONHelper jHelperDailyStats = new JSONHelper(startDate, finishDate);
+            dailyStats = jHelperDailyStats.getDailyStats(startDate, finishDate);
+        }
+        return dailyStatsForSite;
+    }
+
     public List<DictionarySites> getSitesDictionary() throws JSONException {
         List<DictionarySites> dictionarySites = new ArrayList<>();
         Log.d(LOG_TAG, "" + checkUpdates(DBHelper.TB_SITES_NAME));

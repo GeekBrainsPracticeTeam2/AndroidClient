@@ -233,6 +233,10 @@ public class JSONHelper {
         }
     }
 
+    public List<DailyStatistics> getDailyStats() {
+        return dailyStats;
+    }
+
     public void fetchData(String url) {
         // let's start to fetch data from Json
         StringRequest request = new StringRequest(Request.Method.GET, url,

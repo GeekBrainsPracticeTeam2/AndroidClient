@@ -34,6 +34,11 @@ public class MyApp extends Application {
     private int siteID = 0;
 
     private List<DailyStatistics> dailyStatisticses;
+
+    public List<DailyStatistics> getDailyStatisticses() {
+        return dailyStatisticses;
+    }
+
     private Date startDate, finishDate;
 
     public void setStartDate(Date startDate) {

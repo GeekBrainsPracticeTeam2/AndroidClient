@@ -162,6 +162,9 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
                 Log.d(LOG_TAG, "item selected = " + position);
                 Log.d(LOG_TAG, "item selected = " + spinnerSites.getItemAtPosition(position));
 
+                if(adapter != null) {
+                    adapter.setSelectedSite(position);
+                }
                 app.setSiteID(position);
 
                 break;
@@ -169,6 +172,9 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
                 Log.d(LOG_TAG, "Start onItemSelected case " + R.id.spinner_person);
                 Log.d(LOG_TAG, "item selected = " + position);
                 Log.d(LOG_TAG, "item selected = " + spinnerPersons.getItemAtPosition(position));
+                if(adapter != null) {
+                    adapter.setSelectedPerson(position);
+                }
 
                 break;
         }
@@ -185,8 +191,8 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
         long[] date = app.getDate();
         int[] likeCount = app.getLikeCount();
 
-        Log.d(LOG_TAG, "Length long[] date = " + date.length);
-        Log.d(LOG_TAG, "Length int[] likeCount = " + likeCount.length);
+        /*Log.d(LOG_TAG, "Length long[] date = " + date.length);
+        Log.d(LOG_TAG, "Length int[] likeCount = " + likeCount.length);*/
 
         setRecyclerView(date, likeCount);
     }
@@ -195,15 +201,18 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
         Context context = getActivity();
 
         Log.d(LOG_TAG, "Start setRecyclerView");
-        Log.d(LOG_TAG, "Length long[] date = " + date.length);
-        Log.d(LOG_TAG, "Length int[] likeCount = " + likeCount.length);
+        /*Log.d(LOG_TAG, "Length long[] date = " + date.length);
+        Log.d(LOG_TAG, "Length int[] likeCount = " + likeCount.length);*/
         Log.d(LOG_TAG, "context = " + context);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        adapter = new RecyclerViewAdapterDailyStat(date, likeCount, context);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(layoutManager);
+        if(app.getDailyStatisticses() != null) {
+            adapter = new RecyclerViewAdapterDailyStat(app.getDailyStatisticses(), context,
+                    (int) spinnerPersons.getSelectedItemPosition(), (int) spinnerSites.getSelectedItemPosition());
+            recyclerView.setAdapter(adapter);
+            recyclerView.setLayoutManager(layoutManager);
+        }
 
         Log.d(LOG_TAG, "End setRecyclerView");
     }

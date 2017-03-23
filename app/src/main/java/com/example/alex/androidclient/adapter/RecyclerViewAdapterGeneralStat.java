@@ -9,9 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.alex.androidclient.R;
-import com.example.alex.androidclient.models.PersonStats;
-
-import java.util.ArrayList;
 
 /**
  * Created by alex on 18.03.17.
@@ -41,7 +38,7 @@ public class RecyclerViewAdapterGeneralStat extends
     public RecyclerViewAdapterGeneralStat.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                                       int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.
-                        list_view_item_layout, parent, false);
+                list_view_item_general_stat_layout, parent, false);
         return new RecyclerViewAdapterGeneralStat.ViewHolder(view);
     }
 

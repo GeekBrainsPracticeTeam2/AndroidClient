@@ -4,6 +4,7 @@ import android.app.Application;
 import android.util.Log;
 
 import com.example.alex.androidclient.managers.CacheManager;
+import com.example.alex.androidclient.models.DailyStatistics;
 import com.example.alex.androidclient.models.DictionaryPersons;
 import com.example.alex.androidclient.models.DictionarySites;
 import com.example.alex.androidclient.models.PersonStats;
@@ -12,6 +13,7 @@ import com.example.alex.androidclient.models.TotalStatistics;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,6 +32,24 @@ public class MyApp extends Application {
     private List<PersonStats> statsList;
     private TotalStatistics totalStatisticsBySite;
     private int siteID = 0;
+
+    private List<DailyStatistics> dailyStatisticses;
+    private Date startDate, finishDate;
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public void setFinishDate(Date finishDate) {
+        this.finishDate = finishDate;
+    }
+
+    private long[] date;
+
+    public long[] getDate() {
+        initDate();
+        return date;
+    }
 
     public void setSiteID(int siteID) {
         this.siteID = siteID;
@@ -160,5 +180,28 @@ public class MyApp extends Application {
             Log.d(LOG_TAG, "likeCount(" + i + ") = " + likeCount[i]);
         }
         Log.d(LOG_TAG, "End initLikeCount");
+    }
+
+    private void initDate(){
+        Log.d(LOG_TAG, "Start initLikeCount");
+
+        if (dailyStatisticses == null && date == null) {
+            try {
+                dailyStatisticses = new ArrayList<>();
+                dailyStatisticses = cacheManager.getDailyStatisticsForSite(siteID, startDate,
+                        finishDate);
+                Log.d(LOG_TAG, "dailyStatisticses = " + dailyStatisticses);
+
+                statsList = new ArrayList<>();
+                statsList =;
+                        dailyStatisticses.get(siteID);
+                Log.d(LOG_TAG, "Size statsList = " + statsList.size());
+
+                likeCount = new int[statsList.size()];
+                Log.d(LOG_TAG, "Length likeCount = " + likeCount.length);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

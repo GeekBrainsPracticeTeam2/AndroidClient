@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,10 +20,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.alex.androidclient.adapter.RecyclerViewAdapterDailyStat;
+import com.example.alex.androidclient.adapter.RecyclerViewAdapterGeneralStat;
 import com.example.alex.androidclient.presenters.PresenterDailyStat;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import static com.example.alex.androidclient.DatePickerFragment.BUTTON_SELECTED;
 import static com.example.alex.androidclient.DatePickerFragment.CHOSEN;
@@ -40,6 +44,8 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     private Button bView, bFirstDateSelected, bLastDateSelected;
     private TextView tvFirstDateSelected, tvLastDateSelected;
     private RecyclerView recyclerView;
+
+    private RecyclerViewAdapterDailyStat adapter;
 
     private Calendar firstDateSelected, lastDateSelected;
 
@@ -69,6 +75,7 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
         initView(view);
         setSpinnerSites();
         setSpinnerPersons();
+        initRecyclerView();
         buttonBehavoir();
 
         return view;
@@ -100,6 +107,9 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
             case flagFirstDateSelected:
                 try {
                     String firstDate = sdf.format(firstDateSelected.getTime());
+                    Date startDate = new Date(firstDateSelected.getTimeInMillis());
+                    app.setStartDate(startDate);
+
                     tvFirstDateSelected.setText(firstDate);
                 } catch (NullPointerException e){
                     e.printStackTrace();
@@ -108,6 +118,9 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
             case flagLastDateSelected:
                 try {
                     String lastDate = sdf.format(lastDateSelected.getTime());
+                    Date finishDate = new Date(lastDateSelected.getTimeInMillis());
+                    app.setFinishDate(finishDate);
+
                     tvLastDateSelected.setText(lastDate);
                 } catch (NullPointerException e){
                     e.printStackTrace();
@@ -148,11 +161,15 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
                 Log.d(LOG_TAG, "Start onItemSelected case " + R.id.spinner_sites);
                 Log.d(LOG_TAG, "item selected = " + position);
                 Log.d(LOG_TAG, "item selected = " + spinnerSites.getItemAtPosition(position));
+
+                app.setSiteID(position);
+
                 break;
             case R.id.spinner_person:
                 Log.d(LOG_TAG, "Start onItemSelected case " + R.id.spinner_person);
                 Log.d(LOG_TAG, "item selected = " + position);
                 Log.d(LOG_TAG, "item selected = " + spinnerPersons.getItemAtPosition(position));
+
                 break;
         }
     }
@@ -160,6 +177,35 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    private void initRecyclerView(){
+        Log.d(LOG_TAG, "Start onClick case R.id.button_view");
+
+        long[] date = app.getDate();
+        int[] likeCount = app.getLikeCount();
+
+        Log.d(LOG_TAG, "Length long[] date = " + date.length);
+        Log.d(LOG_TAG, "Length int[] likeCount = " + likeCount.length);
+
+        setRecyclerView(date, likeCount);
+    }
+
+    private void setRecyclerView(long[] date, int[] likeCount){
+        Context context = getActivity();
+
+        Log.d(LOG_TAG, "Start setRecyclerView");
+        Log.d(LOG_TAG, "Length long[] date = " + date.length);
+        Log.d(LOG_TAG, "Length int[] likeCount = " + likeCount.length);
+        Log.d(LOG_TAG, "context = " + context);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        adapter = new RecyclerViewAdapterDailyStat(date, likeCount, context);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(layoutManager);
+
+        Log.d(LOG_TAG, "End setRecyclerView");
     }
 
     private void buttonBehavoir(){

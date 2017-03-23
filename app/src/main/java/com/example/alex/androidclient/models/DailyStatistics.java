@@ -16,8 +16,9 @@ public class DailyStatistics {
     public DailyStatistics() {
     }
 
-    public DailyStatistics(int siteID, List<PersonStats> statsList) {
+    public DailyStatistics(int siteID, Date date, List<PersonStats> statsList) {
         this.siteID = siteID;
+        this.date = date;
         this.statsList = statsList;
     }
 

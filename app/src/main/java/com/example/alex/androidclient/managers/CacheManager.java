@@ -168,10 +168,10 @@ public class CacheManager {
         return null;
     }
 
-    public List<DailyStatistics> getDailyStatistics(Date startDate, Date finishDate) {
-        JSONHelper jHelperDailyStats = new JSONHelper(4);
+    public List<DailyStatistics> getDailyStatistics(Date startDate, Date finishDate) throws JSONException {
+        JSONHelper jHelperDailyStats = new JSONHelper(startDate, finishDate);
         List<DailyStatistics> dailyStats = jHelperDailyStats.getDailyStats(startDate, finishDate);
-
+        return dailyStats;
     }
 
     public List<DictionarySites> getSitesDictionary() throws JSONException {

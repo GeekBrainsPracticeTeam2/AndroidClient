@@ -29,17 +29,23 @@ import java.util.Map;
 public class RecyclerViewAdapterDailyStat extends
         RecyclerView.Adapter<RecyclerViewAdapterDailyStat.ViewHolder> {
     private final String LOG_TAG = this.getClass().getSimpleName();
-    /*private List<DailyStatForRecycler> dailyStatForRecyclerList;
-    private DailyStatForRecycler dailyStatForRecycler;*/
+
+    private final int TYPE_ITEM_VISIBILE = 0;
+    private final int TYPE_ITEM_INVISIBLE = 1;
+
     private List<DailyStatistics> dailyStatisticsList;
     private DailyStatistics dailyStatistics;
     private List<PersonStats> personStatsList;
     private PersonStats personStats;
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
     private Context context;
     // what person is selected for now?
     private int selectedPerson = 0;
     // what site is selected for now?
     private int selectedSite = 0;
+
+    private int flagUnvisibleViewInRecycler;
+    private ArrayList<Integer> itemVisibility;
 
     public RecyclerViewAdapterDailyStat(List<DailyStatistics> dailyStats, Context context,
                                         int selectedPerson, int selectedSite) {
@@ -51,41 +57,83 @@ public class RecyclerViewAdapterDailyStat extends
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.list_view_item_general_stat_layout, parent,
-                false);
+        Log.d(LOG_TAG, "Start onCreateViewHolder");
+        View view = null;
+        switch (viewType) {
+            case TYPE_ITEM_VISIBILE:
+                try {
+                    view = LayoutInflater.from(context).inflate(
+                            R.layout.list_view_item_daily_stat_layout, parent, false);
+                    view.setVisibility(View.VISIBLE);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                
+                break;
+            case TYPE_ITEM_INVISIBLE:
+                try {
+                    view = LayoutInflater.from(context).inflate(
+                            R.layout.list_view_item_daily_stat_layout, parent, false);
+                    view.setVisibility(View.INVISIBLE);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                break;
+        }
+
+        Log.d(LOG_TAG, "End onCreateViewHolder");
         return new ViewHolder(view);
     }
 
     @Override
+    public int getItemViewType(int position) {
+        Log.d(LOG_TAG, "Start getItemViewType");
+        Log.d(LOG_TAG, "position = " + position);
+        Log.d(LOG_TAG, "Integer position = " + new Integer(position));
+        Log.d(LOG_TAG, "itemVisibility = " + itemVisibility.size());
+
+        if (itemVisibility.contains(Integer.valueOf(position))){
+            Log.d(LOG_TAG, "End getItemViewType");
+            return TYPE_ITEM_VISIBILE;
+        }
+        Log.d(LOG_TAG, "End getItemViewType");
+        return TYPE_ITEM_INVISIBLE;
+    }
+
+    @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        Log.d(LOG_TAG, "Start onBindViewHolder");
         dailyStatistics = dailyStatisticsList.get(position);
         if(selectedSite == dailyStatistics.getSiteID()) {
             Date date = dailyStatistics.getDate();
-            Log.d(LOG_TAG, date.toString());
+
             personStatsList = dailyStatistics.getStatsList();
             int likesCount = 0;
 
             for (int i = 0; i < personStatsList.size(); i++) {
+                Log.d(LOG_TAG, "Start onBindViewHolder, Start for i = " + i);
                 personStats = personStatsList.get(i);
                 if (personStats.getPersonID() == selectedPerson) {
                     Log.d(LOG_TAG, "Likes count for person ID: " + selectedPerson + " is " +
                             personStats.getLikesCount());
                     likesCount = personStats.getLikesCount();
+                    if (likesCount != 0){
+                        itemVisibility = new ArrayList<>();
+                        itemVisibility.add(position);
+                    }
                 }
             }
 
-            /*Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(date[position]);*/
-            SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-
-
-            try {
-                holder.tvDate.setText(date.toString());
-            } catch (Exception e) {
-                e.printStackTrace();
+            String dateLike = sdf.format(date);
+            Log.d(LOG_TAG, "dateLike = " + dateLike);
+            Log.d(LOG_TAG, "likesCount = " + String.valueOf(likesCount));
+            if (likesCount != 0){
+                holder.tvDate.setText(dateLike);
+                holder.tvLikesCount.setText(String.valueOf(likesCount));
             }
-            holder.tvLikesCount.setText(String.valueOf(likesCount));
         }
+        Log.d(LOG_TAG, "End onBindViewHolder");
     }
 
     @Override
@@ -108,17 +156,9 @@ public class RecyclerViewAdapterDailyStat extends
         }
     }
 
-    public int getSelectedPerson() {
-        return selectedPerson;
-    }
-
     public void setSelectedPerson(int selectedPerson) {
         this.selectedPerson = selectedPerson;
         notifyDataSetChanged();
-    }
-
-    public int getSelectedSite() {
-        return selectedSite;
     }
 
     public void setSelectedSite(int selectedSite) {

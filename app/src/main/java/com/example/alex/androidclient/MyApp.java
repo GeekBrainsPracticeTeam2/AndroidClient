@@ -151,20 +151,20 @@ public class MyApp extends Application {
     }
 
     private void initLikeCount(){
-        Log.d(LOG_TAG, "Start initLikeCount");
+//        Log.d(LOG_TAG, "Start initLikeCount");
 
         if (totalStatisticsBySite == null && likeCount == null) {
             try {
                 totalStatisticsBySite = new TotalStatistics();
                 totalStatisticsBySite = cacheManager.getTotalStatisticsBySite(siteID);
-                Log.d(LOG_TAG, "totalStatisticsList = " + totalStatisticsBySite);
+//                Log.d(LOG_TAG, "totalStatisticsList = " + totalStatisticsBySite);
 
                 statsList = new ArrayList<>();
                 statsList = totalStatisticsBySite.getStatsList();
-                Log.d(LOG_TAG, "Size statsList = " + statsList.size());
+//                Log.d(LOG_TAG, "Size statsList = " + statsList.size());
 
                 likeCount = new int[statsList.size()];
-                Log.d(LOG_TAG, "Length likeCount = " + likeCount.length);
+//                Log.d(LOG_TAG, "Length likeCount = " + likeCount.length);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -172,9 +172,9 @@ public class MyApp extends Application {
             try {
                 totalStatisticsBySite = cacheManager.getTotalStatisticsBySite(siteID);
                 statsList = totalStatisticsBySite.getStatsList();
-                Log.d(LOG_TAG, "siteID = " + siteID);
-                Log.d(LOG_TAG, "totalStatisticsBySite = " + totalStatisticsBySite);
-                Log.d(LOG_TAG, "statsList = " + statsList);
+//                Log.d(LOG_TAG, "siteID = " + siteID);
+//                Log.d(LOG_TAG, "totalStatisticsBySite = " + totalStatisticsBySite);
+//                Log.d(LOG_TAG, "statsList = " + statsList);
             } catch (Exception e){
                 e.printStackTrace();
             }
@@ -182,9 +182,9 @@ public class MyApp extends Application {
         for (int i = 0; i < statsList.size(); i++) {
             int like = statsList.get(i).getLikesCount();
             likeCount[i] = like;
-            Log.d(LOG_TAG, "likeCount(" + i + ") = " + likeCount[i]);
+//            Log.d(LOG_TAG, "likeCount(" + i + ") = " + likeCount[i]);
         }
-        Log.d(LOG_TAG, "End initLikeCount");
+//        Log.d(LOG_TAG, "End initLikeCount");
     }
 
     private void initDate(){

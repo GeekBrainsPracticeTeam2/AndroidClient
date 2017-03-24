@@ -118,20 +118,14 @@ public class RecyclerViewAdapterDailyStat extends
                     Log.d(LOG_TAG, "Likes count for person ID: " + selectedPerson + " is " +
                             personStats.getLikesCount());
                     likesCount = personStats.getLikesCount();
-                    if (likesCount != 0){
-                        itemVisibility = new ArrayList<>();
-                        itemVisibility.add(position);
-                    }
                 }
             }
 
             String dateLike = sdf.format(date);
             Log.d(LOG_TAG, "dateLike = " + dateLike);
             Log.d(LOG_TAG, "likesCount = " + String.valueOf(likesCount));
-            if (likesCount != 0){
                 holder.tvDate.setText(dateLike);
                 holder.tvLikesCount.setText(String.valueOf(likesCount));
-            }
         }
         Log.d(LOG_TAG, "End onBindViewHolder");
     }

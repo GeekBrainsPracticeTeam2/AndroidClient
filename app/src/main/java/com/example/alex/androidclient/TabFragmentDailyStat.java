@@ -21,10 +21,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.alex.androidclient.adapter.RecyclerViewAdapterDailyStat;
+import com.example.alex.androidclient.models.DailyStatistics;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import static com.example.alex.androidclient.DatePickerFragment.BUTTON_SELECTED;
 import static com.example.alex.androidclient.DatePickerFragment.CHOSEN;
@@ -51,6 +53,8 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
 
     private boolean firstDateChosen, lastDateChosen = false;
 
+    private int selectedSite, selectedPerson;
+
     private static final int flagFirstDateSelected = R.id.first_date_selected;
     private static final int flagLastDateSelected = R.id.last_date_selected;
     private static final int CHANGE_DATE = 2;
@@ -73,7 +77,6 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
         initView(view);
         setSpinnerSites();
         setSpinnerPersons();
-        initRecyclerView();
         buttonBehavoir();
 
         return view;
@@ -162,6 +165,7 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
 
                 if(adapter != null) {
                     adapter.setSelectedSite(position);
+                    selectedSite = position;
                 }
 
                 break;
@@ -172,6 +176,7 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
 
                 if(adapter != null) {
                     adapter.setSelectedPerson(position);
+                    selectedPerson = position;
                 }
 //                initRecyclerView();
                 break;
@@ -184,31 +189,39 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     }
 
     private void initRecyclerView(){
-        Log.d(LOG_TAG, "Start onClick case R.id.button_view");
+        Log.d(LOG_TAG, "Start initRecyclerView");
 
-        long[] date = app.getDate();
-        int[] likeCount = app.getLikeCount();
+        app.setStartDate(new Date(firstDateSelected.getTimeInMillis()));
+        app.setFinishDate(new Date(lastDateSelected.getTimeInMillis()));
+        List<DailyStatistics> dailyStatListForRecycler = app.
+                prepareDailyStatForRecycler(selectedSite, selectedPerson);
 
-//        Log.d(LOG_TAG, "Length long[] date = " + date.length);
-//        Log.d(LOG_TAG, "Length int[] likeCount = " + likeCount.length);
+        Log.d(LOG_TAG, "dailyStatListForRecycler = " + dailyStatListForRecycler);
+        Log.d(LOG_TAG, "firstDateSelected = " + firstDateSelected);
+        Log.d(LOG_TAG, "lastDateSelected = " + lastDateSelected);
+        Log.d(LOG_TAG, "selectedSite = " + selectedSite);
+        Log.d(LOG_TAG, "selectedPerson = " + selectedPerson);
 
-        setRecyclerView(date, likeCount);
+        setRecyclerView(dailyStatListForRecycler);
+        Log.d(LOG_TAG, "End initRecyclerView");
     }
 
-    private void setRecyclerView(long[] date, int[] likeCount){
-        Context context = getActivity();
-
+    private void setRecyclerView(List<DailyStatistics> dailyStatListForRecycler){
         Log.d(LOG_TAG, "Start setRecyclerView");
+
+        Context context = getActivity();
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         if(app.getDailyStatisticses() != null) {
-            adapter = new RecyclerViewAdapterDailyStat(app.getDailyStatisticses(), context,
-                    (int) spinnerPersons.getSelectedItemPosition(), (int) spinnerSites.getSelectedItemPosition());
+            adapter = new RecyclerViewAdapterDailyStat(dailyStatListForRecycler, context,
+                    selectedSite, selectedPerson);
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(layoutManager);
         }
 
+        Log.d(LOG_TAG, "selectedSite = " + selectedSite);
+        Log.d(LOG_TAG, "selectedPerson = " + selectedPerson);
         Log.d(LOG_TAG, "End setRecyclerView");
     }
 
@@ -240,6 +253,7 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
             checkSelectedDateIsGreaterToday();
             checkFirstDateSelectedIsGreaterLastDateSelected();
             setTVChosen(0);
+            initRecyclerView();
         }
     }
 

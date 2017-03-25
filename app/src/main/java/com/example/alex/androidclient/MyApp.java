@@ -29,11 +29,18 @@ public class MyApp extends Application {
     private String[] namePerson;
 
     private int[] likeCount;
-    private List<PersonStats> statsList;
+    private List<PersonStats> personStatsList;
+    private PersonStats personStats;
     private TotalStatistics totalStatisticsBySite;
     private int siteID = 0;
 
-    private List<DailyStatistics> dailyStatisticses;
+    private List<DailyStatistics> dailyStatList;
+    private DailyStatistics dailyStat;
+
+    public List<DailyStatistics> getDailyStatisticses() {
+        return dailyStatList;
+    }
+
     private Date startDate, finishDate;
 
     public void setStartDate(Date startDate) {
@@ -42,13 +49,6 @@ public class MyApp extends Application {
 
     public void setFinishDate(Date finishDate) {
         this.finishDate = finishDate;
-    }
-
-    private long[] date;
-
-    public long[] getDate() {
-        initDate();
-        return date;
     }
 
     public void setSiteID(int siteID) {
@@ -102,14 +102,14 @@ public class MyApp extends Application {
     }
 
     private void initCacheManager() throws JSONException {
-        if (cacheManager == null){
+        if (cacheManager == null) {
             cacheManager = new CacheManager(this);
         }
     }
 
     private void initDictionarySites() throws JSONException {
-        Log.d(LOG_TAG, "Start initDictionarySites");
-        if (dictionarySites == null && siteUrl == null){
+//        Log.d(LOG_TAG, "Start initDictionarySites");
+        if (dictionarySites == null && siteUrl == null) {
             try {
                 dictionarySites = new ArrayList<>();
                 dictionarySites = cacheManager.getSitesDictionary();
@@ -121,14 +121,14 @@ public class MyApp extends Application {
         for (int i = 0; i < dictionarySites.size(); i++) {
             String url = dictionarySites.get(i).getSiteUrl();
             siteUrl[i] = url;
-            Log.d(LOG_TAG, "siteUrl(" + i + ") = " + url);
+//            Log.d(LOG_TAG, "siteUrl(" + i + ") = " + url);
         }
-        Log.d(LOG_TAG, "End initDictionarySites");
+//        Log.d(LOG_TAG, "End initDictionarySites");
     }
 
     private void initDictionaryPersons() throws JSONException {
-        Log.d(LOG_TAG, "Start initDictionaryPersons");
-        if (dictionaryPersons == null && namePerson == null){
+//        Log.d(LOG_TAG, "Start initDictionaryPersons");
+        if (dictionaryPersons == null && namePerson == null) {
             try {
                 dictionaryPersons = new ArrayList<>();
                 dictionaryPersons = cacheManager.getPersonsDictionary();
@@ -140,69 +140,91 @@ public class MyApp extends Application {
         for (int i = 0; i < dictionaryPersons.size(); i++) {
             String person = dictionaryPersons.get(i).getPersonName();
             namePerson[i] = person;
-            Log.d(LOG_TAG, "namePerson(" + i + ") = " + namePerson[i]);
+//            Log.d(LOG_TAG, "namePerson(" + i + ") = " + namePerson[i]);
         }
-        Log.d(LOG_TAG, "End initDictionaryPersons");
+//        Log.d(LOG_TAG, "End initDictionaryPersons");
     }
 
-    private void initLikeCount(){
-        Log.d(LOG_TAG, "Start initLikeCount");
+    private void initLikeCount() {
+//        Log.d(LOG_TAG, "Start initLikeCount");
 
         if (totalStatisticsBySite == null && likeCount == null) {
             try {
                 totalStatisticsBySite = new TotalStatistics();
                 totalStatisticsBySite = cacheManager.getTotalStatisticsBySite(siteID);
-                Log.d(LOG_TAG, "totalStatisticsList = " + totalStatisticsBySite);
+//                Log.d(LOG_TAG, "totalStatisticsList = " + totalStatisticsBySite);
 
-                statsList = new ArrayList<>();
-                statsList = totalStatisticsBySite.getStatsList();
-                Log.d(LOG_TAG, "Size statsList = " + statsList.size());
+                personStatsList = new ArrayList<>();
+                personStatsList = totalStatisticsBySite.getStatsList();
+//                Log.d(LOG_TAG, "Size statsList = " + statsList.size());
 
-                likeCount = new int[statsList.size()];
-                Log.d(LOG_TAG, "Length likeCount = " + likeCount.length);
+                likeCount = new int[personStatsList.size()];
+//                Log.d(LOG_TAG, "Length likeCount = " + likeCount.length);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {
             try {
                 totalStatisticsBySite = cacheManager.getTotalStatisticsBySite(siteID);
-                statsList = totalStatisticsBySite.getStatsList();
-                Log.d(LOG_TAG, "siteID = " + siteID);
-                Log.d(LOG_TAG, "totalStatisticsBySite = " + totalStatisticsBySite);
-                Log.d(LOG_TAG, "statsList = " + statsList);
-            } catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-        for (int i = 0; i < statsList.size(); i++) {
-            int like = statsList.get(i).getLikesCount();
-            likeCount[i] = like;
-            Log.d(LOG_TAG, "likeCount(" + i + ") = " + likeCount[i]);
-        }
-        Log.d(LOG_TAG, "End initLikeCount");
-    }
-
-    private void initDate(){
-        Log.d(LOG_TAG, "Start initDate");
-
-        if (dailyStatisticses == null && date == null) {
-            try {
-                dailyStatisticses = new ArrayList<>();
-
-                dailyStatisticses = cacheManager.getDailyStatistics(startDate,
-                        finishDate);
-                Log.d(LOG_TAG, "dailyStatisticses = " + dailyStatisticses);
-
-                statsList = new ArrayList<>();
-
-                statsList = dailyStatisticses.get(siteID).getStatsList();
-                Log.d(LOG_TAG, "Size statsList = " + statsList.size());
-
-                likeCount = new int[statsList.size()];
-                Log.d(LOG_TAG, "Length likeCount = " + likeCount.length);
+                personStatsList = totalStatisticsBySite.getStatsList();
+//                Log.d(LOG_TAG, "siteID = " + siteID);
+//                Log.d(LOG_TAG, "totalStatisticsBySite = " + totalStatisticsBySite);
+//                Log.d(LOG_TAG, "statsList = " + statsList);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+        for (int i = 0; i < personStatsList.size(); i++) {
+            int like = personStatsList.get(i).getLikesCount();
+            likeCount[i] = like;
+//            Log.d(LOG_TAG, "likeCount(" + i + ") = " + likeCount[i]);
+        }
+//        Log.d(LOG_TAG, "End initLikeCount");
+    }
+
+    public List<DailyStatistics> prepareDailyStatForRecycler(int selectedSite,
+                                                              int selectedPerson) {
+        Log.d(LOG_TAG, "Start prepareDailyStatForRecycler. SelectedSite is " + selectedSite +
+                " and selectedPerson is " + selectedPerson);
+
+        // creating new List with only needed data
+        List<DailyStatistics> choosenDailyStatsList = new ArrayList<>();
+
+        // let's check, if dailyStistics is loaded?
+        try {
+            dailyStatList = cacheManager.getDailyStatistics(startDate, finishDate);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // than let's select data we need to display in recycler
+        for (int i = 0; i < dailyStatList.size(); i++) {
+            Log.d(LOG_TAG, "dailyStatList.get(i).getSiteID()" + dailyStatList.get(i).getSiteID());
+            // creating new DailyStatistics object to add to choosenDailyStats
+            if (dailyStatList.get(i).getSiteID() == selectedSite) {
+                dailyStat = dailyStatList.get(i);
+
+                if (selectedSite == dailyStat.getSiteID()) {
+                    List<PersonStats> personStatsList = dailyStat.getStatsList();
+                    // will put chosen data here
+                    List<PersonStats> choosenPersonStatsList = new ArrayList<>();
+
+                    for (int j = 0; j < personStatsList.size(); j++) {
+                        personStats = personStatsList.get(j);
+                        if (personStats.getPersonID() == selectedPerson) {
+                            if (personStats.getLikesCount() > 0) {
+                                choosenPersonStatsList.add(new PersonStats(personStats.getPersonID(),
+                                        personStats.getLikesCount()));
+                            }
+                        }
+                    }
+                    if(!choosenPersonStatsList.isEmpty()) {
+                        choosenDailyStatsList.add(new DailyStatistics(dailyStat.getSiteID(),
+                                dailyStat.getDate(), choosenPersonStatsList));
+                    }
+                }
+            }
+        }
+        return choosenDailyStatsList;
     }
 }

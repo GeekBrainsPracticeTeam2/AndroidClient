@@ -163,7 +163,7 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
                 Log.d(LOG_TAG, "item selected = " + position);
                 Log.d(LOG_TAG, "item selected = " + spinnerSites.getItemAtPosition(position));
 
-                if(adapter != null) {
+                if(adapter != null && position != selectedSite) {
                     adapter.setDailyStatisticsList(app.prepareDailyStatForRecycler(position, selectedPerson));
                     selectedSite = position;
                 }
@@ -174,7 +174,7 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
                 Log.d(LOG_TAG, "item selected = " + position);
                 Log.d(LOG_TAG, "item selected = " + spinnerPersons.getItemAtPosition(position));
 
-                if(adapter != null) {
+                if(adapter != null && position != selectedPerson) {
                     adapter.setDailyStatisticsList(app.prepareDailyStatForRecycler(selectedSite, position));
                     selectedPerson = position;
                 }

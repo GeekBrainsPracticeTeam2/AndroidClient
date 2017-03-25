@@ -114,7 +114,7 @@ public class MyApp extends Application {
     }
 
     private void initDictionarySites() throws JSONException {
-        Log.d(LOG_TAG, "Start initDictionarySites");
+//        Log.d(LOG_TAG, "Start initDictionarySites");
         if (dictionarySites == null && siteUrl == null) {
             try {
                 dictionarySites = new ArrayList<>();
@@ -127,13 +127,13 @@ public class MyApp extends Application {
         for (int i = 0; i < dictionarySites.size(); i++) {
             String url = dictionarySites.get(i).getSiteUrl();
             siteUrl[i] = url;
-            Log.d(LOG_TAG, "siteUrl(" + i + ") = " + url);
+//            Log.d(LOG_TAG, "siteUrl(" + i + ") = " + url);
         }
-        Log.d(LOG_TAG, "End initDictionarySites");
+//        Log.d(LOG_TAG, "End initDictionarySites");
     }
 
     private void initDictionaryPersons() throws JSONException {
-        Log.d(LOG_TAG, "Start initDictionaryPersons");
+//        Log.d(LOG_TAG, "Start initDictionaryPersons");
         if (dictionaryPersons == null && namePerson == null) {
             try {
                 dictionaryPersons = new ArrayList<>();
@@ -146,9 +146,9 @@ public class MyApp extends Application {
         for (int i = 0; i < dictionaryPersons.size(); i++) {
             String person = dictionaryPersons.get(i).getPersonName();
             namePerson[i] = person;
-            Log.d(LOG_TAG, "namePerson(" + i + ") = " + namePerson[i]);
+//            Log.d(LOG_TAG, "namePerson(" + i + ") = " + namePerson[i]);
         }
-        Log.d(LOG_TAG, "End initDictionaryPersons");
+//        Log.d(LOG_TAG, "End initDictionaryPersons");
     }
 
     private void initLikeCount() {
@@ -200,31 +200,32 @@ public class MyApp extends Application {
         } catch (Exception e) {
             e.printStackTrace();
         }
-            dailyStat = dailyStatList.get(selectedSite);
-            if (siteID == dailyStat.getSiteID()) {
-                Date date = dailyStat.getDate();
 
-                personStatsList = dailyStat.getStatsList();
-                int likesCount = 0;
+        for (int i = 0; i < dailyStatList.size(); i++){
+            if (dailyStatList.get(i).getSiteID() == selectedSite){
+                dailyStat = dailyStatList.get(i);
 
-                for (int i = 0; i < personStatsList.size(); i++) {
-                    Log.d(LOG_TAG, "Start prepareDailyStatForRecycler, Start for i = " + i);
-                    personStats = personStatsList.get(i);
-                    if (personStats.getPersonID() == selectedPerson) {
-                        Log.d(LOG_TAG, "Likes count for person ID: " + selectedPerson + " is " +
-                                personStats.getLikesCount());
-                        likesCount = personStats.getLikesCount();
-                        if (likesCount != 0) {
-                            personStatsForRecycler = new PersonStats(selectedPerson, likesCount);
-                            personStatsListForRecycler.add(personStatsForRecycler);
+                if (siteID == dailyStat.getSiteID()) {
+                    Date date = dailyStat.getDate();
+                    personStatsList = dailyStat.getStatsList();
+
+                    int likesCount = 0;
+                    for (int j = 0; j < personStatsList.size(); j++) {
+                        personStats = personStatsList.get(j);
+                        if (personStats.getPersonID() == selectedPerson) {
+                            likesCount = personStats.getLikesCount();
+                            if (likesCount != 0) {
+                                personStatsForRecycler = new PersonStats(selectedPerson, likesCount);
+                                personStatsListForRecycler.add(personStatsForRecycler);
+                                dailyStatForRecycler = new DailyStatistics(selectedSite, date,
+                                        personStatsListForRecycler);
+                                dailyStatListForRecycler.add(dailyStatForRecycler);
+                            }
                         }
                     }
-                    dailyStatForRecycler = new DailyStatistics(selectedSite, date,
-                            personStatsListForRecycler);
-                    dailyStatListForRecycler.add(dailyStatForRecycler);
                 }
-                return dailyStatListForRecycler;
             }
-        return null;
+        }
+        return dailyStatListForRecycler;
     }
 }

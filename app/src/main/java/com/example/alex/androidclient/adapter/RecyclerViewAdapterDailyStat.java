@@ -30,9 +30,6 @@ public class RecyclerViewAdapterDailyStat extends
         RecyclerView.Adapter<RecyclerViewAdapterDailyStat.ViewHolder> {
     private final String LOG_TAG = this.getClass().getSimpleName();
 
-    private final int TYPE_ITEM_VISIBILE = 0;
-    private final int TYPE_ITEM_INVISIBLE = 1;
-
     private List<DailyStatistics> dailyStatisticsList;
 
     private DailyStatistics dailyStatistics;
@@ -44,11 +41,6 @@ public class RecyclerViewAdapterDailyStat extends
     private int selectedPerson = 0;
     // what site is selected for now?
     private int selectedSite = 0;
-
-    /*
-    private int flagUnvisibleViewInRecycler;
-    private ArrayList<Integer> itemVisibility;
-    */
 
     public RecyclerViewAdapterDailyStat(List<DailyStatistics> dailyStats, Context context,
                                         int selectedPerson, int selectedSite) {
@@ -67,21 +59,6 @@ public class RecyclerViewAdapterDailyStat extends
 
         Log.d(LOG_TAG, "End onCreateViewHolder");
         return new ViewHolder(view);
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        Log.d(LOG_TAG, "Start getItemViewType");
-        Log.d(LOG_TAG, "position = " + position);
-        Log.d(LOG_TAG, "Integer position = " + new Integer(position));
-        /*Log.d(LOG_TAG, "itemVisibility = " + itemVisibility.size());
-
-        if (itemVisibility.contains(Integer.valueOf(position))){
-            Log.d(LOG_TAG, "End getItemViewType");
-            return TYPE_ITEM_VISIBILE;
-        }*/
-        Log.d(LOG_TAG, "End getItemViewType");
-        return TYPE_ITEM_INVISIBLE;
     }
 
     @Override

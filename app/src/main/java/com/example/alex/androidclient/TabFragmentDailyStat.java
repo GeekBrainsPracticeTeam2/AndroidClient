@@ -164,9 +164,6 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
                 Log.d(LOG_TAG, "item selected = " + spinnerSites.getItemAtPosition(position));
 
                 if(adapter != null) {
-                    /*
-                    adapter.setSelectedSite(position);
-                     */
                     adapter.setDailyStatisticsList(app.prepareDailyStatForRecycler(position, selectedPerson));
                     selectedSite = position;
                 }
@@ -178,13 +175,9 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
                 Log.d(LOG_TAG, "item selected = " + spinnerPersons.getItemAtPosition(position));
 
                 if(adapter != null) {
-                    /*
-                    adapter.setSelectedPerson(position);
-                     */
                     adapter.setDailyStatisticsList(app.prepareDailyStatForRecycler(selectedSite, position));
                     selectedPerson = position;
                 }
-//                initRecyclerView();
                 break;
         }
     }
@@ -332,24 +325,5 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
                 setTVChosen(flag);
                 checkTVDateSelected();
         }
-    }
-
-    private void handleDate(Calendar dateSelected, int flag, boolean dateChosen, boolean chosen){
-        Log.d(LOG_TAG, "Start handleDate");
-
-        dateSelected = Calendar.getInstance();
-        dateSelected.setTimeInMillis(date);
-        dateChosen = chosen;
-        setTVChosen(flag);
-        checkTVDateSelected();
-
-        Log.d(LOG_TAG, "dateSelected = " + dateSelected);
-        Log.d(LOG_TAG, "firstDateSelected = " + firstDateSelected);
-        Log.d(LOG_TAG, "lastDateSelected = " + lastDateSelected);
-        Log.d(LOG_TAG, "dateChosen = " + dateChosen);
-        Log.d(LOG_TAG, "firstDateChosen = " + firstDateChosen);
-        Log.d(LOG_TAG, "lastDateChosen = " + lastDateChosen);
-        Log.d(LOG_TAG, "End handleDate");
-
     }
 }

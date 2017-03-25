@@ -30,16 +30,12 @@ public class MyApp extends Application {
 
     private int[] likeCount;
     private List<PersonStats> personStatsList;
-    private List<PersonStats> personStatsListForRecycler;
     private PersonStats personStats;
-    private PersonStats personStatsForRecycler;
     private TotalStatistics totalStatisticsBySite;
     private int siteID = 0;
 
     private List<DailyStatistics> dailyStatList;
-    private List<DailyStatistics> dailyStatListForRecycler;
     private DailyStatistics dailyStat;
-    private DailyStatistics dailyStatForRecycler;
 
     public List<DailyStatistics> getDailyStatisticses() {
         return dailyStatList;
@@ -54,8 +50,6 @@ public class MyApp extends Application {
     public void setFinishDate(Date finishDate) {
         this.finishDate = finishDate;
     }
-
-
 
     public void setSiteID(int siteID) {
         this.siteID = siteID;

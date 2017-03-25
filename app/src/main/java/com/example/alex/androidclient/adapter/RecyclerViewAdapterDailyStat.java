@@ -106,16 +106,6 @@ public class RecyclerViewAdapterDailyStat extends
         }
     }
 
-    public void setSelectedPerson(int selectedPerson) {
-        this.selectedPerson = selectedPerson;
-        notifyDataSetChanged();
-    }
-
-    public void setSelectedSite(int selectedSite) {
-        this.selectedSite = selectedSite;
-        notifyDataSetChanged();
-    }
-
     public void setDailyStatisticsList(List<DailyStatistics> dailyStatisticsList) {
         this.dailyStatisticsList = dailyStatisticsList;
         Log.d(LOG_TAG, "dailyStatisticsList contains: " + dailyStatisticsList.toString());

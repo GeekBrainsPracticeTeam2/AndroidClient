@@ -190,74 +190,35 @@ public class MyApp extends Application {
 
     public List<DailyStatistics> prepareDailyStatForRecycler(int selectedSite,
                                                               int selectedPerson) {
-        Log.d(LOG_TAG, "Start prepareDailyStatForRecycler");
+        Log.d(LOG_TAG, "Start prepareDailyStatForRecycler. SelectedSite is " + selectedSite +
+                " and selectedPerson is " + selectedPerson);
 
-        /*dailyStatListForRecycler = new ArrayList<>();
-        personStatsListForRecycler = new ArrayList<>();
+        // creating new List with only needed data
+        List<DailyStatistics> choosenDailyStatsList = new ArrayList<>();
 
+        // let's check, if dailyStistics is loaded?
         try {
             dailyStatList = cacheManager.getDailyStatistics(startDate, finishDate);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        for (int i = 0; i < dailyStatList.size(); i++){
-            if (dailyStatList.get(i).getSiteID() == selectedSite){
-                dailyStat = dailyStatList.get(i);
-
-                if (siteID == dailyStat.getSiteID()) {
-                    Date date = dailyStat.getDate();
-                    personStatsList = dailyStat.getStatsList();
-
-                    int likesCount = 0;
-                    for (int j = 0; j < personStatsList.size(); j++) {
-                        personStats = personStatsList.get(j);
-                        if (personStats.getPersonID() == selectedPerson) {
-                            likesCount = personStats.getLikesCount();
-                            if (likesCount != 0) {
-                                personStatsForRecycler = new PersonStats(selectedPerson, likesCount);
-                                personStatsListForRecycler.add(personStatsForRecycler);
-                                dailyStatForRecycler = new DailyStatistics(selectedSite, date,
-                                        personStatsListForRecycler);
-                                dailyStatListForRecycler.add(dailyStatForRecycler);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return dailyStatListForRecycler;*/
-
-        // creating new List with only needed data
-        List<DailyStatistics> choosenDailyStatsList = new ArrayList<>();
-
-        // let's check, if dailyStistics is loaded?
-        if(dailyStatList == null) {
-            try {
-                dailyStatList = cacheManager.getDailyStatistics(startDate, finishDate);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
         // than let's select data we need to display in recycler
         for (int i = 0; i < dailyStatList.size(); i++) {
+            Log.d(LOG_TAG, "dailyStatList.get(i).getSiteID()" + dailyStatList.get(i).getSiteID());
             // creating new DailyStatistics object to add to choosenDailyStats
             if (dailyStatList.get(i).getSiteID() == selectedSite) {
                 dailyStat = dailyStatList.get(i);
 
-                if (siteID == dailyStat.getSiteID()) {
-                    Date date = dailyStat.getDate();
+                if (selectedSite == dailyStat.getSiteID()) {
                     List<PersonStats> personStatsList = dailyStat.getStatsList();
                     // will put chosen data here
                     List<PersonStats> choosenPersonStatsList = new ArrayList<>();
 
-                    int likesCount = 0;
                     for (int j = 0; j < personStatsList.size(); j++) {
                         personStats = personStatsList.get(j);
                         if (personStats.getPersonID() == selectedPerson) {
-                            likesCount = personStats.getLikesCount();
-                            if (likesCount != 0) {
+                            if (personStats.getLikesCount() > 0) {
                                 choosenPersonStatsList.add(new PersonStats(personStats.getPersonID(),
                                         personStats.getLikesCount()));
                             }

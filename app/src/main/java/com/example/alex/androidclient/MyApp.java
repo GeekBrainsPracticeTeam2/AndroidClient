@@ -194,12 +194,12 @@ public class MyApp extends Application {
 
         dailyStatListForRecycler = new ArrayList<>();
         personStatsListForRecycler = new ArrayList<>();
-        if (dailyStat == null) {
-            try {
-                dailyStatList = cacheManager.getDailyStatistics(startDate, finishDate);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+
+        try {
+            dailyStatList = cacheManager.getDailyStatistics(startDate, finishDate);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
             dailyStat = dailyStatList.get(selectedSite);
             if (siteID == dailyStat.getSiteID()) {
                 Date date = dailyStat.getDate();
@@ -225,7 +225,6 @@ public class MyApp extends Application {
                 }
                 return dailyStatListForRecycler;
             }
-        }
         return null;
     }
 }

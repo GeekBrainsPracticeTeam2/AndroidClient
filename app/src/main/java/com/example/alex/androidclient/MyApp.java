@@ -192,7 +192,7 @@ public class MyApp extends Application {
                                                               int selectedPerson) {
         Log.d(LOG_TAG, "Start prepareDailyStatForRecycler");
 
-        dailyStatListForRecycler = new ArrayList<>();
+        /*dailyStatListForRecycler = new ArrayList<>();
         personStatsListForRecycler = new ArrayList<>();
 
         try {
@@ -226,6 +226,50 @@ public class MyApp extends Application {
                 }
             }
         }
-        return dailyStatListForRecycler;
+        return dailyStatListForRecycler;*/
+
+        // creating new List with only needed data
+        List<DailyStatistics> choosenDailyStatsList = new ArrayList<>();
+
+        // let's check, if dailyStistics is loaded?
+        if(dailyStatList == null) {
+            try {
+                dailyStatList = cacheManager.getDailyStatistics(startDate, finishDate);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        // than let's select data we need to display in recycler
+        for (int i = 0; i < dailyStatList.size(); i++) {
+            // creating new DailyStatistics object to add to choosenDailyStats
+            if (dailyStatList.get(i).getSiteID() == selectedSite) {
+                dailyStat = dailyStatList.get(i);
+
+                if (siteID == dailyStat.getSiteID()) {
+                    Date date = dailyStat.getDate();
+                    List<PersonStats> personStatsList = dailyStat.getStatsList();
+                    // will put chosen data here
+                    List<PersonStats> choosenPersonStatsList = new ArrayList<>();
+
+                    int likesCount = 0;
+                    for (int j = 0; j < personStatsList.size(); j++) {
+                        personStats = personStatsList.get(j);
+                        if (personStats.getPersonID() == selectedPerson) {
+                            likesCount = personStats.getLikesCount();
+                            if (likesCount != 0) {
+                                choosenPersonStatsList.add(new PersonStats(personStats.getPersonID(),
+                                        personStats.getLikesCount()));
+                            }
+                        }
+                    }
+                    if(!choosenPersonStatsList.isEmpty()) {
+                        choosenDailyStatsList.add(new DailyStatistics(dailyStat.getSiteID(),
+                                dailyStat.getDate(), choosenPersonStatsList));
+                    }
+                }
+            }
+        }
+        return choosenDailyStatsList;
     }
 }

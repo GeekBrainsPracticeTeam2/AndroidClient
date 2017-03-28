@@ -55,8 +55,8 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
 
     private int selectedSite, selectedPerson;
 
-    private static final int flagFirstDateSelected = R.id.first_date_selected;
-    private static final int flagLastDateSelected = R.id.last_date_selected;
+    private static final int flagFirstDateSelected = R.id.textview_first_date_selected;
+    private static final int flagLastDateSelected = R.id.textview_last_date_selected;
     private static final int CHANGE_DATE = 2;
 
     private SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
@@ -91,7 +91,7 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
         bLastDateSelected = (Button)view.findViewById(R.id.last_date_selected);
 
         tvFirstDateSelected = (TextView)view.findViewById(R.id.textview_first_date_selected);
-        tvLastDateSelected = (TextView)view.findViewById(R.id.textviews_last_date_selected);
+        tvLastDateSelected = (TextView)view.findViewById(R.id.textview_last_date_selected);
 
         setTVDefault(tvFirstDateSelected);
         setTVDefault(tvLastDateSelected);
@@ -226,8 +226,8 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
 
     private void buttonBehavoir(){
         bView.setOnClickListener(this);
-        bFirstDateSelected.setOnClickListener(this);
-        bLastDateSelected.setOnClickListener(this);
+        tvFirstDateSelected.setOnClickListener(this);
+        tvLastDateSelected.setOnClickListener(this);
 
     }
 

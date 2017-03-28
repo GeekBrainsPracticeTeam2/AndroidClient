@@ -33,6 +33,7 @@ public class MyApp extends Application {
     private List<PersonStats> personStatsList;
     private PersonStats personStats;
     private TotalStatistics totalStatisticsBySite;
+
     private int siteID = 0;
 
     private List<DailyStatistics> dailyStatList;
@@ -75,7 +76,9 @@ public class MyApp extends Application {
     }
 
     public int[] getLikeCount() {
+        /*
         initLikeCount();
+         */
         return likeCount;
     }
 
@@ -105,7 +108,7 @@ public class MyApp extends Application {
 
     private void initCacheManager() throws JSONException {
         if (cacheManager == null && instance.getBaseContext() != null) {
-            cacheManager = new CacheManager(instance);
+            cacheManager = new CacheManager(instance, this);
         } else {
             Log.d(LOG_TAG, "Context is NULL!!!");
         }
@@ -149,13 +152,18 @@ public class MyApp extends Application {
 //        Log.d(LOG_TAG, "End initDictionaryPersons");
     }
 
+    public void setTotalStatisticsBySite(TotalStatistics totalStatisticsBySite) {
+        this.totalStatisticsBySite = totalStatisticsBySite;
+        initLikeCount();
+    }
+
     private void initLikeCount() {
 //        Log.d(LOG_TAG, "Start initLikeCount");
 
         if (totalStatisticsBySite == null && likeCount == null) {
             try {
                 totalStatisticsBySite = new TotalStatistics();
-                totalStatisticsBySite = cacheManager.getTotalStatisticsBySite(siteID);
+                cacheManager.getTotalStatisticsBySite(siteID);
 //                Log.d(LOG_TAG, "totalStatisticsList = " + totalStatisticsBySite);
 
                 personStatsList = new ArrayList<>();
@@ -169,7 +177,8 @@ public class MyApp extends Application {
             }
         } else {
             try {
-                totalStatisticsBySite = cacheManager.getTotalStatisticsBySite(siteID);
+                totalStatisticsBySite = new TotalStatistics();
+                cacheManager.getTotalStatisticsBySite(siteID);
                 personStatsList = totalStatisticsBySite.getStatsList();
 //                Log.d(LOG_TAG, "siteID = " + siteID);
 //                Log.d(LOG_TAG, "totalStatisticsBySite = " + totalStatisticsBySite);

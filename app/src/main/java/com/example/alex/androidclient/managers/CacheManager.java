@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.example.alex.androidclient.MyApp;
 import com.example.alex.androidclient.R;
 import com.example.alex.androidclient.helpers.DBHelper;
 import com.example.alex.androidclient.helpers.JSONHelper;
@@ -30,18 +31,24 @@ public class CacheManager {
     public static final String REST_DICTIONARIES_UPDATES = "WebAppRest/GetTablesLastUpdate";
     public static final String REST_DICTIONARY_SITES = "WebAppRest/GetSites";
     public static final String REST_DICTIONARY_PERSONS = "WebAppRest/GetPersons";
+    public static final String REST_STATISTICS_GET = "WebAppRest/GetStatisticForPeriod";
     private final String LOG_TAG = this.getClass().getSimpleName();
-    JSONHelper jHelper;
-    DBHelper dbHelper;
-    SQLiteDatabase database;
-    Context mContext;
+    private JSONHelper jHelper;
+    private DBHelper dbHelper;
+    private SQLiteDatabase database;
+    private Context mContext;
+    private List<TotalStatistics> totalStatisticsList = null;
+    private MyApp myApp;
+    private boolean returnBySite = false;
+    private int siteId;
 
     public Context getContext() {
         return mContext;
     }
 
-    public CacheManager(Context context) throws JSONException {
-        mContext = context;
+    public CacheManager(Context context, MyApp myApp) throws JSONException {
+        this.mContext = context;
+        this.myApp = myApp;
         Log.d(LOG_TAG, REST_HOST + REST_DICTIONARIES_UPDATES);
         jHelper = new JSONHelper(REST_HOST + REST_DICTIONARIES_UPDATES, 1, this);
         dbHelper = new DBHelper(context);
@@ -169,24 +176,26 @@ public class CacheManager {
 
     public void getTotalStatistics() throws JSONException {
         Log.d(LOG_TAG, "Start getTotalStatistics");
-        JSONHelper jHelperTotalStats = new JSONHelper(mContext.getResources().getString(R.string.rest_host) +
-                mContext.getResources().getString(R.string.rest_statistics_get), 0, this);
+        totalStatisticsList = null;
+        JSONHelper jHelperTotalStats = new JSONHelper(REST_HOST + REST_STATISTICS_GET, 0, this);
     }
 
-    public TotalStatistics getTotalStatisticsBySite(int siteId) throws JSONException {
-        Log.d(LOG_TAG, "Start getTotalStatisticsBySite");
-        Log.d(LOG_TAG, "siteId = " + siteId);
-        JSONHelper jHelperTotalStats = new JSONHelper(mContext.getResources().getString(R.string.rest_host) +
-                mContext.getResources().getString(R.string.rest_statistics_get), 0, this);
-        List<TotalStatistics> totalStats = jHelperTotalStats.getTotalStats();
-        Log.d(LOG_TAG, "Size totalStatis = " + jHelperTotalStats.getTotalStats().size());
-        for (TotalStatistics stats: totalStats) {
-            if(stats.getSiteID() == siteId){
-                Log.d(LOG_TAG, "Size stats = " + stats.getStatsList().size());
-                return stats;
+    public void getTotalStatisticsBySite(int siteId) throws JSONException {
+        if(totalStatisticsList != null) {
+            Log.d(LOG_TAG, "Start getTotalStatisticsBySite");
+            Log.d(LOG_TAG, "siteId = " + siteId);
+            Log.d(LOG_TAG, "Size totalStatis = " + totalStatisticsList.size());
+            for (TotalStatistics stats: totalStatisticsList) {
+                if(stats.getSiteID() == siteId){
+                    Log.d(LOG_TAG, "Size stats = " + stats.getStatsList().size());
+                    myApp.setTotalStatisticsBySite(stats);
+                }
             }
         }
-        return null;
+        else {
+            returnBySite = true;
+            this.siteId = siteId;
+        }
     }
 
     public List<DailyStatistics> getDailyStatistics(Date startDate, Date finishDate) throws JSONException {
@@ -265,5 +274,23 @@ public class CacheManager {
         database.close();
 
         return dictionaryPersons;
+    }
+
+    public void setTotalStatistics(List<TotalStatistics> totalStatistics) {
+        this.totalStatisticsList = totalStatistics;
+        if(returnBySite) {
+            returnTotalStatisticsBySite();
+        }
+    }
+
+    private void returnTotalStatisticsBySite() {
+        for (TotalStatistics stats: totalStatisticsList) {
+            if(stats.getSiteID() == siteId){
+                Log.d(LOG_TAG, "Size stats = " + stats.getStatsList().size());
+                myApp.setTotalStatisticsBySite(stats);
+            }
+        }
+        returnBySite = false;
+        siteId = -1;
     }
 }

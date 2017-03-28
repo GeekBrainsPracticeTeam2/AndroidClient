@@ -29,4 +29,13 @@
     <string name="BUTTON_SELECTED">flag</string>
     <string name="CHOSEN">chosen</string>
     <!- End DatePickerFragment -->
+    
+    <!-- Start REST-addresses -->
+    <string name="rest_host">http://drivewater.ru:8080/</string>
+    <string name="rest_dictionaries_updates">WebAppRest/GetTablesLastUpdate</string>
+    <string name="rest_dictionary_sites">WebAppRest/GetSites</string>
+    <string name="rest_dictionary_persons">WebAppRest/GetPersons</string>
+    <string name="rest_statistics_get">WebAppRest/GetStatisticForPeriod</string>
+    <string name="rest_statistics_start_date">StartDate</string>
+    <string name="rest_statistics_end_date">EndDate</string>
 </resources>

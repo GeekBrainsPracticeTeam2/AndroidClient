@@ -1,5 +1,6 @@
 package com.example.alex.androidclient.helpers;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -7,6 +8,9 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.alex.androidclient.MainActivity;
+import com.example.alex.androidclient.managers.CacheManager;
 import com.example.alex.androidclient.models.DailyStatistics;
 import com.example.alex.androidclient.models.DictionaryPersons;
 import com.example.alex.androidclient.models.DictionarySites;
@@ -81,6 +85,9 @@ public class JSONHelper {
     private List<DictionarySites> dictionarySitesList = new ArrayList<>();
     private List<DictionaryPersons> dictionaryPersonsList = new ArrayList<>();
     private List<DailyStatistics> dailyStats = new ArrayList<>();
+    private CacheManager cacheManager;
+    private MainActivity mainActivity;
+    private Context mContext;
 
     private int mode = -1;
 
@@ -103,6 +110,14 @@ public class JSONHelper {
                 break;
         }
         fetchData();
+    }
+
+    public JSONHelper(String url, int mode, CacheManager manager) throws JSONException {
+        this.mContext = manager.getContext();
+        this.mode = mode;
+        this.cacheManager = manager;
+        requestQueue = Volley.newRequestQueue(mContext);
+        fetchData(url);
     }
 
     public JSONHelper(Date startDate, Date finishDate) throws JSONException {
@@ -186,6 +201,7 @@ public class JSONHelper {
                     persons.getString(DICTIONARY_NAME)));
         }
         Log.d(LOG_TAG, "dictionaryPersonsList size is " + dictionaryPersonsList.size());
+        cacheManager.updateDictionaryPersons(dictionaryPersonsList);
     }
 
     private void fetchSitesDictionaryUpdate() throws JSONException {
@@ -198,6 +214,7 @@ public class JSONHelper {
                     sites.getString(DICTIONARY_URL)));
         }
         Log.d(LOG_TAG, "dictionarySitesList size is " + dictionarySitesList.size());
+        cacheManager.updateDictionarySites(dictionarySitesList);
     }
 
     private void fetchUpdatesForDictionaries() throws JSONException {
@@ -253,6 +270,56 @@ public class JSONHelper {
     private final Response.Listener<String> onPostsLoaded = new Response.Listener<String>() {
         @Override
         public void onResponse(String response) {
+            try {
+                Log.d(LOG_TAG, "jsonObject creation");
+                jsonDataObject = new JSONObject(response);
+                Log.d(LOG_TAG, "jsonObject created");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            switch (mode){
+                // get total statistics
+                case 0:
+                    try {
+                        fetchTotalStatistics();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                // get updates for dictionaries
+                case 1:
+                    try {
+                        fetchUpdatesForDictionaries();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                // get update for sites dictionary
+                case 2:
+                    try {
+                        fetchSitesDictionaryUpdate();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                // get update for persons dictionary
+                case 3:
+                    try {
+                        fetchPersonsDictionaryUpdate();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case 4:
+                    try {
+                        fetchDailyStatistics();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
     };
 

@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.example.alex.androidclient.R;
 import com.example.alex.androidclient.helpers.DBHelper;
 import com.example.alex.androidclient.helpers.JSONHelper;
 import com.example.alex.androidclient.models.DailyStatistics;
@@ -25,13 +26,24 @@ import java.util.List;
  */
 
 public class CacheManager {
+    public static final String REST_HOST = "http://drivewater.ru:8080/";
+    public static final String REST_DICTIONARIES_UPDATES = "WebAppRest/GetTablesLastUpdate";
+    public static final String REST_DICTIONARY_SITES = "WebAppRest/GetSites";
+    public static final String REST_DICTIONARY_PERSONS = "WebAppRest/GetPersons";
     private final String LOG_TAG = this.getClass().getSimpleName();
     JSONHelper jHelper;
     DBHelper dbHelper;
     SQLiteDatabase database;
+    Context mContext;
+
+    public Context getContext() {
+        return mContext;
+    }
 
     public CacheManager(Context context) throws JSONException {
-        jHelper = new JSONHelper(1);
+        mContext = context;
+        Log.d(LOG_TAG, REST_HOST + REST_DICTIONARIES_UPDATES);
+        jHelper = new JSONHelper(REST_HOST + REST_DICTIONARIES_UPDATES, 1, this);
         dbHelper = new DBHelper(context);
     }
 
@@ -80,43 +92,53 @@ public class CacheManager {
         return false;
     }
 
+    public void updateDictionarySites(List<DictionarySites> dictionarySitesList) {
+        Log.d(LOG_TAG, "updateDictionarySites with " + dictionarySitesList.toString());
+        database = dbHelper.getWritableDatabase();
+        Cursor c = database.query(DBHelper.TB_SITES_NAME, null, null, null, null, null, null);
+        database.delete(DBHelper.TB_SITES_NAME, null, null);
+        ContentValues cv = new ContentValues();
+        for (int i = 0; i < dictionarySitesList.size(); i++) {
+            cv.put(DBHelper.TB_ID_COL_NAME, dictionarySitesList.get(i)
+                    .getSiteID());
+            cv.put(DBHelper.TB_SITES_URL, dictionarySitesList.get(i)
+                    .getSiteUrl());
+            database.insert(DBHelper.TB_SITES_NAME, null, cv);
+        }
+        database.close();
+        updateDictionaryDate(DBHelper.TB_SITES_NAME);
+    }
+
+    public void updateDictionaryPersons(List<DictionaryPersons> dictionaryPersonsList) {
+        Log.d(LOG_TAG, "updateDictionaryPersons with " + dictionaryPersonsList.toString());
+        database = dbHelper.getWritableDatabase();
+        Cursor c = database.query(DBHelper.TB_PERSONS_NAMES, null, null, null, null, null, null);
+        database.delete(DBHelper.TB_PERSONS_NAMES, null, null);
+        ContentValues cv = new ContentValues();
+        for (int i = 0; i < dictionaryPersonsList.size(); i++) {
+            cv.put(DBHelper.TB_ID_COL_NAME, dictionaryPersonsList
+                    .get(i).getPersonId());
+            cv.put(DBHelper.TB_PERSON_NAME, dictionaryPersonsList
+                    .get(i).getPersonName());
+            Log.d(LOG_TAG, "Inserting in " + DBHelper.TB_PERSONS_NAMES + " " + dictionaryPersonsList
+                    .get(i).getPersonId() + " " + dictionaryPersonsList
+                    .get(i).getPersonName());
+            database.insert(DBHelper.TB_PERSONS_NAMES, null, cv);
+        }
+        database.close();
+        updateDictionaryDate(DBHelper.TB_PERSONS_NAMES);
+    }
+
     public void updateDictionary(String table) throws JSONException {
         switch (table) {
             case DBHelper.TB_SITES_NAME:
-                JSONHelper siteJsonHelper = new JSONHelper(2);
-                database = dbHelper.getWritableDatabase();
-                Cursor c = database.query(DBHelper.TB_SITES_NAME, null, null, null, null, null, null);
-                database.delete(DBHelper.TB_SITES_NAME, null, null);
-                ContentValues cv = new ContentValues();
-                for (int i = 0; i < siteJsonHelper.getDictionarySitesList().size(); i++) {
-                    cv.put(DBHelper.TB_ID_COL_NAME, siteJsonHelper.getDictionarySitesList().get(i)
-                            .getSiteID());
-                    cv.put(DBHelper.TB_SITES_URL, siteJsonHelper.getDictionarySitesList().get(i)
-                            .getSiteUrl());
-                    database.insert(table, null, cv);
-                }
-                database.close();
-                updateDictionaryDate(table);
+                JSONHelper siteJsonHelper = new JSONHelper(REST_HOST +
+                        REST_DICTIONARY_SITES, 2, this);
                 break;
             case DBHelper.TB_PERSONS_NAMES:
                 Log.d(LOG_TAG, "updateDictionary() persons");
-                JSONHelper personsJsonHelper = new JSONHelper(3);
-                database = dbHelper.getWritableDatabase();
-                c = database.query(DBHelper.TB_PERSONS_NAMES, null, null, null, null, null, null);
-                database.delete(DBHelper.TB_PERSONS_NAMES, null, null);
-                cv = new ContentValues();
-                for (int i = 0; i < personsJsonHelper.getDictionaryPersonsList().size(); i++) {
-                    cv.put(DBHelper.TB_ID_COL_NAME, personsJsonHelper.getDictionaryPersonsList()
-                            .get(i).getPersonId());
-                    cv.put(DBHelper.TB_PERSON_NAME, personsJsonHelper.getDictionaryPersonsList()
-                            .get(i).getPersonName());
-                    Log.d(LOG_TAG, "Inserting in " + DBHelper.TB_PERSONS_NAMES + " " + personsJsonHelper.getDictionaryPersonsList()
-                            .get(i).getPersonId() + " " + personsJsonHelper.getDictionaryPersonsList()
-                            .get(i).getPersonName());
-                    database.insert(table, null, cv);
-                }
-                database.close();
-                updateDictionaryDate(table);
+                JSONHelper personsJsonHelper = new JSONHelper(REST_HOST +
+                        REST_DICTIONARY_PERSONS, 3, this);
                 break;
             default:
                 break;
@@ -145,18 +167,17 @@ public class CacheManager {
         database.close();
     }
 
-    public List<TotalStatistics> getTotalStatistics() throws JSONException {
+    public void getTotalStatistics() throws JSONException {
         Log.d(LOG_TAG, "Start getTotalStatistics");
-        JSONHelper jHelperTotalStats = new JSONHelper(0);
-        Log.d(LOG_TAG, "Size totalStatisticsList = " + jHelperTotalStats.getTotalStats().size());
-        Log.d(LOG_TAG, "End getTotalStatistics");
-        return jHelperTotalStats.getTotalStats();
+        JSONHelper jHelperTotalStats = new JSONHelper(mContext.getResources().getString(R.string.rest_host) +
+                mContext.getResources().getString(R.string.rest_statistics_get), 0, this);
     }
 
     public TotalStatistics getTotalStatisticsBySite(int siteId) throws JSONException {
         Log.d(LOG_TAG, "Start getTotalStatisticsBySite");
         Log.d(LOG_TAG, "siteId = " + siteId);
-        JSONHelper jHelperTotalStats = new JSONHelper(0);
+        JSONHelper jHelperTotalStats = new JSONHelper(mContext.getResources().getString(R.string.rest_host) +
+                mContext.getResources().getString(R.string.rest_statistics_get), 0, this);
         List<TotalStatistics> totalStats = jHelperTotalStats.getTotalStats();
         Log.d(LOG_TAG, "Size totalStatis = " + jHelperTotalStats.getTotalStats().size());
         for (TotalStatistics stats: totalStats) {

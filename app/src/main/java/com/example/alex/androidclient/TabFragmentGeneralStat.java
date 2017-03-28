@@ -101,8 +101,13 @@ public class TabFragmentGeneralStat extends Fragment implements AdapterView.OnIt
         int[] likeCount = app.getLikeCount();
         String[] namePerson = app.getNamePerson();
 
-        Log.d(LOG_TAG, "Length int[] likeCount = " + likeCount.length);
-        Log.d(LOG_TAG, "Length String[] namePerson = " + namePerson.length);
+        try{
+            Log.d(LOG_TAG, "Length int[] likeCount = " + likeCount.length);
+            Log.d(LOG_TAG, "Length String[] namePerson = " + namePerson.length);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
         setRecyclerView(namePerson, likeCount);
     }

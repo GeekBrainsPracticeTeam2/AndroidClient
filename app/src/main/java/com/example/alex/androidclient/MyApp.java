@@ -22,6 +22,7 @@ import java.util.List;
 
 public class MyApp extends Application {
     private final String LOG_TAG = this.getClass().getSimpleName();
+    private static MyApp instance = null;
     private CacheManager cacheManager;
     private List<DictionarySites> dictionarySites;
     private String[] siteUrl;
@@ -81,6 +82,7 @@ public class MyApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        instance = this;
 
         try {
             initCacheManager();
@@ -102,8 +104,10 @@ public class MyApp extends Application {
     }
 
     private void initCacheManager() throws JSONException {
-        if (cacheManager == null) {
-            cacheManager = new CacheManager(this);
+        if (cacheManager == null && instance.getBaseContext() != null) {
+            cacheManager = new CacheManager(instance);
+        } else {
+            Log.d(LOG_TAG, "Context is NULL!!!");
         }
     }
 

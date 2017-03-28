@@ -3,6 +3,7 @@ package com.example.alex.androidclient;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -59,6 +60,11 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     private static final int flagLastDateSelected = R.id.textview_last_date_selected;
     private static final int CHANGE_DATE = 2;
 
+    public static final String APP_PREFERENCES = "mySettings";
+    public static final String APP_PREFERENCES_FIRST_DATE = "firstDate";
+    public static final String APP_PREFERENCES_LAST_DATE = "lastDate";
+    private SharedPreferences mSettings;
+
     private SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 
     private MyApp app;
@@ -67,6 +73,13 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     public void onAttach(Context context) {
         super.onAttach(context);
         app = ((MyApp)getActivity().getApplicationContext());
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mSettings = this.getActivity().getSharedPreferences(APP_PREFERENCES,
+                Context.MODE_PRIVATE);
     }
 
     @Nullable
@@ -80,6 +93,32 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
         buttonBehavoir();
 
         return view;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        SharedPreferences.Editor editor = mSettings.edit();
+        editor.putLong(APP_PREFERENCES_FIRST_DATE, firstDateSelected.getTimeInMillis());
+        editor.putLong(APP_PREFERENCES_LAST_DATE, lastDateSelected.getTimeInMillis());
+        editor.apply();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (mSettings.contains(APP_PREFERENCES_FIRST_DATE) &&
+                mSettings.contains(APP_PREFERENCES_LAST_DATE)) {
+
+            firstDateSelected.setTimeInMillis(mSettings.getLong(APP_PREFERENCES_FIRST_DATE, 0));
+            lastDateSelected.setTimeInMillis(mSettings.getLong(APP_PREFERENCES_LAST_DATE, 0));
+            String firstDate = sdf.format(firstDateSelected.getTime());
+            String lastDate = sdf.format(lastDateSelected.getTime());
+            tvFirstDateSelected.setText(firstDate);
+            tvLastDateSelected.setText(lastDate);
+        }
     }
 
     private void initView(View view){

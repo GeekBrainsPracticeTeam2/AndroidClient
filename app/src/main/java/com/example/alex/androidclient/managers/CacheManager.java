@@ -38,6 +38,7 @@ public class CacheManager {
     private SQLiteDatabase database;
     private Context mContext;
     private List<TotalStatistics> totalStatisticsList = null;
+    private List<DictionaryUpdates> updates = null;
     private MyApp myApp;
     private boolean returnBySite = false;
     private int siteId;
@@ -51,50 +52,57 @@ public class CacheManager {
         this.myApp = myApp;
         Log.d(LOG_TAG, REST_HOST + REST_DICTIONARIES_UPDATES);
         jHelper = new JSONHelper(REST_HOST + REST_DICTIONARIES_UPDATES, 1, this);
+        /*
+        jHelper = new JSONHelper(0);
+         */
         dbHelper = new DBHelper(context);
     }
 
     public boolean checkUpdates(String table) {
+        /*
         List<DictionaryUpdates> updates = jHelper.getDictionaryUpdatesList();
+         */
         database = dbHelper.getWritableDatabase();
-        try {
-            Cursor cursor = database.query(DBHelper.TB_UPDATES, null, null, null, null, null, null);
+        if(updates != null) {
+            try {
+                Cursor cursor = database.query(DBHelper.TB_UPDATES, null, null, null, null, null, null);
 
-            if (cursor.moveToFirst()) {
-                int idIndex = cursor.getColumnIndex(DBHelper.TB_ID_COL_NAME);
-                int dateIndex = cursor.getColumnIndex(DBHelper.TB_UPDATES_DATE);
-                int tableNameIndex = cursor.getColumnIndex(DBHelper.TB_UPDATES_TBNAME);
-                Log.d(LOG_TAG, "checkUpdates for " + table);
+                if (cursor.moveToFirst()) {
+                    int idIndex = cursor.getColumnIndex(DBHelper.TB_ID_COL_NAME);
+                    int dateIndex = cursor.getColumnIndex(DBHelper.TB_UPDATES_DATE);
+                    int tableNameIndex = cursor.getColumnIndex(DBHelper.TB_UPDATES_TBNAME);
+                    Log.d(LOG_TAG, "checkUpdates for " + table);
 
-                do {
-                    for (int i = 0; i < updates.size(); i++) {
-                        if ((updates.get(i).getDictionaryName().equalsIgnoreCase(table)) &&
-                                updates.get(i).getDictionaryName().equalsIgnoreCase(cursor
-                                        .getString(tableNameIndex))) {
-                            if (!updates.get(i).getLastUpdateDate().equals(cursor.getString(dateIndex))) {
-                                Log.d(LOG_TAG, "Dates of " + table + " is " + updates.get(i).getLastUpdateDate() +
-                                        " date in DB is " + cursor.getString(dateIndex));
-                                return true;
+                    do {
+                        for (int i = 0; i < updates.size(); i++) {
+                            if ((updates.get(i).getDictionaryName().equalsIgnoreCase(table)) &&
+                                    updates.get(i).getDictionaryName().equalsIgnoreCase(cursor
+                                            .getString(tableNameIndex))) {
+                                if (!updates.get(i).getLastUpdateDate().equals(cursor.getString(dateIndex))) {
+                                    Log.d(LOG_TAG, "Dates of " + table + " is " + updates.get(i).getLastUpdateDate() +
+                                            " date in DB is " + cursor.getString(dateIndex));
+                                    return true;
+                                }
                             }
                         }
-                    }
-                } while (cursor.moveToNext());
-            } else {
-                // if table is empty, than add some data
-                Log.d(LOG_TAG, "Adding empty data to Updates table");
-                ContentValues cv = new ContentValues();
-                cv.put(DBHelper.TB_UPDATES_TBNAME, DBHelper.TB_PERSONS_NAMES);
-                cv.put(DBHelper.TB_UPDATES_DATE, "");
-                database.insert(DBHelper.TB_UPDATES, null, cv);
-                cv.put(DBHelper.TB_UPDATES_TBNAME, DBHelper.TB_SITES_NAME);
-                cv.put(DBHelper.TB_UPDATES_DATE, "");
-                database.insert(DBHelper.TB_UPDATES, null, cv);
-                return true;
+                    } while (cursor.moveToNext());
+                } else {
+                    // if table is empty, than add some data
+                    Log.d(LOG_TAG, "Adding empty data to Updates table");
+                    ContentValues cv = new ContentValues();
+                    cv.put(DBHelper.TB_UPDATES_TBNAME, DBHelper.TB_PERSONS_NAMES);
+                    cv.put(DBHelper.TB_UPDATES_DATE, "");
+                    database.insert(DBHelper.TB_UPDATES, null, cv);
+                    cv.put(DBHelper.TB_UPDATES_TBNAME, DBHelper.TB_SITES_NAME);
+                    cv.put(DBHelper.TB_UPDATES_DATE, "");
+                    database.insert(DBHelper.TB_UPDATES, null, cv);
+                    return true;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+            database.close();
         }
-        database.close();
 
         return false;
     }
@@ -221,6 +229,7 @@ public class CacheManager {
         if(checkUpdates(DBHelper.TB_SITES_NAME)) {
             Log.d(LOG_TAG, "Needs to update SitesDictionary");
             updateDictionary(DBHelper.TB_SITES_NAME);
+            return null;
         }
 
         database = dbHelper.getWritableDatabase();
@@ -237,7 +246,7 @@ public class CacheManager {
                 } while (cursor.moveToNext());
             }
 
-            Log.d(LOG_TAG, "Sites dictionary count of rows = " + cursor.getCount());
+            Log.d(LOG_TAG, "Sites dictionary count of rows = " + cursor.getCount() + "\n" + dictionarySites.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -251,6 +260,7 @@ public class CacheManager {
         if(checkUpdates(DBHelper.TB_PERSONS_NAMES)) {
             Log.d(LOG_TAG, "Needs to update PersonsDictionary");
             updateDictionary(DBHelper.TB_PERSONS_NAMES);
+            return null;
         }
 
         database = dbHelper.getWritableDatabase();
@@ -277,6 +287,7 @@ public class CacheManager {
     }
 
     public void setTotalStatistics(List<TotalStatistics> totalStatistics) {
+        Log.d(LOG_TAG, "TotalStatistics returned to CacheManager " + totalStatistics.toString());
         this.totalStatisticsList = totalStatistics;
         if(returnBySite) {
             returnTotalStatisticsBySite();
@@ -284,6 +295,7 @@ public class CacheManager {
     }
 
     private void returnTotalStatisticsBySite() {
+        Log.d(LOG_TAG, "returnTotalStatisticsBySite() is called");
         for (TotalStatistics stats: totalStatisticsList) {
             if(stats.getSiteID() == siteId){
                 Log.d(LOG_TAG, "Size stats = " + stats.getStatsList().size());
@@ -292,5 +304,10 @@ public class CacheManager {
         }
         returnBySite = false;
         siteId = -1;
+    }
+
+    public void updateDictionaries(List<DictionaryUpdates> dictionaryUpdatesList) throws JSONException {
+        Log.d(LOG_TAG, "returned Updates");
+        updates = dictionaryUpdatesList;
     }
 }

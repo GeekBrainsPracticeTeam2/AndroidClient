@@ -7,6 +7,7 @@ import com.example.alex.androidclient.managers.CacheManager;
 import com.example.alex.androidclient.models.DailyStatistics;
 import com.example.alex.androidclient.models.DictionaryPersons;
 import com.example.alex.androidclient.models.DictionarySites;
+import com.example.alex.androidclient.models.DictionaryUpdates;
 import com.example.alex.androidclient.models.PersonStats;
 import com.example.alex.androidclient.models.TotalStatistics;
 
@@ -76,9 +77,7 @@ public class MyApp extends Application {
     }
 
     public int[] getLikeCount() {
-        /*
         initLikeCount();
-         */
         return likeCount;
     }
 
@@ -154,7 +153,22 @@ public class MyApp extends Application {
 
     public void setTotalStatisticsBySite(TotalStatistics totalStatisticsBySite) {
         this.totalStatisticsBySite = totalStatisticsBySite;
+        /*
         initLikeCount();
+         */
+//      Log.d(LOG_TAG, "totalStatisticsList = " + totalStatisticsBySite);
+
+        personStatsList = new ArrayList<>();
+        personStatsList = totalStatisticsBySite.getStatsList();
+//                Log.d(LOG_TAG, "Size statsList = " + statsList.size());
+
+        likeCount = new int[personStatsList.size()];
+//                Log.d(LOG_TAG, "Length likeCount = " + likeCount.length);
+        for (int i = 0; i < personStatsList.size(); i++) {
+            int like = personStatsList.get(i).getLikesCount();
+            likeCount[i] = like;
+//            Log.d(LOG_TAG, "likeCount(" + i + ") = " + likeCount[i]);
+        }
     }
 
     private void initLikeCount() {
@@ -164,20 +178,13 @@ public class MyApp extends Application {
             try {
                 totalStatisticsBySite = new TotalStatistics();
                 cacheManager.getTotalStatisticsBySite(siteID);
-//                Log.d(LOG_TAG, "totalStatisticsList = " + totalStatisticsBySite);
 
-                personStatsList = new ArrayList<>();
-                personStatsList = totalStatisticsBySite.getStatsList();
-//                Log.d(LOG_TAG, "Size statsList = " + statsList.size());
-
-                likeCount = new int[personStatsList.size()];
-//                Log.d(LOG_TAG, "Length likeCount = " + likeCount.length);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {
             try {
-                totalStatisticsBySite = new TotalStatistics();
+                /*totalStatisticsBySite = new TotalStatistics();*/
                 cacheManager.getTotalStatisticsBySite(siteID);
                 personStatsList = totalStatisticsBySite.getStatsList();
 //                Log.d(LOG_TAG, "siteID = " + siteID);
@@ -186,11 +193,6 @@ public class MyApp extends Application {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-        for (int i = 0; i < personStatsList.size(); i++) {
-            int like = personStatsList.get(i).getLikesCount();
-            likeCount[i] = like;
-//            Log.d(LOG_TAG, "likeCount(" + i + ") = " + likeCount[i]);
         }
 //        Log.d(LOG_TAG, "End initLikeCount");
     }

@@ -113,10 +113,15 @@ public class JSONHelper {
     }
 
     public JSONHelper(String url, int mode, CacheManager manager) throws JSONException {
+        Log.v(LOG_TAG, "Creating json helper");
         this.mContext = manager.getContext();
         this.mode = mode;
         this.cacheManager = manager;
-        requestQueue = Volley.newRequestQueue(mContext);
+        try {
+            requestQueue = Volley.newRequestQueue(mContext);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         fetchData(url);
     }
 
@@ -231,6 +236,7 @@ public class JSONHelper {
             dictionaryUpdatesList.add(dicUpdates);
         }
         Log.d(LOG_TAG, "dictionaryUpdatesList size is " + dictionaryUpdatesList.size());
+        cacheManager.updateDictionaries(dictionaryUpdatesList);
     }
 
     private void fetchTotalStatistics() throws JSONException {
@@ -271,8 +277,8 @@ public class JSONHelper {
     private final Response.Listener<String> onPostsLoaded = new Response.Listener<String>() {
         @Override
         public void onResponse(String response) {
+            Log.d(LOG_TAG, "jsonObject creation with " + response);
             try {
-                Log.d(LOG_TAG, "jsonObject creation");
                 jsonDataObject = new JSONObject(response);
                 Log.d(LOG_TAG, "jsonObject created");
             } catch (JSONException e) {
@@ -290,6 +296,7 @@ public class JSONHelper {
                 // get updates for dictionaries
                 case 1:
                     try {
+                        Log.d(LOG_TAG, "Fetching data for dicUpdates");
                         fetchUpdatesForDictionaries();
                     } catch (JSONException e) {
                         e.printStackTrace();

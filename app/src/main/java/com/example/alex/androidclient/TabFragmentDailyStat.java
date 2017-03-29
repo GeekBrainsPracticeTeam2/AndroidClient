@@ -60,10 +60,6 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     private static final int flagLastDateSelected = R.id.textview_last_date_selected;
     private static final int CHANGE_DATE = 2;
 
-    public static final String APP_PREFERENCES = "mySettings";
-    public static final String APP_PREFERENCES_FIRST_DATE = "firstDate";
-    public static final String APP_PREFERENCES_LAST_DATE = "lastDate";
-    private SharedPreferences mSettings;
 
     private SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 
@@ -75,12 +71,6 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
         app = ((MyApp)getActivity().getApplicationContext());
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mSettings = this.getActivity().getSharedPreferences(APP_PREFERENCES,
-                Context.MODE_PRIVATE);
-    }
 
     @Nullable
     @Override
@@ -96,34 +86,42 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d(LOG_TAG, "Start onCreate");
 
-        SharedPreferences.Editor editor = mSettings.edit();
-        editor.putLong(APP_PREFERENCES_FIRST_DATE, firstDateSelected.getTimeInMillis());
-        editor.putLong(APP_PREFERENCES_LAST_DATE, lastDateSelected.getTimeInMillis());
-        editor.apply();
+        if (savedInstanceState != null) {
+            firstDateSelected = Calendar.getInstance();
+            firstDateSelected.setTimeInMillis(savedInstanceState.getLong("firstDate"));
+
+            lastDateSelected = Calendar.getInstance();
+            lastDateSelected.setTimeInMillis(savedInstanceState.getLong("lastDate"));
+
+            selectedSite = savedInstanceState.getInt("selectedSite");
+            selectedPerson = savedInstanceState.getInt("selectedPerson");
+
+        }
+
+        Log.d(LOG_TAG, "End onCreate");
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.d(LOG_TAG, "Start onSaveInstanceState");
+        outState.putLong("firstDate", firstDateSelected.getTimeInMillis());
+        outState.putLong("lastDate", lastDateSelected.getTimeInMillis());
+        outState.putInt("selectedSite", selectedSite);
+        outState.putInt("selectedPerson", selectedPerson);
 
-        if (mSettings.contains(APP_PREFERENCES_FIRST_DATE) &&
-                mSettings.contains(APP_PREFERENCES_LAST_DATE)) {
-
-            firstDateSelected.setTimeInMillis(mSettings.getLong(APP_PREFERENCES_FIRST_DATE, 0));
-            lastDateSelected.setTimeInMillis(mSettings.getLong(APP_PREFERENCES_LAST_DATE, 0));
-            String firstDate = sdf.format(firstDateSelected.getTime());
-            String lastDate = sdf.format(lastDateSelected.getTime());
-            tvFirstDateSelected.setText(firstDate);
-            tvLastDateSelected.setText(lastDate);
-        }
+        Log.d(LOG_TAG, "outState = " + outState);
+        Log.d(LOG_TAG, "End onSaveInstanceState");
     }
 
     private void initView(View view){
         spinnerSites = (Spinner)view.findViewById(R.id.spinner_sites);
         spinnerPersons = (Spinner)view.findViewById(R.id.spinner_person);
+        setSpinner();
 
         bView =(Button)view.findViewById(R.id.button_view);
         bFirstDateSelected = (Button)view.findViewById(R.id.first_date_selected);
@@ -135,11 +133,45 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
         setTVDefault(tvFirstDateSelected);
         setTVDefault(tvLastDateSelected);
 
+        //TODO Рассмотреть возможность работы с датами через массив
+
         recyclerView = (RecyclerView)view.findViewById(R.id.recycler_view);
     }
 
+    private void setSpinner(){
+        if (selectedPerson != 0 && selectedSite != 0){
+            spinnerSites.setSelection(selectedSite);
+            spinnerPersons.setSelection(selectedPerson);
+        }
+    }
+
     private void setTVDefault(TextView tv) {
-        tv.setText(R.string.default_date);
+        if (firstDateSelected == null && lastDateSelected == null){
+            tv.setText(R.string.default_date);
+        } else {
+            setTVChosen();
+        }
+    }
+
+    private void setTVChosen(){
+        try {
+            String firstDate = sdf.format(firstDateSelected.getTime());
+            Date startDate = new Date(firstDateSelected.getTimeInMillis());
+            app.setStartDate(startDate);
+
+            tvFirstDateSelected.setText(firstDate);
+        } catch (NullPointerException e){
+            e.printStackTrace();
+        }
+        try {
+            String lastDate = sdf.format(lastDateSelected.getTime());
+            Date finishDate = new Date(lastDateSelected.getTimeInMillis());
+            app.setFinishDate(finishDate);
+
+            tvLastDateSelected.setText(lastDate);
+        } catch (NullPointerException e){
+            e.printStackTrace();
+        }
     }
 
     private void setTVChosen(int flag){

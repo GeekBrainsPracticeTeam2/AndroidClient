@@ -54,12 +54,17 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
 
     private boolean firstDateChosen, lastDateChosen = false;
 
-    private int selectedSite, selectedPerson;
+    private int selectedSite = -1;
+    private int selectedPerson = -1;
 
     private static final int flagFirstDateSelected = R.id.textview_first_date_selected;
     private static final int flagLastDateSelected = R.id.textview_last_date_selected;
     private static final int CHANGE_DATE = 2;
 
+    private static final String SAVED_INSTANCE_STATE_FIRST_DATE = "firstDate";
+    private static final String SAVED_INSTANCE_STATE_LAST_DATE = "lastDate";
+    private static final String SAVED_INSTANCE_STATE_SELECTED_SITE = "selectedSite";
+    private static final String SAVED_INSTANCE_STATE_SELECTED_PERSON = "selectedPerson";
 
     private SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 
@@ -88,40 +93,34 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(LOG_TAG, "Start onCreate");
 
         if (savedInstanceState != null) {
             firstDateSelected = Calendar.getInstance();
-            firstDateSelected.setTimeInMillis(savedInstanceState.getLong("firstDate"));
+            firstDateSelected.setTimeInMillis(savedInstanceState.
+                    getLong(SAVED_INSTANCE_STATE_FIRST_DATE));
 
             lastDateSelected = Calendar.getInstance();
-            lastDateSelected.setTimeInMillis(savedInstanceState.getLong("lastDate"));
+            lastDateSelected.setTimeInMillis(savedInstanceState.
+                    getLong(SAVED_INSTANCE_STATE_LAST_DATE));
 
-            selectedSite = savedInstanceState.getInt("selectedSite");
-            selectedPerson = savedInstanceState.getInt("selectedPerson");
-
+            selectedSite = savedInstanceState.getInt(SAVED_INSTANCE_STATE_SELECTED_SITE);
+            selectedPerson = savedInstanceState.getInt(SAVED_INSTANCE_STATE_SELECTED_PERSON);
         }
-
-        Log.d(LOG_TAG, "End onCreate");
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Log.d(LOG_TAG, "Start onSaveInstanceState");
-        outState.putLong("firstDate", firstDateSelected.getTimeInMillis());
-        outState.putLong("lastDate", lastDateSelected.getTimeInMillis());
-        outState.putInt("selectedSite", selectedSite);
-        outState.putInt("selectedPerson", selectedPerson);
 
-        Log.d(LOG_TAG, "outState = " + outState);
-        Log.d(LOG_TAG, "End onSaveInstanceState");
+        outState.putLong(SAVED_INSTANCE_STATE_FIRST_DATE, firstDateSelected.getTimeInMillis());
+        outState.putLong(SAVED_INSTANCE_STATE_LAST_DATE, lastDateSelected.getTimeInMillis());
+        outState.putInt(SAVED_INSTANCE_STATE_SELECTED_SITE, selectedSite);
+        outState.putInt(SAVED_INSTANCE_STATE_SELECTED_PERSON, selectedPerson);
     }
 
     private void initView(View view){
         spinnerSites = (Spinner)view.findViewById(R.id.spinner_sites);
         spinnerPersons = (Spinner)view.findViewById(R.id.spinner_person);
-        setSpinner();
 
         bView =(Button)view.findViewById(R.id.button_view);
         bFirstDateSelected = (Button)view.findViewById(R.id.first_date_selected);
@@ -130,18 +129,21 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
         tvFirstDateSelected = (TextView)view.findViewById(R.id.textview_first_date_selected);
         tvLastDateSelected = (TextView)view.findViewById(R.id.textview_last_date_selected);
 
+        recyclerView = (RecyclerView)view.findViewById(R.id.recycler_view);
+
         setTVDefault(tvFirstDateSelected);
         setTVDefault(tvLastDateSelected);
 
         //TODO Рассмотреть возможность работы с датами через массив
 
-        recyclerView = (RecyclerView)view.findViewById(R.id.recycler_view);
+        setSpinnerOnSaveInstanceState();
     }
 
-    private void setSpinner(){
-        if (selectedPerson != 0 && selectedSite != 0){
+    private void setSpinnerOnSaveInstanceState(){
+        if (selectedPerson != -1 && selectedSite != -1){
             spinnerSites.setSelection(selectedSite);
             spinnerPersons.setSelection(selectedPerson);
+            initRecyclerView();
         }
     }
 
@@ -237,6 +239,8 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
                 if(adapter != null && position != selectedSite) {
                     adapter.setDailyStatisticsList(app.prepareDailyStatForRecycler(position, selectedPerson));
                     selectedSite = position;
+                } else {
+                    selectedSite = position;
                 }
 
                 break;
@@ -247,6 +251,8 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
 
                 if(adapter != null && position != selectedPerson) {
                     adapter.setDailyStatisticsList(app.prepareDailyStatForRecycler(selectedSite, position));
+                    selectedPerson = position;
+                } else {
                     selectedPerson = position;
                 }
                 break;

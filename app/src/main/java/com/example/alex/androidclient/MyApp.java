@@ -114,39 +114,34 @@ public class MyApp extends Application {
     }
 
     private void initDictionarySites() throws JSONException {
-//        Log.d(LOG_TAG, "Start initDictionarySites");
-        if (dictionarySites == null && siteUrl == null) {
-            try {
-                dictionarySites = new ArrayList<>();
-                dictionarySites = cacheManager.getSitesDictionary();
-                siteUrl = new String[dictionarySites.size()];
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        cacheManager.getSitesDictionary();
+    }
+
+    private void initDictionaryPersons() throws JSONException {
+        cacheManager.getPersonsDictionary();
+    }
+
+    public void setDictionarySites(List<DictionarySites> dictionarySitesList) {
+        Log.d(LOG_TAG, "Start setDictionarySites");
+        this.dictionarySites = dictionarySitesList;
+        siteUrl = new String[dictionarySites.size()];
+
         for (int i = 0; i < dictionarySites.size(); i++) {
             String url = dictionarySites.get(i).getSiteUrl();
             siteUrl[i] = url;
-//            Log.d(LOG_TAG, "siteUrl(" + i + ") = " + url);
+            Log.d(LOG_TAG, "siteUrl(" + i + ") = " + url);
         }
 //        Log.d(LOG_TAG, "End initDictionarySites");
     }
 
-    private void initDictionaryPersons() throws JSONException {
-//        Log.d(LOG_TAG, "Start initDictionaryPersons");
-        if (dictionaryPersons == null && namePerson == null) {
-            try {
-                dictionaryPersons = new ArrayList<>();
-                dictionaryPersons = cacheManager.getPersonsDictionary();
-                namePerson = new String[dictionaryPersons.size()];
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+    public void setDictionaryPersons(List<DictionaryPersons> dictionaryPersonsList) {
+        Log.d(LOG_TAG, "Start setDictionaryPersons");
+        this.dictionaryPersons = dictionaryPersonsList;
+        namePerson = new String[dictionaryPersons.size()];
         for (int i = 0; i < dictionaryPersons.size(); i++) {
             String person = dictionaryPersons.get(i).getPersonName();
             namePerson[i] = person;
-//            Log.d(LOG_TAG, "namePerson(" + i + ") = " + namePerson[i]);
+            Log.d(LOG_TAG, "namePerson(" + i + ") = " + namePerson[i]);
         }
 //        Log.d(LOG_TAG, "End initDictionaryPersons");
     }

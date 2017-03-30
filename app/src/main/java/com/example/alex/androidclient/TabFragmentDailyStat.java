@@ -133,23 +133,27 @@ public class TabFragmentDailyStat extends Fragment implements AdapterView.OnItem
     private void setSpinnerSites(){
         String[] siteUrl = app.getSiteUrl();
 
-        ArrayAdapter<String> adapter = new  ArrayAdapter<>(getActivity(),
-                android.R.layout.simple_spinner_item, siteUrl);
-        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        if(siteUrl != null) {
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
+                    android.R.layout.simple_spinner_item, siteUrl);
+            adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
 
-        spinnerSites.setAdapter(adapter);
-        spinnerSites.setOnItemSelectedListener(this);
+            spinnerSites.setAdapter(adapter);
+            spinnerSites.setOnItemSelectedListener(this);
+        }
     }
 
     private void setSpinnerPersons(){
         String[] namePerson= app.getNamePerson();
 
-        ArrayAdapter<String> adapter = new  ArrayAdapter<>(getActivity(),
-                android.R.layout.simple_spinner_item, namePerson);
-        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        if(namePerson != null) {
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
+                    android.R.layout.simple_spinner_item, namePerson);
+            adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
 
-        spinnerPersons.setAdapter(adapter);
-        spinnerPersons.setOnItemSelectedListener(this);
+            spinnerPersons.setAdapter(adapter);
+            spinnerPersons.setOnItemSelectedListener(this);
+        }
     }
 
     @Override

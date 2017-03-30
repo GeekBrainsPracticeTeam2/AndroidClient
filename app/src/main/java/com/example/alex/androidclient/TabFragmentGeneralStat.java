@@ -60,20 +60,22 @@ public class TabFragmentGeneralStat extends Fragment implements AdapterView.OnIt
         recyclerView = (RecyclerView)view.findViewById(R.id.recycler_view_general_stat);
     }
 
-    private void setSpinner(){
+    public void setSpinner(){
         Log.d(LOG_TAG, "Start setSpinner");
 
 
         siteUrl = app.getSiteUrl();
+        if(siteUrl != null) {
         Log.d(LOG_TAG, "Length String[] siteUrl = " + siteUrl.length);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
-                android.R.layout.simple_spinner_item, siteUrl);
-        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
+                    android.R.layout.simple_spinner_item, siteUrl);
+            adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
 
-        spinnerSites.setAdapter(adapter);
-        spinnerSites.setOnItemSelectedListener(this);
-        Log.d(LOG_TAG, "End setSpinner");
+            spinnerSites.setAdapter(adapter);
+            spinnerSites.setOnItemSelectedListener(this);
+            Log.d(LOG_TAG, "End setSpinner");
+        }
     }
 
     @Override
@@ -112,20 +114,22 @@ public class TabFragmentGeneralStat extends Fragment implements AdapterView.OnIt
         setRecyclerView(namePerson, likeCount);
     }
 
-    private void setRecyclerView(String[] namePerson, int[] likeCount){
+    public void setRecyclerView(String[] namePerson, int[] likeCount){
         Context context = getActivity();
 
-        Log.d(LOG_TAG, "Start setRecyclerView");
-        Log.d(LOG_TAG, "Length int[] likeCount = " + likeCount.length);
-        Log.d(LOG_TAG, "Length String[] namePerson = " + namePerson.length);
-        Log.d(LOG_TAG, "context = " + context);
+        if(namePerson != null && likeCount != null) {
+            Log.d(LOG_TAG, "Start setRecyclerView");
+            Log.d(LOG_TAG, "Length int[] likeCount = " + likeCount.length);
+            Log.d(LOG_TAG, "Length String[] namePerson = " + namePerson.length);
+            Log.d(LOG_TAG, "context = " + context);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        adapter = new  RecyclerViewAdapterGeneralStat(namePerson, likeCount, context);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(layoutManager);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+            adapter = new RecyclerViewAdapterGeneralStat(namePerson, likeCount, context);
+            recyclerView.setAdapter(adapter);
+            recyclerView.setLayoutManager(layoutManager);
 
-        Log.d(LOG_TAG, "End setRecyclerView");
+            Log.d(LOG_TAG, "End setRecyclerView");
+        }
     }
 }

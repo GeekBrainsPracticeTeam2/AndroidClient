@@ -122,6 +122,7 @@ public class CacheManager {
         }
         database.close();
         updateDictionaryDate(DBHelper.TB_SITES_NAME);
+        myApp.setDictionarySites(dictionarySitesList);
     }
 
     public void updateDictionaryPersons(List<DictionaryPersons> dictionaryPersonsList) {
@@ -142,6 +143,7 @@ public class CacheManager {
         }
         database.close();
         updateDictionaryDate(DBHelper.TB_PERSONS_NAMES);
+        myApp.setDictionaryPersons(dictionaryPersonsList);
     }
 
     public void updateDictionary(String table) throws JSONException {

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerStats"
+        android:layout_width="match_parent"
+        android:layout_height="409dp"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:layout_weight="0.64" />
+
+    <Button
+        android:id="@+id/btnClose"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:text="Button" />
+</LinearLayout>

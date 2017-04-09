@@ -12,18 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.example.alex.androidclient.adapter.RecyclerViewAdapterGeneralStat;
-import com.example.alex.androidclient.managers.CacheManager;
-import com.example.alex.androidclient.models.DictionarySites;
-import com.example.alex.androidclient.models.PersonStats;
-import com.example.alex.androidclient.models.TotalStatistics;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by alex on 03.03.17.
@@ -103,13 +94,10 @@ public class TabFragmentGeneralStat extends Fragment implements AdapterView.OnIt
         int[] likeCount = app.getLikeCount();
         String[] namePerson = app.getNamePerson();
 
-        try{
+        if(likeCount != null && namePerson != null) {
             Log.d(LOG_TAG, "Length int[] likeCount = " + likeCount.length);
             Log.d(LOG_TAG, "Length String[] namePerson = " + namePerson.length);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-
 
         setRecyclerView(namePerson, likeCount);
     }
